@@ -53,4 +53,7 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	pFrame->AddControl(*init);
 	pFrame->SetCurrentForm(*init);
 	init->RequestRedraw(true);
+
+
+
 }

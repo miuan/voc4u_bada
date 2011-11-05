@@ -8,18 +8,22 @@
     <Vendor/>
     <Description/>
     <Icons>
-        <MainMenu>voc4u.png<Type1>voc4u.png</Type1>
+        <MainMenu>Splash.png<Type1>Splash.png</Type1>
             <Type2/>
+            <Type3/>
+            <Type4/>
         </MainMenu>
         <Setting/>
         <Ticker/>
         <QuickPanel/>
-        <LaunchImage>Splash.png<Type1>Splash.png</Type1>
+        <LaunchImage>voc4u.png<Type1>voc4u.png</Type1>
             <Type2/>
+            <Type3/>
+            <Type4/>
         </LaunchImage>
     </Icons>
     <AutoScaling>
         <Enabled>true</Enabled>
-        <BaseResolution>480x800</BaseResolution>
+        <BaseResolution>NormalSize</BaseResolution>
     </AutoScaling>
 </Application>

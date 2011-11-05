@@ -5,24 +5,8 @@
 	<AppVersion>1.0.0</AppVersion>
 	<ManifestVersion>1.2</ManifestVersion>
 	<Privileges>
-			<Privilege>
-            <Name>SYSTEM_SERVICE</Name>
-        </Privilege>
-         <Privilege>
-            <Name>WEB_SERVICE</Name>
-        </Privilege>
 	</Privileges>
 	<DeviceProfile>
-		<APIVersion>1.2</APIVersion>
-		<CPU>Cortex8</CPU>
-		<ScreenSize>480x800</ScreenSize>
-		<Connectivity>Bluetooth</Connectivity>
-		<Connectivity>Wi-Fi</Connectivity>
-		<Sensor>GPS</Sensor>
-		<Sensor>Accelerometer</Sensor>
-		<Sensor>Proximity</Sensor>
-		<InputDevice>Touch</InputDevice>
-		<SoundMixing>Enable</SoundMixing>
-		<UserInteraction>Vibration-effects</UserInteraction>
+		<APIVersion>2.0</APIVersion>
 	</DeviceProfile>
 </Manifest>

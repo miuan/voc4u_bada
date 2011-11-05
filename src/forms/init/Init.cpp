@@ -81,7 +81,8 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		else
 			__pPopup->Init(null);
 
-		__pPopup->Draw();
+		//__pPopup->Draw();
+		__pPopup->SetShowState(true);
 		__pPopup->Show();
 
 

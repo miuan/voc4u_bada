@@ -16,6 +16,7 @@
 using namespace Osp::Ui;
 using namespace Osp::Ui::Controls;
 using namespace Osp::App;
+using namespace Osp::Graphics;
 
 class Dashboard :
 	public Osp::Ui::Controls::Form,

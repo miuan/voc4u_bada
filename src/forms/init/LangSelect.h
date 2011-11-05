@@ -22,50 +22,65 @@ using namespace Osp::Graphics;
 using namespace Osp::Ui::Controls;
 using namespace Osp::Media;
 
-
 class ILangSelectListener
 {
 public:
 	virtual void onSelectLang(int type, Locale &selected) = 0;
 };
 
-class CustomListElement: public ICustomListElement
+class CustomListElement: public ICustomElement
 {
 
-
-
 public:
-	result DrawElement(const Osp::Graphics::Canvas& canvas,
-			const Osp::Graphics::Rectangle& rect,
-			CustomListItemStatus itemStatus)
+	//	result DrawElement(const Osp::Graphics::Canvas& canvas,
+	//			const Osp::Graphics::Rectangle& rect,
+	//			CustomListItemStatus itemStatus)
+	//	{
+	//		result r = E_SUCCESS;
+	//
+	//		Canvas* pCanvas = const_cast<Canvas*> (&canvas);
+	//
+	//		pCanvas->SetLineWidth(5);
+	//		pCanvas->SetForegroundColor(Color::COLOR_GREEN);
+	//		if (pCanvas->DrawRectangle(rect) != E_SUCCESS)
+	//			return r;
+	//
+	//		pCanvas->SetForegroundColor(Color::COLOR_WHITE);
+	//		if (pCanvas->DrawText(Point(rect.x + 20, rect.y + 20), L"Custom") != E_SUCCESS)
+	//		return r;
+	//
+	//		return r;
+	//	}
+
+	bool OnDraw(Osp::Graphics::Canvas& canvas, const Osp::Graphics::Rectangle& rect, Osp::Ui::Controls::ListItemDrawingStatus itemStatus)
 	{
-		result r = E_SUCCESS;
+		// Sets the Font
+		Osp::Graphics::Font font;
+		font.Construct(Osp::Graphics::FONT_STYLE_PLAIN, 20);
+		canvas.SetFont(font);
+		canvas.SetLineWidth(5);
+		canvas.SetForegroundColor(Osp::Graphics::Color::COLOR_GREEN);
+		if (canvas.DrawRectangle(rect) != E_SUCCESS)
+			return false;
+		if (canvas.DrawText(Osp::Graphics::Point(rect.x + 2, rect.y + 20), L"Custom") != E_SUCCESS)
+			return false;
 
-		Canvas* pCanvas = const_cast<Canvas*> (&canvas);
-
-		pCanvas->SetLineWidth(5);
-		pCanvas->SetForegroundColor(Color::COLOR_GREEN);
-		if (pCanvas->DrawRectangle(rect) != E_SUCCESS)
-			return r;
-
-		pCanvas->SetForegroundColor(Color::COLOR_WHITE);
-		if (pCanvas->DrawText(Point(rect.x + 20, rect.y + 20), L"Custom") != E_SUCCESS)
-		return r;
-
-		return r;
+		return true;
 	}
 };
 
-class LangSelect: public Popup, public Osp::Ui::ICustomItemEventListener
+class LangSelect: public Popup, public Osp::Ui::Controls::IListViewItemEventListener, public Osp::Ui::Controls::IListViewItemProvider
 {
 	ILangSelectListener * __langSelectListener;
-	CustomList *__list;
-	CustomListItemFormat *__pCustomListItemFormat;
+	ListView *__pList;
+	//CustomListElement *__pCustomListItemFormat;
 	CustomListElement *__pListElement;
 	int __type;
 
 	static Locale __locales[];
 	static const int __numLocales;
+	Locale **__aUsedLocales;
+	int __numUsedLocales;
 
 public:
 	static const int ID_LIST_ITEM = 101;
@@ -73,18 +88,28 @@ public:
 	static const int ID_LIST_BITMAP = 103;
 	static const int ID_FORMAT_CUSTOM = 104;
 
+	static const int ID_FORMAT_STRING = 100;
+	static const int ID_FORMAT_BITMAP = 101;
+	// static const int ID_FORMAT_CUSTOM = 102;
+	static const int ID_CONTEXT_ITEM_1 = 103;
+	static const int ID_CONTEXT_ITEM_2 = 104;
+
 public:
 	LangSelect(int type, ILangSelectListener * lsl);
 	bool Init(Locale *without);
 	virtual ~LangSelect();
 
-	virtual void OnItemStateChanged(const Osp::Ui::Control &source, int index,
-			int itemId, int elementId, Osp::Ui::ItemStatus status);
-	virtual void OnItemStateChanged(const Osp::Ui::Control &source, int index,
-			int itemId, Osp::Ui::ItemStatus status);
+	// IListViewItemEventListener
+	virtual void OnListViewContextItemStateChanged(Osp::Ui::Controls::ListView &listView, int index, int elementId, Osp::Ui::Controls::ListContextItemStatus state);
+	virtual void OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listView, int index, int elementId, Osp::Ui::Controls::ListItemStatus status);
+	virtual void OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int index, Osp::Ui::Controls::SweepDirection direction);
 
-	result AddListItem(CustomList& customList, int index,
-			Bitmap* pBitmapNormal, Bitmap* pBitmapFocused);
+	//IListViewItemProvider
+	virtual Osp::Ui::Controls::ListItemBase* CreateItem(int index, int itemWidth);
+	virtual bool DeleteItem(int index, Osp::Ui::Controls::ListItemBase* pItem, int itemWidth);
+	virtual int GetItemCount(void);
+
+	result AddListItem(CustomList& customList, int index, Bitmap* pBitmapNormal, Bitmap* pBitmapFocused);
 
 	Bitmap * GetBitmapN(int i)
 	{
@@ -100,7 +125,8 @@ public:
 		bitmap = bitmapDecoder->DecodeN(L"/Home/Res/flags_preview_large.png", BITMAP_PIXEL_FORMAT_ARGB8888);
 
 		return bitmap;
-	};
+	}
+	;
 
 };
 
