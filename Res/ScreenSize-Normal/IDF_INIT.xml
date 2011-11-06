@@ -4,14 +4,22 @@
 -->
 <!DOCTYPE Scene SYSTEM "UIForm.dtd">
 
-<Scene Bversion="2.0.0.v20101205" Dversion="20100701">
+<Scene Bversion="2.0.2.v20110930" Dversion="20100701">
     <Form id="IDF_INIT">
-        <property BGColor="" BGColorOpacity="0" Orientation="Automatic:2Dir" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="Hello bada!" titleAlign="ALIGN_LEFT" titleIcon=""/>
-        <layout mode="Portrait" style="FORM_STYLE_TITLE|FORM_STYLE_INDICATOR"/>
-        <layout mode="Landscape" style="FORM_STYLE_TITLE|FORM_STYLE_INDICATOR"/>
+        <property BGColor="" BGColorOpacity="0" Orientation="Automatic" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="Hello bada!" titleAlign="ALIGN_LEFT" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
+        <layout mode="Portrait" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
+        <layout mode="Landscape" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
     </Form>
+    <Footer>
+        <property BGBitmapPath="" color="" colorOpacity="100" disabledButtonColor="" disabledButtonColorOpacity="100" disabledButtonTextColor="" disabledItemColor="" disabledItemColorOpacity="100" disabledItemTextColor="" footerStyle="FOOTER_STYLE_TAB" highlightedButtonColor="" highlightedButtonColorOpacity="100" highlightedButtonTextColor="" highlightedItemColor="" highlightedItemColorOpacity="100" highlightedItemTextColor="" normalButtonColor="" normalButtonColorOpacity="100" normalButtonTextColor="" normalItemColor="" normalItemColorOpacity="100" normalItemTextColor="" pressedButtonColor="" pressedButtonColorOpacity="100" pressedButtonTextColor="" pressedItemColor="" pressedItemColorOpacity="100" pressedItemTextColor="" selectedItemColor="" selectedItemColorOpacity="100" selectedItemTextColor="" showBackButton="FALSE"/>
+        <itemSet/>
+    </Footer>
+    <Header>
+        <property BGBitmapPath="" color="" colorOpacity="100" descriptionText="" descriptionTextColor="" disabledButtonColor="" disabledButtonColorOpacity="100" disabledButtonTextColor="" disabledItemColor="" disabledItemColorOpacity="100" disabledItemTextColor="" headerStyle="HEADER_STYLE_TITLE" highlightedButtonColor="" highlightedButtonColorOpacity="100" highlightedButtonTextColor="" highlightedItemColor="" highlightedItemColorOpacity="100" highlightedItemTextColor="" normalButtonColor="" normalButtonColorOpacity="100" normalButtonTextColor="" normalItemColor="" normalItemColorOpacity="100" normalItemTextColor="" pressedButtonColor="" pressedButtonColorOpacity="100" pressedButtonTextColor="" pressedItemColor="" pressedItemColorOpacity="100" pressedItemTextColor="" selectedItemColor="" selectedItemColorOpacity="100" selectedItemTextColor="" titleIconPath="" titleText="" titleTextColor=""/>
+        <itemSet/>
+    </Header>
     <Button id="IDC_BTN_NATIVE" parent="IDF_INIT">
-        <property NormalBGBitmapPath="" PressedBGBitmapPath="" disableTextColor="" hAlign="ALIGN_CENTER" normalTextColor="" pressedTextColor="" text="::IDS_NOT_SELECTED_YET" vAlign="ALIGN_MIDDLE"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_NOT_SELECTED_YET" textSize="32" vAlign="ALIGN_MIDDLE"/>
         <layout height="91" mode="Portrait" width="461" x="11" y="82"/>
         <layout height="103" mode="Landscape" width="401" x="200" y="108"/>
     </Button>
@@ -26,13 +34,13 @@
         <layout height="37" mode="Landscape" width="333" x="40" y="85"/>
     </Label>
     <Button id="IDC_BTN_LERN" parent="IDF_INIT">
-        <property NormalBGBitmapPath="" PressedBGBitmapPath="" disableTextColor="" hAlign="ALIGN_CENTER" normalTextColor="" pressedTextColor="" text="::IDS_NOT_SELECTED_YET" vAlign="ALIGN_MIDDLE"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_NOT_SELECTED_YET" textSize="32" vAlign="ALIGN_MIDDLE"/>
         <layout height="91" mode="Portrait" width="459" x="13" y="252"/>
         <layout height="48" mode="Landscape" width="241" x="558" y="176"/>
     </Button>
     <Button id="IDC_BTN_BEGIN" parent="IDF_INIT">
-        <property NormalBGBitmapPath="" PressedBGBitmapPath="" disableTextColor="" hAlign="ALIGN_CENTER" normalTextColor="" pressedTextColor="" text="::IDS_BTN_BEGIN" vAlign="ALIGN_MIDDLE"/>
-        <layout height="68" mode="Portrait" width="458" x="13" y="622"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_BEGIN" textSize="32" vAlign="ALIGN_MIDDLE"/>
+        <layout height="68" mode="Portrait" width="458" x="13" y="542"/>
         <layout height="48" mode="Landscape" width="333" x="178" y="344"/>
     </Button>
 </Scene>
