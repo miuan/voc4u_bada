@@ -49,13 +49,13 @@ bool AddWord::ShowPopup(Form * parent)
 
 void AddWord::showErrorMessageBox()
 {
-    String body;
-    Application::GetInstance()->GetAppResource()->GetString(L"IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD", body);
-    MessageBox messageBox;
-    messageBox.Construct(GetTitleText(), body, MSGBOX_STYLE_OK, 3000);
-    // Calls ShowAndWait - draw, show itself and process events
-    int modalResult = 0;
-    messageBox.ShowAndWait(modalResult);
+	String body;
+	Application::GetInstance()->GetAppResource()->GetString(L"IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD", body);
+	MessageBox messageBox;
+	messageBox.Construct(GetTitleText(), body, MSGBOX_STYLE_OK, 3000);
+	// Calls ShowAndWait - draw, show itself and process events
+	int modalResult = 0;
+	messageBox.ShowAndWait(modalResult);
 }
 
 void AddWord::OnActionPerformed(const Osp::Ui::Control & source, int actionId)
@@ -67,8 +67,15 @@ void AddWord::OnActionPerformed(const Osp::Ui::Control & source, int actionId)
 
 		if (native.GetLength() == 0 || lern.GetLength() == 0)
 		{
-		    showErrorMessageBox();
+			showErrorMessageBox();
 			return;
+		}
+
+		WordCtrl * wc = WordCtrl::GetInstance();
+		if (wc)
+		{
+			Word w(-1, 0, native, lern, 1, 1);
+			wc->AddWord(w);
 		}
 	}
 

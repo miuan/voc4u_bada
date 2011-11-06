@@ -15,6 +15,8 @@
 #include <FLclLocale.h>
 #include <FApp.h>
 
+#include "ctrl/WordCtrl.h"
+
 using namespace Osp::App;
 using namespace Osp::Locales;
 using namespace Osp::Base;

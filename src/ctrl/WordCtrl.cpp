@@ -9,23 +9,61 @@
 
 WordCtrl * WordCtrl::__wc = null;
 
-WordCtrl::WordCtrl()
+WordCtrl::WordCtrl() : __db(null)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 WordCtrl::~WordCtrl()
 {
-	// TODO Auto-generated destructor stub
+	if(__db)
+		delete __db;
 }
 
 WordCtrl * WordCtrl::GetInstance()
 {
 	if(!__wc)
+	{
 		__wc = new WordCtrl();
+		__wc->Init();
+	}
 
 	return __wc;
+}
+
+result WordCtrl::PrepareDB()
+{
+	result r;
+    String sql;
+    sql.Format(1000, INSERT_TABLE, TABLE_NAME, COLUMN_ID, COLUMN_LESSON,
+    			COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT, COLUMN_NWEIGHT, COLUMN_USER_CHANGE );
+
+
+    AppLogDebug("SQL: (%ls)", sql.GetPointer());
+    r = __db->ExecuteSql(sql, true);
+
+    if(IsFailed(r))
+    {
+    	AppLog("DB not initialized (%1s)", GetErrorMessage(r));
+    	return r;
+    }
+
+    return r;
+}
+
+result WordCtrl::Init()
+{
+	result  r = E_SUCCESS;
+	__db = new Database();
+
+	if(!Database::Exists(DB_NAME))
+	{
+		__db->Construct(DB_NAME, true);
+	    r = PrepareDB();
+	}
+	else
+		__db->Construct(DB_NAME, false);
+
+	return r;
 }
 
 bool WordCtrl::AddWord(Word &word)
