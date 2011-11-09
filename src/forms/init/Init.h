@@ -13,7 +13,7 @@ class Init :
 	public Osp::Ui::IActionEventListener,
 	public ILangSelectListener
 {
-
+		CommonSetting *__setting;
 // Construction
 public:
 	Init(void);

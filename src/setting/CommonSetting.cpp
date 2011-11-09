@@ -23,15 +23,13 @@ void CommonSetting::Restore()
 {
 	result r;
 
-	Registry reg;
-	r = reg.Construct(REG_NAME, false);
-	TryReturnVoid(r == E_SUCCESS, "");
+	AppRegistry* pReg = Osp::App::Application::GetInstance()->GetAppRegistry();
 
-	TryReturnVoid(reg.GetValue(REG_SECTION, VAL_LERN, lern) == E_SUCCESS
-			, "can not GetValue for lern");
+	TryReturnVoid(pReg->Get(VAL_LERN, lern) == E_SUCCESS
+			, "can not GetValue for lern %s", GetErrorMessage(GetLastResult()));
 
-	TryReturnVoid(reg.GetValue(REG_SECTION, VAL_NATIVE, native) == E_SUCCESS
-				, "can not GetValue for native");
+	TryReturnVoid(pReg->Get(VAL_NATIVE, native) == E_SUCCESS
+				, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
 
 	__initialized = true;
 	return;
@@ -40,32 +38,19 @@ void CommonSetting::Restore()
 
 bool CommonSetting::Store()
 {
-	Registry reg;
-	//AppRegistry* pAppRegistry = Osp::App::Application::GetInstance()->GetAppRegistry();
-	result r = reg.Construct(name, REG_OPEN_READ_WRITE | REG_OPEN_CREATE, true, 0);
-	if(IsFailed(r))
-	{
-		AppLog("reg construct doesn't work (%s)", GetErrorMessage(r));
-		goto CATCH;
-	}
-	reg.AddSection(REG_SECTION);
+	result r;
+	AppRegistry* pReg = Osp::App::Application::GetInstance()->GetAppRegistry();
 
-
-	r = reg.AddValue(REG_SECTION, VAL_LERN,lern);
-	if(r == E_KEY_ALREADY_EXIST)
-		r = reg.SetValue(REG_SECTION, VAL_LERN, lern);
-
+	r = pReg->Add(VAL_LERN, lern);
 	if(IsFailed(r))
 		goto CATCH;
 
-	r = reg.AddValue(REG_SECTION, VAL_NATIVE, native);
-	if(r == E_KEY_ALREADY_EXIST)
-		r = reg.SetValue(REG_SECTION, VAL_NATIVE, native);
-
+	r = pReg->Add(VAL_NATIVE, native);
 	if(IsFailed(r))
 		goto CATCH;
 
 		return true;
 	CATCH:
+		AppLog("Store error by : (%s)", GetErrorMessage(r));
 		return false;
 }

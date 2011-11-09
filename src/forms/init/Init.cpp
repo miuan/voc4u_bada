@@ -20,7 +20,7 @@ bool Init::Initialize()
 {
 	// Construct an XML form
 	Construct(L"IDF_INIT");
-
+	__setting = &CommonSetting::GetInstance();
 	return true;
 }
 
@@ -90,7 +90,7 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	}
 	case ID_BUTTON_BEGIN:
 	{
-		CommonSetting::GetInstance().Store();
+		__setting->Store();
 		AppLog("ahoj");
 		 MessageBox messageBox;
 		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
@@ -137,13 +137,13 @@ void Init::onSelectLang(int type, Locale &selected)
 			__pbtnLern->SetText(title);
 		}
 
-		CommonSetting::GetInstance().native = code;
+		__setting->native = code;
 	}
 	if(type == ID_BUTTON_LERN)
 	{
 		__pbtnLern->SetText(str);
 		__pLern =&selected;
-		CommonSetting::GetInstance().lern = code;
+		__setting->lern = code;
 	}
 
 	__pbtnBegin->SetEnabled(__pLern && __pNative);
