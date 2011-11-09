@@ -12,6 +12,7 @@
 #include <FUi.h>
 #include <FGraphics.h>
 
+#include "setting/CommonSetting.h"
 
 class BaseWordForm
 		: public Osp::Ui::Controls::Form

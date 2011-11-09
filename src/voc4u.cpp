@@ -5,9 +5,10 @@
  * Description : 
  */
 
-
 #include "voc4u.h"
 #include "forms/dashboard/Dashboard.h"
+#include "forms/init/Init.h"
+#include "setting/CommonSetting.h"
 
 using namespace Osp::App;
 using namespace Osp::Base;
@@ -30,8 +31,7 @@ voc4u::CreateInstance(void)
 	return new voc4u();
 }
 
-bool
-voc4u::OnAppInitializing(AppRegistry& appRegistry)
+bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 {
 	// TODO:
 	// Initialize UI resources and application specific data.
@@ -43,26 +43,40 @@ voc4u::OnAppInitializing(AppRegistry& appRegistry)
 	// Uncomment the following statement to listen to the screen on/off events.
 	//PowerManager::SetScreenEventListener(*this);
 
-	// Create a form
-	Dashboard *pInit = new Dashboard();
-	pInit->Initialize();
+	Form *pForm;
 
+	// if setting currently initialized
+	// you can continue normaly
+	if (CommonSetting::GetInstance().IsInitialized())
+	{
+		// Create a form
+		Dashboard *pDashboard = new Dashboard();
+		pDashboard->Init();
+		pForm = pDashboard;
+	}
+	else
+	{
+		// if not, is probably first start
+		// make init setting
+		Init * init = new Init();
+		init->Initialize();
+		pForm = init;
+	}
 	// Add the form to the frame
 	Frame *pFrame = GetAppFrame()->GetFrame();
-	pFrame->AddControl(*pInit);
+	pFrame->AddControl(*pForm);
 
 	// Set the current form
-	pFrame->SetCurrentForm(*pInit);
+	pFrame->SetCurrentForm(*pForm);
 
 	// Draw and Show the form
-	pInit->Draw();
-	pInit->Show();
+	pForm->Draw();
+	pForm->Show();
 
 	return true;
 }
 
-bool
-voc4u::OnAppTerminating(AppRegistry& appRegistry, bool forcedTermination)
+bool voc4u::OnAppTerminating(AppRegistry& appRegistry, bool forcedTermination)
 {
 	// TODO:
 	// Deallocate resources allocated by this application for termination.
@@ -70,44 +84,38 @@ voc4u::OnAppTerminating(AppRegistry& appRegistry, bool forcedTermination)
 	return true;
 }
 
-void
-voc4u::OnForeground(void)
+void voc4u::OnForeground(void)
 {
 	// TODO:
 	// Start or resume drawing when the application is moved to the foreground.
 }
 
-void
-voc4u::OnBackground(void)
+void voc4u::OnBackground(void)
 {
 	// TODO:
 	// Stop drawing when the application is moved to the background.
 }
 
-void
-voc4u::OnLowMemory(void)
+void voc4u::OnLowMemory(void)
 {
 	// TODO:
 	// Free unused resources or close the application.
 }
 
-void
-voc4u::OnBatteryLevelChanged(BatteryLevel batteryLevel)
+void voc4u::OnBatteryLevelChanged(BatteryLevel batteryLevel)
 {
 	// TODO:
 	// Handle any changes in battery level here.
 	// Stop using multimedia features(camera, mp3 etc.) if the battery level is CRITICAL.
 }
 
-void
-voc4u::OnScreenOn (void)
+void voc4u::OnScreenOn(void)
 {
 	// TODO:
 	// Get the released resources or resume the operations that were paused or stopped in OnScreenOff().
 }
 
-void
-voc4u::OnScreenOff (void)
+void voc4u::OnScreenOff(void)
 {
 	// TODO:
 	//  Unless there is a strong reason to do otherwise, release resources (such as 3D, media, and sensors) to allow the device to enter the sleep mode to save the battery.

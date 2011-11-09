@@ -31,7 +31,7 @@ public:
 	Dashboard();
 	virtual ~Dashboard();
 
-	bool Initialize();
+	bool Init();
 	result OnInitializing(void);
 
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);

@@ -6,6 +6,7 @@
 #include <FGraphics.h>
 
 #include "LangSelect.h"
+#include "setting/CommonSetting.h"
 
 class Init :
 	public Osp::Ui::Controls::Form,

@@ -90,6 +90,7 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	}
 	case ID_BUTTON_BEGIN:
 	{
+		CommonSetting::GetInstance().Store();
 		AppLog("ahoj");
 		 MessageBox messageBox;
 		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
@@ -117,8 +118,9 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 void Init::onSelectLang(int type, Locale &selected)
 {
-	String str;
+	String str, code;
 	selected.GetLanguageName(str);
+	code = selected.GetLanguageCodeString();
 
 	if (type == ID_BUTTON_NATIVE)
 	{
@@ -134,11 +136,14 @@ void Init::onSelectLang(int type, Locale &selected)
 			if (res->GetString(L"IDS_NOT_SELECTED_YET", title) == E_SUCCESS)
 			__pbtnLern->SetText(title);
 		}
+
+		CommonSetting::GetInstance().native = code;
 	}
 	if(type == ID_BUTTON_LERN)
 	{
 		__pbtnLern->SetText(str);
 		__pLern =&selected;
+		CommonSetting::GetInstance().lern = code;
 	}
 
 	__pbtnBegin->SetEnabled(__pLern && __pNative);

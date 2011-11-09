@@ -53,7 +53,7 @@ result Dashboard::OnInitializing(void)
 	return r;
 }
 
-bool Dashboard::Initialize()
+bool Dashboard::Init()
 {
 	Construct(L"IDF_DASHBOARD");
 	return true;
@@ -74,11 +74,11 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	{
 		Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
 
-		Init * init = new Init();
-		init->Initialize();
-		pFrame->RemoveControl(*init);
-		pFrame->AddControl(*init);
-		pFrame->SetCurrentForm(*init);
-		init->RequestRedraw(true);
+//		Init * init = new Init();
+//		init->Initialize();
+//		pFrame->RemoveControl(*init);
+//		pFrame->AddControl(*init);
+//		pFrame->SetCurrentForm(*init);
+//		init->RequestRedraw(true);
 	}
 }
