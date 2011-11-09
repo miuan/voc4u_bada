@@ -13,18 +13,28 @@
 #include <FGraphics.h>
 
 #include "setting/CommonSetting.h"
+#include "ctrl/WordCtrl.h"
+
+using namespace Osp::Ui::Controls;
 
 class BaseWordForm
-		: public Osp::Ui::Controls::Form
+		: public Osp::Ui::Controls::Form,
+		public Osp::Ui::IActionEventListener
 {
+public:
+			static const int ID_ADD_WORD = 1001;
+protected:
+		WordCtrl *__WCtrl;
 public:
 	BaseWordForm();
 	virtual ~BaseWordForm();
 
 
-	bool Initialize();
+	bool Init();
+	virtual String GetResourceID() = 0;
+	virtual result OnInitializing();
 
-
+	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 };
 
 #endif /* BASEWORDFORM_H_ */

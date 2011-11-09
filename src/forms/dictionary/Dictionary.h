@@ -15,6 +15,8 @@ class Dictionary: public BaseWordForm
 public:
 	Dictionary();
 	virtual ~Dictionary();
+
+	String  GetResourceID(){return L"IDF_DICTIONARY";}
 };
 
 #endif /* DICTIONARY_H_ */

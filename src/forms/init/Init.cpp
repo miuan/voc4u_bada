@@ -91,23 +91,32 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	case ID_BUTTON_BEGIN:
 	{
 		__setting->Store();
-		AppLog("ahoj");
-		 MessageBox messageBox;
-		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
+		Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
 
-		    // Calls ShowAndWait - draw, show itself and process events
-		    int modalResult = 0;
-		    messageBox.ShowAndWait(modalResult);
+		Dictionary * init = new Dictionary();
+		init->Init();
+		pFrame->AddControl(*init);
+		pFrame->SetCurrentForm(*init);
+		init->RequestRedraw(true);
+		pFrame->RemoveControl(*this);
 
-		    switch(modalResult)
-		    {
-		    case MSGBOX_RESULT_OK:
-		        // Todo:
-		        break;
-
-		    default:
-		        break;
-		    }
+				AppLog("ahoj");
+//		 MessageBox messageBox;
+//		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
+//
+//		    // Calls ShowAndWait - draw, show itself and process events
+//		    int modalResult = 0;
+//		    messageBox.ShowAndWait(modalResult);
+//
+//		    switch(modalResult)
+//		    {
+//		    case MSGBOX_RESULT_OK:
+//		        // Todo:
+//		        break;
+//
+//		    default:
+//		        break;
+//		    }
 		break;
 	}
 	default:

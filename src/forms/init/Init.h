@@ -7,6 +7,7 @@
 
 #include "LangSelect.h"
 #include "setting/CommonSetting.h"
+#include "forms/dictionary/Dictionary.h"
 
 class Init :
 	public Osp::Ui::Controls::Form,

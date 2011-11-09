@@ -8,6 +8,7 @@
 #include "voc4u.h"
 #include "forms/dashboard/Dashboard.h"
 #include "forms/init/Init.h"
+#include "forms/dictionary/Dictionary.h"
 #include "setting/CommonSetting.h"
 
 using namespace Osp::App;
@@ -47,10 +48,11 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	// if setting currently initialized
 	// you can continue normaly
-	if (CommonSetting::GetInstance().IsInitialized())
+	if (true ||
+		CommonSetting::GetInstance().IsInitialized())
 	{
 		// Create a form
-		Dashboard *pDashboard = new Dashboard();
+		Dictionary *pDashboard = new Dictionary();
 		pDashboard->Init();
 		pForm = pDashboard;
 	}

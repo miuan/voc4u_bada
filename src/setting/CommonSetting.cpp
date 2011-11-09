@@ -42,14 +42,23 @@ bool CommonSetting::Store()
 	AppRegistry* pReg = Osp::App::Application::GetInstance()->GetAppRegistry();
 
 	r = pReg->Add(VAL_LERN, lern);
+	if(r == E_KEY_NOT_FOUND)
+		r = pReg->Set(VAL_LERN, lern);
+
 	if(IsFailed(r))
 		goto CATCH;
 
 	r = pReg->Add(VAL_NATIVE, native);
+	if(r == E_KEY_NOT_FOUND)
+			r = pReg->Set(VAL_NATIVE, native);
+
+
 	if(IsFailed(r))
 		goto CATCH;
 
+	pReg->Save();
 		return true;
+
 	CATCH:
 		AppLog("Store error by : (%s)", GetErrorMessage(r));
 		return false;
