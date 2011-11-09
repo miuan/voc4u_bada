@@ -12,12 +12,10 @@ BaseWordForm::BaseWordForm()
 
 }
 
-
 BaseWordForm::~BaseWordForm()
 {
 
 }
-
 
 bool BaseWordForm::Init()
 {
@@ -30,7 +28,7 @@ bool BaseWordForm::Init()
 	{
 		ButtonItem btnAddWord;
 		btnAddWord.Construct(BUTTON_ITEM_STYLE_TEXT, ID_ADD_WORD);
-		btnAddWord.SetText("Add word");
+		btnAddWord.SetText(GetString("IDS_ADD_WORD_BUTTON"));
 		HeaderItem headerItem1;
 
 		header->SetTitleText("voc4u");
@@ -38,9 +36,26 @@ bool BaseWordForm::Init()
 		header->PlayWaitingAnimation(HEADER_ANIMATION_POSITION_BUTTON_LEFT);
 		header->AddActionEventListener(*this);
 	}
+
+	Footer *footer = GetFooter();
+
+	if (footer)
+	{
+		FooterItem btnSave;
+		btnSave.Construct(ID_ADD_WORD);
+		btnSave.SetText(GetString("IDS_SAVE_DICTIONARY"));
+		footer->AddItem(btnSave);
+	}
 	return true;
 }
 
+String BaseWordForm::GetString(Osp::Base::String ID)
+{
+	String out = "";
+	Application* pApp = Application::GetInstance();
+	pApp->GetAppResource()->GetString(ID, out);
+	return out;
+}
 
 result BaseWordForm::OnInitializing()
 {

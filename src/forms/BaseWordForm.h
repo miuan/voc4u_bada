@@ -35,6 +35,8 @@ public:
 	virtual result OnInitializing();
 
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
+	static String GetString(Osp::Base::String ID);
 };
 
 #endif /* BASEWORDFORM_H_ */
