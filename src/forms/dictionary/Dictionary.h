@@ -20,6 +20,10 @@ using namespace Osp::Base;
 class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEventListener, public Osp::Ui::Controls::IListViewItemProvider
 {
 	ListView * __pList;
+
+	/**
+	 * @lesson must be 1 or higher
+	 */
     CustomItem *CreateLessonItem(int itemWidth, int lesson);
 public:
     static const int ID_FORMAT_STRING = 1;

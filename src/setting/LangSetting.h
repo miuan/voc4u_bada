@@ -47,7 +47,7 @@ public:
 	/**
 	 * colors for lesson
 	 */
-
+	static const Color LESSON_COLORS[];
 
 public:
 	LangSetting();
