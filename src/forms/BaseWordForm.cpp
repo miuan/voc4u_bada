@@ -20,6 +20,7 @@ BaseWordForm::~BaseWordForm()
 bool BaseWordForm::Init()
 {
 	__WCtrl = WordCtrl::GetInstance();
+
 	Construct(GetResourceID());
 
 	Header *header = GetHeader();
@@ -51,10 +52,7 @@ bool BaseWordForm::Init()
 
 String BaseWordForm::GetString(Osp::Base::String ID)
 {
-	String out = "";
-	Application* pApp = Application::GetInstance();
-	pApp->GetAppResource()->GetString(ID, out);
-	return out;
+	return Utils::GetString(ID);
 }
 
 result BaseWordForm::OnInitializing()

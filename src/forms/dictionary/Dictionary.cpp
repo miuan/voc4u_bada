@@ -20,7 +20,7 @@ Dictionary::~Dictionary()
 
 result Dictionary::OnInitializing(void)
 {
-	__pList = static_cast<ListView *>(GetControl(L"IDC_LESSON"));
+	__pList = static_cast<ListView *> (GetControl(L"IDC_LESSON"));
 	__pList->SetItemProvider(*this);
 	return E_SUCCESS;
 }
@@ -42,30 +42,22 @@ void OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int index, Osp::
 {
 }
 
+CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
+{
+    ListAnnexStyle style = LIST_ANNEX_STYLE_NORMAL;
+    CustomItem *pItem = new CustomItem();
+    pItem->Construct(Osp::Graphics::Dimension(itemWidth, 100), style);
+    String name = LangSetting::GetNameOfLesson(lesson);
+    pItem->AddElement(Rectangle(5, 5, 250, 50), ID_FORMAT_STRING, name, true);
+    return pItem;
+}
+
 // list item provider
 Osp::Ui::Controls::ListItemBase * Dictionary::CreateItem(int index, int itemWidth)
 {
-	ListAnnexStyle style = LIST_ANNEX_STYLE_NORMAL;
-	    CustomItem* pItem = new CustomItem();
-	    pItem->Construct(Osp::Graphics::Dimension(itemWidth,100), style);
+    CustomItem *pItem = CreateLessonItem(itemWidth, index + 1);
 
-	    switch (index % 3)
-	    {
-	    case 0:
-	        pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, L"HOME", true);
-	        break;
-	    case 1:
-	        pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, L"Msg", true);
-	        break;
-	    case 2:
-	        pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, L"Alarm", true);
-	        break;
-	    default:
-	        break;
-	    }
-
-
-	    return pItem;
+	return pItem;
 }
 
 bool Dictionary::DeleteItem(int index, Osp::Ui::Controls::ListItemBase *pItem, int itemWidth)
@@ -75,5 +67,5 @@ bool Dictionary::DeleteItem(int index, Osp::Ui::Controls::ListItemBase *pItem, i
 
 int Dictionary::GetItemCount(void)
 {
-	return 10;
+	return LangSetting::NUM_LESSON;
 }

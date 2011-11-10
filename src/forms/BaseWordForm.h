@@ -14,6 +14,7 @@
 
 #include "setting/CommonSetting.h"
 #include "ctrl/WordCtrl.h"
+#include "system/Utils.h"
 
 using namespace Osp::Ui::Controls;
 

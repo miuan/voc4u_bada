@@ -6,24 +6,33 @@
  */
 
 #include "LangSetting.h"
+#include "system/Utils.h"
 
-const LangType LangSetting::CZECH(0, "cs-CZ");
-const LangType LangSetting::ENGLISH(1, "EN");
-const LangType LangSetting::GERMANY(2, "DE");
-const LangType LangSetting::SPAIN(3, "SP");
-const LangType LangSetting::PORTUGAL(4, "PT");
-const LangType LangSetting::POLAND(5, "PL");
-const LangType LangSetting::FRANCE(6, "FR");
-const LangType LangSetting::ITALIAN(7, "IT");
+const Locale LangSetting::CZECH(LANGUAGE_CES, COUNTRY_CZ);
+const Locale LangSetting::ENGLISH(LANGUAGE_ENG, COUNTRY_US);
+const Locale LangSetting::GERMANY(LANGUAGE_DEU, COUNTRY_DE);
+const Locale LangSetting::SPAIN(LANGUAGE_SPA, COUNTRY_ES);
+const Locale LangSetting::PORTUGAL(LANGUAGE_POR, COUNTRY_PT);
+const Locale LangSetting::POLAND(LANGUAGE_POL, COUNTRY_PL);
+const Locale LangSetting::FRANCE(LANGUAGE_FRA, COUNTRY_FR);
+const Locale LangSetting::ITALIAN(LANGUAGE_ITA, COUNTRY_IT);
 
+Locale LangSetting::LOCALES[] =
+{ LangSetting::CZECH, LangSetting::ENGLISH, LangSetting::GERMANY, LangSetting::SPAIN, LangSetting::PORTUGAL, LangSetting::POLAND, LangSetting::FRANCE, LangSetting::ITALIAN };
+
+const int LangSetting::NUM_LOCALES = 8;
 
 LangSetting::LangSetting()
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 LangSetting::~LangSetting()
 {
-	// TODO Auto-generated destructor stub
+}
+
+String LangSetting::GetNameOfLesson(int lesson)
+{
+	String name = L"IDS_LESSON_";
+	name.Append(lesson);
+	return Utils::GetString(name);
 }

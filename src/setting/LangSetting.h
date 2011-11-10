@@ -9,52 +9,52 @@
 #define LANGSETTING_H_
 
 #include <FBase.h>
+#include <FLclLocale.h>
+#include <FApp.h>
+#include <FGraphics.h>
 
+using namespace Osp::App;
+using namespace Osp::Locales;
 using namespace Osp::Base;
-
-class LangType
-{
-public:
-	const String __code;
-	const int __id;
-
-	LangType(int id, String code) :
-		__id(id), __code(code)
-	{
-
-	}
-
-	const String getCode() const
-	{
-		return __code;
-	}
-
-	const int getId() const
-	{
-		return __id;
-	}
-};
+using namespace Osp::Graphics;
 
 class LangSetting
 {
 public:
-	static const LangType CZECH;
-	static const LangType ENGLISH;
-	static const LangType GERMANY;
-	static const LangType SPAIN;
-	static const LangType PORTUGAL;
-	static const LangType POLAND;
-	static const LangType FRANCE;
-	static const LangType ITALIAN;
+	/**
+	 * all allowed languages
+	 */
+	static const Locale CZECH;
+	static const Locale ENGLISH;
+	static const Locale GERMANY;
+	static const Locale SPAIN;
+	static const Locale PORTUGAL;
+	static const Locale POLAND;
+	static const Locale FRANCE;
+	static const Locale ITALIAN;
+
+	/**
+	 * all languages in array
+	 */
+	static Locale LOCALES[];
+	static const int NUM_LOCALES;
+
+	/**
+	 * num lesson for initing DB
+	 */
+	static const int NUM_LESSON = 4;
+
+	/**
+	 * colors for lesson
+	 */
+
 
 public:
 	LangSetting();
 	virtual ~LangSetting();
 
-	LangType * getLangTypeArrayN()
-	{
+	static String GetNameOfLesson(int lesson);
 
-	}
 };
 
 #endif /* LANGSETTING_H_ */

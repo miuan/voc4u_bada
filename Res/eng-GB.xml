@@ -14,7 +14,11 @@
     <text id="IDS_HINT_NATIVE_WORD">native word</text>
     <text id="IDS_START">start</text>
     <text id="IDS_LANG_GERMANY">germany</text>
+    <text id="IDS_LESSON_4">Intermediate</text>
     <text id="IDS_ADD_WORD_BUTTON">add word</text>
+    <text id="IDS_LESSON_3">Pre-Intermediate</text>
+    <text id="IDS_LESSON_2">Elementary</text>
+    <text id="IDS_LESSON_1">Basic</text>
     <text id="IDS_BTN_TRAIN">TRAIN</text>
     <text id="IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD">For save add word, must be filled both field!</text>
     <text id="IDS_ADD_WORD_TITLE">Add custom word</text>
