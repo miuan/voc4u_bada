@@ -13,6 +13,8 @@
 #include <FApp.h>
 #include <FGraphics.h>
 
+#include "lang/InitData.h"
+
 using namespace Osp::App;
 using namespace Osp::Locales;
 using namespace Osp::Base;
@@ -55,6 +57,7 @@ public:
 
 	static String GetNameOfLesson(int lesson);
 
+	//static
 };
 
 #endif /* LANGSETTING_H_ */
