@@ -57,7 +57,7 @@ public:
 
 	static String GetNameOfLesson(int lesson);
 
-	//static
+	static wchar_t ** GetInitDataN(String lang, int lesson, int &count);
 };
 
 #endif /* LANGSETTING_H_ */

@@ -34,6 +34,8 @@ using namespace Osp::Io;
 		%ls INTEGER)"
 
 
+#define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
+
 class WordCtrl
 {
 private:
@@ -52,6 +54,7 @@ public:
 	result Init();
 	static WordCtrl * GetInstance();
 	bool AddWord(Word &word);
+    bool GetLessonEnabled(const int lesson);
 };
 
 #endif /* WORDCTRL_H_ */

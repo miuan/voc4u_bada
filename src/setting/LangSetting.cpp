@@ -38,3 +38,8 @@ String LangSetting::GetNameOfLesson(int lesson)
 	name.Append(lesson);
 	return Utils::GetString(name);
 }
+
+wchar_t ** LangSetting::GetInitDataN(String lang, int lesson, int &count)
+{
+	return getInitData(lang, lesson, count);
+}

@@ -21,10 +21,10 @@ class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEv
 {
 	ListView * __pList;
 
-	/**
-	 * @lesson must be 1 or higher
-	 */
+	bool initState[LangSetting::NUM_LESSON];
+	bool saveState[LangSetting::NUM_LESSON];
     CustomItem *CreateLessonItem(int itemWidth, int lesson);
+    void InitLessonState();
 public:
     static const int ID_FORMAT_STRING = 1;
 public:
@@ -44,6 +44,10 @@ public:
 	virtual bool  DeleteItem (int index, Osp::Ui::Controls::ListItemBase *pItem, int itemWidth);
 	virtual int  GetItemCount (void);
 
+	void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
+
+	bool Init();
 };
 
 #endif /* DICTIONARY_H_ */

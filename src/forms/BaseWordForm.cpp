@@ -38,15 +38,7 @@ bool BaseWordForm::Init()
 		header->AddActionEventListener(*this);
 	}
 
-	Footer *footer = GetFooter();
 
-	if (footer)
-	{
-		FooterItem btnSave;
-		btnSave.Construct(ID_ADD_WORD);
-		btnSave.SetText(GetString("IDS_SAVE_DICTIONARY"));
-		footer->AddItem(btnSave);
-	}
 	return true;
 }
 
