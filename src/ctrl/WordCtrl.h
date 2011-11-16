@@ -39,6 +39,8 @@ using namespace Osp::Base::Collection;
 
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
 
+
+
 class ILessonWorkerLissener
 {
 public:
@@ -51,7 +53,8 @@ public:
 	}
 	;
 public:
-	virtual void OnLessonDone(const int lesson) = 0;
+
+	virtual void OnLessonTask(const int lesson) = 0;
 };
 
 class LessonWorker: public Osp::Base::Runtime::Thread
@@ -225,7 +228,7 @@ public:
 
 				__mutex.Acquire();
 				if (__lwLissener)
-					__lwLissener->OnLessonDone(lesson);
+					__lwLissener->OnLessonTask(lesson);
 				__mutex.Release();
 			}
 		}
@@ -280,7 +283,7 @@ public:
 	}
 };
 
-class WordCtrl
+class WordCtrl : public ILessonWorkerLissener
 {
 private:
 	static WordCtrl *__wc;
@@ -300,6 +303,7 @@ public:
     bool GetLessonEnabled(const int lesson);
     bool AddLesson(const int lesson, bool remove);
     void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
+    virtual void OnLessonTask(const int lesson);
 };
 
 #endif /* WORDCTRL_H_ */

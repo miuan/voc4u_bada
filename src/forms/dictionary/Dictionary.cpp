@@ -141,7 +141,7 @@ int Dictionary::GetItemCount(void)
 	return LangSetting::NUM_LESSON;
 }
 
-void Dictionary::OnLessonDone(const int lesson)
+void Dictionary::OnLessonTask(const int lesson)
 {
 	AppLog("OnLessonDone %i", lesson);
 }

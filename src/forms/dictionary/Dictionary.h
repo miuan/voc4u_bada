@@ -48,7 +48,7 @@ public:
     virtual int GetItemCount(void);
     void OnActionPerformed(const Osp::Ui::Control & source, int actionId);
 public:
-    virtual void OnLessonDone(const int lesson);
+    virtual void OnLessonTask(const int lesson);
 
 	bool Init();
 };

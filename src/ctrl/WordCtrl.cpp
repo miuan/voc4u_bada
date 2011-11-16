@@ -107,7 +107,7 @@ void WordCtrl::CreateLessonWorker()
 	// delete and create new LessonWorker
 	__lw = new LessonWorker();
 	__lw->Construct();
-	__lw->SetLessonWorkerLissener(__lwLissener);
+	__lw->SetLessonWorkerLissener(this);
 }
 
 bool WordCtrl::AddLesson(const int lesson, bool remove)
@@ -155,7 +155,11 @@ bool WordCtrl::AddLesson(const int lesson, bool remove)
 void WordCtrl::SetLessonWorkerListener(ILessonWorkerLissener *ilwl)
 {
 	__lwLissener = ilwl;
-	if (__lw)
-		__lw->SetLessonWorkerLissener(__lwLissener);
+
 }
-;
+
+void WordCtrl::OnLessonTask(const int lesson)
+{
+	if(__lwLissener)
+		__lwLissener->OnLessonTask(lesson);
+}
