@@ -10,8 +10,12 @@
 
 #include "Word.h"
 #include <FIo.h>
+#include <FBase.h>
 
 using namespace Osp::Io;
+using namespace Osp::Base;
+using namespace Osp::Base::Runtime;
+using namespace Osp::Base::Collection;
 
 #define DB_NAME L"/Home/testingDatabase"
 
@@ -33,8 +37,195 @@ using namespace Osp::Io;
 		%ls INTEGER,\
 		%ls INTEGER)"
 
-
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
+
+class ILessonWorkerLissener
+{
+	ILessonWorkerLissener();
+	virtual ~ILessonWorkerLissener();
+public:
+	virtual void OnLessonDone(const int lesson) = 0;
+};
+
+class LessonWorker: public Osp::Base::Runtime::Thread
+{
+	/**
+	 * mutex
+	 */
+	Mutex __mutex;
+
+	/**
+	 * is now working or not
+	 */
+	bool __runing;
+
+	/**
+	 * can continu in Run process
+	 * because user can stop the adding proces uncheck the lesson
+	 */
+	bool __stop;
+
+	/**
+	 * list with other works, lesson waiting to do (add, remove)
+	 */
+	ArrayList __list;
+
+	/*
+	 * lesson already worket on
+	 */
+	int __currentLesson;
+
+	/**
+	 * after every lesson done (add, remove) is called
+	 * ILessonWorkerLissener::OnLessonDone
+	 */
+	ILessonWorkerLissener * __lwLissener;
+
+public:
+	LessonWorker()
+	{
+		__mutex.Create();
+		__list.Construct(10);
+		__runing = false;
+		__currentLesson = 0;
+		__stop = false;
+		__lwLissener = null;
+	}
+
+	~LessonWorker()
+	{
+
+	}
+
+public:
+
+	bool GetLessonFromList(int & lesson)
+	{
+		__mutex.Acquire();
+
+		// reset values to stop
+		lesson = 0;
+		__currentLesson = 0;
+
+		// is something for do in list?
+		__runing = __list.GetCount() > 0;
+		if (__runing)
+		{
+			Integer *pInt = static_cast<Integer*> (__list.GetAt(0));
+			lesson = pInt->ToInt();
+			__list.RemoveAt(0, true);
+			__currentLesson = lesson;
+		}
+		__mutex.Release();
+
+		return lesson != 0;
+	}
+
+	bool AddLesson(int lesson, bool remove)
+	{
+		AppAssert(lesson != 0);
+		if (lesson == 0)
+			return false;
+
+		bool result = true;
+
+		// negative lesson is remove lesson with the id
+		lesson = !remove ? lesson : lesson * -1;
+
+		__mutex.Acquire();
+
+		int inversion = lesson * (-1);
+
+		// try add lesson which actualy in work process
+		if(lesson == __currentLesson)
+		{
+			result = false;
+			goto RELEASE;
+		}
+
+		// try add lesson which is inversion of lesson already in work process
+		if(inversion == __currentLesson)
+		{
+			// hope that isn't in list other inversion
+			// because will be catched here
+			// on previosly attempt
+			result = __list.InsertAt(*(new Integer(lesson)),0) == E_SUCCESS;
+			__stop = true;
+
+			goto RELEASE;
+		}
+
+		// get inversion in list
+		// when somebody check lesson and after that uncheck
+
+		for (int i = 0; i != __list.GetCount(); i++)
+		{
+			Integer *pInt = static_cast<Integer*> (__list.GetAt(0));
+			if (inversion == pInt->ToInt())
+			{
+				__list.RemoveAt(i, true);
+				result = true;
+				goto RELEASE;
+			}
+		}
+
+		// get exist in list
+		for (int i = 0; i != __list.GetCount(); i++)
+		{
+			Integer *pInt = static_cast<Integer*> (__list.GetAt(0));
+			if (pInt->ToInt() == lesson)
+			{
+				result = false;
+				break;
+			}
+		}
+
+		// add to list if not exist in list
+		if (result)
+			result = __list.Add(*(new Integer(lesson))) == E_SUCCESS;
+RELEASE:
+		__mutex.Release();
+
+		return result;
+	}
+
+	bool IsRunning()
+	{
+		bool isRunning;
+		__mutex.Acquire();
+		isRunning = __runing;
+		__mutex.Release();
+		return isRunning;
+	}
+
+	Object *Run(void)
+	{
+		int lesson = 0;
+
+		while (GetLessonFromList(lesson))
+		{
+
+
+
+			__mutex.Acquire();
+
+			if(__lwLissener)
+				__lwLissener->OnLessonDone(lesson);
+
+			__mutex.Release();
+		}
+
+		return null;
+	}
+
+
+	void SetLessonWorkerLissener(ILessonWorkerLissener *lesson)
+	{
+		__mutex.Acquire();
+		__lwLissener = lesson;
+		__mutex.Release();
+	}
+};
 
 class WordCtrl
 {
@@ -42,10 +233,9 @@ private:
 	static WordCtrl *__wc;
 	Database *__db;
 
-
+	LessonWorker __lw;
 private:
-    result PrepareDB();
-
+	result PrepareDB();
 
 public:
 	WordCtrl();
@@ -54,7 +244,10 @@ public:
 	result Init();
 	static WordCtrl * GetInstance();
 	bool AddWord(Word &word);
-    bool GetLessonEnabled(const int lesson);
+	bool GetLessonEnabled(const int lesson);
+	bool AddLesson(const int lesson, bool remove);
+
+	LessonWorker & GetLessonWorker() { return __lw; };
 };
 
 #endif /* WORDCTRL_H_ */

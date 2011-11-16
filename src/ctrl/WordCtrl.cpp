@@ -85,10 +85,20 @@ result WordCtrl::Init()
 	}
 	else __db->Construct(DB_NAME, false);
 
+	__lw.Construct();
+
 	return r;
 }
 
 bool WordCtrl::AddWord(Word &word)
 {
+	return true;
+}
+
+bool WordCtrl::AddLesson(const int lesson, bool remove)
+{
+	if(__lw.AddLesson(lesson, remove) && !__lw.IsRunning())
+		__lw.Start();
+
 	return true;
 }
