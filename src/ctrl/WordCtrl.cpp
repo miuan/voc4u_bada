@@ -10,12 +10,21 @@
 WordCtrl * WordCtrl::__wc = null;
 
 WordCtrl::WordCtrl() :
-	__db(null)
+	__db(null), __lw(null), __lwLissener(null)
 {
 }
 
 WordCtrl::~WordCtrl()
 {
+	if (__lw)
+	{
+		__lw->SetLessonWorkerLissener(null);
+
+		while (__lw->IsRunning())
+			Thread::Sleep(1000);
+
+		delete __lw;
+	}
 	if (__db)
 		delete __db;
 }
@@ -85,8 +94,6 @@ result WordCtrl::Init()
 	}
 	else __db->Construct(DB_NAME, false);
 
-	__lw.Construct();
-
 	return r;
 }
 
@@ -95,10 +102,60 @@ bool WordCtrl::AddWord(Word &word)
 	return true;
 }
 
+void WordCtrl::CreateLessonWorker()
+{
+	// delete and create new LessonWorker
+	__lw = new LessonWorker();
+	__lw->Construct();
+	__lw->SetLessonWorkerLissener(__lwLissener);
+}
+
 bool WordCtrl::AddLesson(const int lesson, bool remove)
 {
-	if(__lw.AddLesson(lesson, remove) && !__lw.IsRunning())
-		__lw.Start();
+	bool createnew = false;
+
+	if (!__lw)
+	{
+		CreateLessonWorker();
+		createnew = true;
+	}
+	else
+	{
+		// set wait because, the __lw
+		// can be on end of add/removing cycle
+		// set wait on this cycle for try GetLessonFromList
+		__lw->StartWait();
+	}
+
+	// the __lw is finished yet
+	// you can create new therad
+	// because old thread isn't abble to start again
+	if (!createnew && !__lw->IsRunning())
+	{
+		__lw->StopWait();
+		delete __lw;
+		__lw = null;
+
+		CreateLessonWorker();
+		createnew = true;
+	}
+
+	// add/remove lesson at lesson
+	__lw->AddLesson(lesson, remove);
+
+	// it was create new start new thread
+	// otherwise call StopWait -> continue cycle in Run
+	if (createnew)
+		__lw->Start();
+	else __lw->StopWait();
 
 	return true;
 }
+
+void WordCtrl::SetLessonWorkerListener(ILessonWorkerLissener *ilwl)
+{
+	__lwLissener = ilwl;
+	if (__lw)
+		__lw->SetLessonWorkerLissener(__lwLissener);
+}
+;
