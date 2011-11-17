@@ -148,7 +148,7 @@ void LessonWorker::LessonAdd(int & lesson, void * vwc)
 		String l = String(lern[i]);
 		Word word(-1, lesson, n, l, 0, 0);
 		wc->AddWord(word);
-		Thread::Sleep(1000);
+		//Thread::Sleep(1000);
 		__mutex.Acquire();
 
 		if(__stop)

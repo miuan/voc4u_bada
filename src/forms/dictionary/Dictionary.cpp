@@ -104,7 +104,7 @@ void Dictionary::OnListViewItemLongPressed(Osp::Ui::Controls::ListView &listView
 void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listView, int index, int elementId, Osp::Ui::Controls::ListItemStatus status)
 {
 	bool add = status == LIST_ITEM_STATUS_CHECKED;
-	__WCtrl->AddLesson(index, !add);
+	__WCtrl->AddLesson(index + 1, !add);
 	saveState[index] =  add;
 	listView.UpdateList();
 }

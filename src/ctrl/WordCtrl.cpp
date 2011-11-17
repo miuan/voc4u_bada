@@ -99,6 +99,30 @@ result WordCtrl::Init()
 
 bool WordCtrl::AddWord(Word &word)
 {
+	String statement;
+
+	if (__db->BeginTransaction() != E_SUCCESS)
+		return false;
+
+	statement.Format(1000, L"INSERT INTO %S (%S, %S, %S, %S, %S, %S) VALUES (?, ?, ?, ?, ?, ?)", TABLE_NAME, COLUMN_LESSON, COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT,
+			COLUMN_NWEIGHT, COLUMN_USER_CHANGE);
+
+	DbStatement * pStmt = __db->CreateStatementN(statement);
+
+	pStmt->BindInt(0, word.__lesson);
+	pStmt->BindString(1, word.__lern);
+	pStmt->BindString(2, word.__native);
+	pStmt->BindInt(3, word.__lweight);
+	pStmt->BindInt(4, word.__nweight);
+	pStmt->BindInt(5, 0);
+
+	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+
+	__db->CommitTransaction();
+
+	delete pEnum;
+	delete pStmt;
+
 	AppLog("word: %S - %S", word.__lern.GetPointer(), word.__native.GetPointer());
 	return true;
 }
@@ -161,7 +185,7 @@ void WordCtrl::SetLessonWorkerListener(ILessonWorkerLissener *ilwl)
 
 void WordCtrl::OnLessonTask(const int lesson)
 {
-	if(__lwLissener)
+	if (__lwLissener)
 		__lwLissener->OnLessonTask(lesson);
 }
 
