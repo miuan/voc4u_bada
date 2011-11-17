@@ -22,12 +22,6 @@ result Dashboard::OnInitializing(void)
 {
 	result r = E_SUCCESS;
 
-	WordCtrl * wc = WordCtrl::GetInstance();
-	if (wc)
-	{
-		Word w(-1, 0, L"ahoj", L"hello", 1, 1);
-		wc->AddWord(w);
-	}
 
 	Button *pBtn_train = static_cast<Button *> (GetControl("IDC_BTN_TRAIN"));
 	if (pBtn_train)

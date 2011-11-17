@@ -53,6 +53,9 @@ bool Dictionary::Init()
 
 result Dictionary::OnInitializing(void)
 {
+	Information * pAddWord = new Information(L"DICTIONARY");
+	pAddWord->ShowPopup(this);
+
 	Footer *footer = GetFooter();
 
 	if (footer)

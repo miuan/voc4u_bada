@@ -11,6 +11,7 @@
 #include "../BaseWordForm.h"
 #include <FGraphics.h>
 #include "setting/LangSetting.h"
+#include "dialogs/information/Information.h"
 
 using namespace Osp::Ui;
 using namespace Osp::Ui::Controls;
