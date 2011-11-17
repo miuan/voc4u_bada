@@ -14,6 +14,7 @@ using namespace Osp::Base;
 
 class Word
 {
+public:
 	String __native;
 	String __lern;
 	const int __id;

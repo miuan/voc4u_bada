@@ -99,6 +99,7 @@ result WordCtrl::Init()
 
 bool WordCtrl::AddWord(Word &word)
 {
+	AppLog("word: %S - %S", word.__lern.GetPointer(), word.__native.GetPointer());
 	return true;
 }
 
@@ -162,4 +163,9 @@ void WordCtrl::OnLessonTask(const int lesson)
 {
 	if(__lwLissener)
 		__lwLissener->OnLessonTask(lesson);
+}
+
+bool WordCtrl::RemoveLesson(const int lesson)
+{
+	return true;
 }

@@ -14,6 +14,7 @@ using namespace Osp::Io;
 using namespace Osp::Base;
 using namespace Osp::Base::Runtime;
 using namespace Osp::Base::Collection;
+using namespace Osp::Base::Utility;
 
 class ILessonWorkerLissener
 {
@@ -69,6 +70,7 @@ class LessonWorker: public Osp::Base::Runtime::Thread
 	 * ILessonWorkerLissener::OnLessonDone
 	 */
 	ILessonWorkerLissener * __lwLissener;
+    void LessonAdd(int & lesson, void * wc);
 
 public:
 	LessonWorker();

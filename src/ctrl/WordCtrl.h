@@ -40,13 +40,7 @@ using namespace Osp::Base::Collection;
 
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
 
-
-
-
-
-
-
-class WordCtrl : public ILessonWorkerLissener
+class WordCtrl: public ILessonWorkerLissener
 {
 private:
 	static WordCtrl *__wc;
@@ -54,19 +48,31 @@ private:
 
 	LessonWorker *__lw;
 	ILessonWorkerLissener * __lwLissener;
+
+	friend Object * LessonWorker::Run(void);
+
 private:
 	result PrepareDB();
-    void CreateLessonWorker();
+	void CreateLessonWorker();
 public:
-    WordCtrl();
-    virtual ~WordCtrl();
-    result Init();
-    static WordCtrl *GetInstance();
-    bool AddWord(Word & word);
-    bool GetLessonEnabled(const int lesson);
-    bool AddLesson(const int lesson, bool remove);
-    void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
-    virtual void OnLessonTask(const int lesson);
+	WordCtrl();
+	virtual ~WordCtrl();
+	result Init();
+	static WordCtrl *GetInstance();
+	bool AddWord(Word & word);
+	bool GetLessonEnabled(const int lesson);
+
+	bool AddLesson(const int lesson, bool remove);
+
+	void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
+	virtual void OnLessonTask(const int lesson);
+
+private:
+	/*
+	 * no call directly, use AddLesson with remove parameter
+	 * because this is called from LessonWorker
+	 */
+	bool RemoveLesson(const int lesson);
 };
 
 #endif /* WORDCTRL_H_ */

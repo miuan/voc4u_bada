@@ -38,6 +38,11 @@ void Dictionary::InitLessonState()
 
 bool Dictionary::Init()
 {
+	CommonSetting cs = CommonSetting::GetInstance();
+	cs.lern = L"EN";
+	cs.native = L"CS";
+	cs.Store();
+
 	BaseWordForm::Init();
 	__pList = static_cast<ListView *> (GetControl(L"IDC_LESSON"));
 	__pList->SetItemProvider(*this);

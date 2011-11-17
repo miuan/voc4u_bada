@@ -7,6 +7,10 @@
 
 #include "LessonWorker.h"
 
+#include "WordCtrl.h"
+#include "Setting/LangSetting.h"
+#include "Setting/CommonSetting.h"
+
 LessonWorker::LessonWorker()
 {
 	__mutex.Create();
@@ -43,6 +47,7 @@ bool LessonWorker::GetLessonFromList(int & lesson)
 		lesson = pInt->ToInt();
 		__list.RemoveAt(0, true);
 		__currentLesson = lesson;
+		__stop = false;
 	}
 	__mutex.Release();
 
@@ -125,15 +130,54 @@ bool LessonWorker::IsRunning()
 	return isRunning;
 }
 
+void LessonWorker::LessonAdd(int & lesson, void * vwc)
+{
+	CommonSetting cs = CommonSetting::GetInstance();
+	int ncount, lcount, count;
+	wchar_t ** native = LangSetting::GetInitDataN(cs.native, lesson, ncount);
+	wchar_t ** lern = LangSetting::GetInitDataN(cs.lern, lesson, lcount);
+
+	count = ncount > lcount ? lcount : ncount;
+
+
+	WordCtrl * wc = static_cast<WordCtrl*>(vwc);
+
+	for(int i = 0;i < count; i++)
+	{
+		String n = String(native[i]);
+		String l = String(lern[i]);
+		Word word(-1, lesson, n, l, 0, 0);
+		wc->AddWord(word);
+		Thread::Sleep(1000);
+		__mutex.Acquire();
+
+		if(__stop)
+		{
+			// break
+			count = 0;
+		}
+		__mutex.Release();
+	}
+}
+
 Object *LessonWorker::Run(void)
 {
 	int lesson = 0;
+
+	WordCtrl *wc = WordCtrl::GetInstance();
 
 	while (IsWait())
 	{
 		while (GetLessonFromList(lesson))
 		{
-			// TODO: add lessons
+			if(lesson > 0)
+			{
+			    LessonAdd(lesson, wc);
+			}
+			else
+			{
+				wc->RemoveLesson(Math::Abs(lesson));
+			}
 
 			__mutex.Acquire();
 			if (__lwLissener)
