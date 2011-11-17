@@ -10,6 +10,7 @@
 #include <FApp.h>
 using namespace Osp::Base;
 using namespace Osp::App;
+using namespace Osp::Graphics;
 
 Utils::Utils()
 {
@@ -28,4 +29,12 @@ String Utils::GetString(String ID)
 	Application* pApp = Application::GetInstance();
 	pApp->GetAppResource()->GetString(ID, out);
 	return out;
+}
+
+Bitmap * Utils::GetBitmap(String ID)
+{
+	Application* pApp = Application::GetInstance();
+
+	// TODO: handling the resource (store in list and remove on end)
+	return pApp->GetAppResource()->GetBitmapN(ID, BITMAP_PIXEL_FORMAT_ARGB8888);
 }

@@ -21,10 +21,15 @@ using namespace Osp::Base;
 class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEventListener, public Osp::Ui::Controls::IListViewItemProvider
 , public ILessonWorkerLissener
 {
+public:
+    static const int ID_CONTEXTMENU_ITEM1 = 1101;
+    static const int ID_CONTEXTMENU_ITEM2 = 1102;
+    static const int ID_MENU = 1103;
+private:
 	ListView * __pList;
 
 	Information *__info;
-
+	ContextMenu *__pContextMenu;
 
 	bool initState[LangSetting::NUM_LESSON];
 	bool saveState[LangSetting::NUM_LESSON];
@@ -34,6 +39,8 @@ class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEv
     void ShowInfoDlg();
 
 public:
+
+
     static const int ID_FORMAT_STRING = 1;
 public:
     Dictionary();

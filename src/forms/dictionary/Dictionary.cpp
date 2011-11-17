@@ -7,16 +7,18 @@
 
 #include "Dictionary.h"
 
-Dictionary::Dictionary() : __info(null)
+Dictionary::Dictionary() :
+	__info(null), __pContextMenu(null)
 {
-
 
 }
 
 Dictionary::~Dictionary()
 {
-	if(__info)
+	if (__info)
 		delete __info;
+	if (__pContextMenu)
+		delete __pContextMenu;
 }
 
 void Dictionary::SetupInitSetting()
@@ -54,11 +56,11 @@ bool Dictionary::Init()
 
 void Dictionary::ShowInfoDlg()
 {
-	if(__info)
+	if (__info)
 		delete __info;
 
 	__info = new Information();
-	if(__info)
+	if (__info)
 	{
 		__info->SetType(IDS_DICTIONARY);
 		__info->ShowPopup(this);
@@ -67,19 +69,28 @@ void Dictionary::ShowInfoDlg()
 
 result Dictionary::OnInitializing(void)
 {
-	if(!CommonSetting::GetInstance().NSHDictionary)
+	if (!CommonSetting::GetInstance().NSHDictionary)
 		ShowInfoDlg();
 
 	Footer *footer = GetFooter();
 
 	if (footer)
 	{
-		FooterItem btnSave;
-		btnSave.Construct(ID_ADD_WORD);
-		btnSave.SetText(GetString("IDS_SAVE_DICTIONARY"));
-		footer->AddItem(btnSave);
+		ButtonItem btnSave;
+		btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
+		btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
+		footer->SetButton(BUTTON_POSITION_LEFT ,btnSave);
+		footer->SetBackButton();
+		footer->SetBackButtonEnabled(true);
 	}
 	footer->AddActionEventListener(*this);
+
+	__pContextMenu = new ContextMenu();
+	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
+
+	__pContextMenu->AddItem("Item1", ID_CONTEXTMENU_ITEM1);
+	__pContextMenu->AddItem("Item2", ID_CONTEXTMENU_ITEM2);
+	__pContextMenu->AddActionEventListener(*this);
 
 	InitLessonState();
 	//BaseWebForm::OnInitializing();
@@ -97,14 +108,22 @@ result Dictionary::OnTerminating(void)
 
 void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
-	ShowInfoDlg();
-	if (actionId == ID_ADD_WORD)
-	{
 
-		//		for (int i = 0; i != LangSetting::NUM_LESSON; i++)
-		//		{
-		//			saveState[i] = __pList->IsItemChecked(i);
-		//		}
+	//ShowInfoDlg();
+	if (actionId == ID_MENU)
+	{
+		int hp = GetHeight();
+
+		Footer *footer = GetFooter();
+		if (footer)
+			hp -= (footer->GetHeight() - 5);
+
+		// Set the anchor position of the ContextMenu
+		__pContextMenu->SetPosition(Point(10, hp));
+
+		// Show the ContextMenu
+		__pContextMenu->SetShowState(true);
+		__pContextMenu->Show();
 
 	}
 	else BaseWordForm::OnActionPerformed(source, actionId);
@@ -124,7 +143,7 @@ void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listVie
 {
 	bool add = status == LIST_ITEM_STATUS_CHECKED;
 	__WCtrl->AddLesson(index + 1, !add);
-	saveState[index] =  add;
+	saveState[index] = add;
 	listView.UpdateList();
 }
 
