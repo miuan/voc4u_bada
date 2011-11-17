@@ -123,7 +123,7 @@ bool WordCtrl::AddWord(Word &word)
 	delete pEnum;
 	delete pStmt;
 
-	AppLog("word: %S - %S", word.__lern.GetPointer(), word.__native.GetPointer());
+	AppLogDebug("word: %S - %S", word.__lern.GetPointer(), word.__native.GetPointer());
 	return true;
 }
 
@@ -189,7 +189,26 @@ void WordCtrl::OnLessonTask(const int lesson)
 		__lwLissener->OnLessonTask(lesson);
 }
 
-bool WordCtrl::RemoveLesson(const int lesson)
+bool WordCtrl::DeleteLesson(const int lesson)
 {
+	String statement;
+
+	if (__db->BeginTransaction() != E_SUCCESS)
+		return false;
+
+	statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
+
+	DbStatement * pStmt = __db->CreateStatementN(statement);
+
+	pStmt->BindInt(0, lesson);
+
+	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+
+	__db->CommitTransaction();
+
+	delete pEnum;
+	delete pStmt;
+
+	AppLog("Delete lesson: %d", lesson);
 	return true;
 }

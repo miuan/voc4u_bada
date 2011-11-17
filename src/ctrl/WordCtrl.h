@@ -72,7 +72,7 @@ private:
 	 * no call directly, use AddLesson with remove parameter
 	 * because this is called from LessonWorker
 	 */
-	bool RemoveLesson(const int lesson);
+	bool DeleteLesson(const int lesson);
 };
 
 #endif /* WORDCTRL_H_ */

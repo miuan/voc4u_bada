@@ -176,7 +176,7 @@ Object *LessonWorker::Run(void)
 			}
 			else
 			{
-				wc->RemoveLesson(Math::Abs(lesson));
+				wc->DeleteLesson(Math::Abs(lesson));
 			}
 
 			__mutex.Acquire();
