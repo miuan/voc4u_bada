@@ -12,7 +12,6 @@
 #include <FIo.h>
 #include <FApp.h>
 #include <FAppAppRegistry.h>
-
 using namespace Osp::Base;
 using namespace Osp::Io;
 using namespace Osp::App;
@@ -23,6 +22,10 @@ using namespace Osp::App;
 #define VAL_LERN String(L"lern")
 #define VAL_NATIVE String(L"native")
 
+// No Show More Dictionary
+#define VAL_NSM_DICTIONARY String(L"NSM_DICTIONARY")
+
+
 class CommonSetting
 {
 private:
@@ -32,6 +35,12 @@ public:
 
 	String lern;
 	String native;
+
+	// No Show More
+	bool NSHDictionary;
+
+
+
 public:
 	CommonSetting();
 	virtual ~CommonSetting();

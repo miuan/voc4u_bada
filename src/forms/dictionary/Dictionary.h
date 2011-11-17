@@ -23,11 +23,16 @@ class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEv
 {
 	ListView * __pList;
 
+	Information *__info;
+
+
 	bool initState[LangSetting::NUM_LESSON];
 	bool saveState[LangSetting::NUM_LESSON];
 	CustomItem *CreateLessonItem(int itemWidth, int lesson);
 	void InitLessonState();
     void SetupInitSetting();
+    void ShowInfoDlg();
+
 public:
     static const int ID_FORMAT_STRING = 1;
 public:

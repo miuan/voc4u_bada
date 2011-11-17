@@ -7,14 +7,16 @@
 
 #include "Dictionary.h"
 
-Dictionary::Dictionary()
+Dictionary::Dictionary() : __info(null)
 {
+
 
 }
 
 Dictionary::~Dictionary()
 {
-
+	if(__info)
+		delete __info;
 }
 
 void Dictionary::SetupInitSetting()
@@ -32,16 +34,15 @@ void Dictionary::InitLessonState()
 	{
 		initState[i] = __WCtrl->GetLessonEnabled((i + 1));
 		saveState[i] = initState[i];
-
 	}
 }
 
 bool Dictionary::Init()
 {
-	CommonSetting cs = CommonSetting::GetInstance();
-	cs.lern = L"EN";
-	cs.native = L"CS";
-	cs.Store();
+	CommonSetting *cs = &CommonSetting::GetInstance();
+	cs->lern = L"EN";
+	cs->native = L"CS";
+	cs->Store();
 
 	BaseWordForm::Init();
 	__pList = static_cast<ListView *> (GetControl(L"IDC_LESSON"));
@@ -51,10 +52,23 @@ bool Dictionary::Init()
 	return true;
 }
 
+void Dictionary::ShowInfoDlg()
+{
+	if(__info)
+		delete __info;
+
+	__info = new Information();
+	if(__info)
+	{
+		__info->SetType(IDS_DICTIONARY);
+		__info->ShowPopup(this);
+	}
+}
+
 result Dictionary::OnInitializing(void)
 {
-	Information * pAddWord = new Information(L"DICTIONARY");
-	pAddWord->ShowPopup(this);
+	if(!CommonSetting::GetInstance().NSHDictionary)
+		ShowInfoDlg();
 
 	Footer *footer = GetFooter();
 
@@ -83,8 +97,10 @@ result Dictionary::OnTerminating(void)
 
 void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
+	ShowInfoDlg();
 	if (actionId == ID_ADD_WORD)
 	{
+
 		//		for (int i = 0; i != LangSetting::NUM_LESSON; i++)
 		//		{
 		//			saveState[i] = __pList->IsItemChecked(i);
