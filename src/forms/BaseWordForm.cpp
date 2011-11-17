@@ -7,14 +7,15 @@
 
 #include "BaseWordForm.h"
 
-BaseWordForm::BaseWordForm()
+BaseWordForm::BaseWordForm(): __pAddWordDlg(null)
 {
 
 }
 
 BaseWordForm::~BaseWordForm()
 {
-
+	if(__pAddWordDlg)
+		delete __pAddWordDlg;
 }
 
 bool BaseWordForm::Init()
@@ -28,8 +29,9 @@ bool BaseWordForm::Init()
 	if (header)
 	{
 		ButtonItem btnAddWord;
-		btnAddWord.Construct(BUTTON_ITEM_STYLE_TEXT, ID_ADD_WORD);
-		btnAddWord.SetText(GetString("IDS_ADD_WORD_BUTTON"));
+		btnAddWord.Construct(BUTTON_ITEM_STYLE_ICON, ID_ADD_WORD);
+		//btnAddWord.SetText(GetString("IDS_ADD_WORD_BUTTON"));
+		btnAddWord.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_add_word.png"));
 		HeaderItem headerItem1;
 
 		header->SetTitleText("voc4u");
@@ -54,4 +56,12 @@ result BaseWordForm::OnInitializing()
 
 void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
+	if (actionId == ID_ADD_WORD)
+	{
+		if(__pAddWordDlg)
+			delete __pAddWordDlg;
+
+		__pAddWordDlg = new AddWord();
+		__pAddWordDlg->ShowPopup(this);
+	}
 }

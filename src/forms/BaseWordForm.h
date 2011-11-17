@@ -15,6 +15,7 @@
 #include "setting/CommonSetting.h"
 #include "ctrl/WordCtrl.h"
 #include "system/Utils.h"
+#include "dialogs/addword/AddWord.h"
 
 using namespace Osp::Ui::Controls;
 
@@ -23,9 +24,11 @@ class BaseWordForm
 		public Osp::Ui::IActionEventListener
 {
 public:
-			static const int ID_ADD_WORD = 1001;
+			static const int ID_ADD_WORD = 101;
 protected:
 		WordCtrl *__WCtrl;
+
+		AddWord *__pAddWordDlg;
 public:
 	BaseWordForm();
 	virtual ~BaseWordForm();

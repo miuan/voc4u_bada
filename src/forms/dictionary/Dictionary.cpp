@@ -90,7 +90,7 @@ void Dictionary::PrepareContextMenu()
     Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
     __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_INFO"), ID_MENU_INFO, *info);
     __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
-    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_ADD_WORD"), ID_MENU_ADD_WORD, *add_word);
+    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
     __pContextMenu->AddActionEventListener(*this);
 }
 
