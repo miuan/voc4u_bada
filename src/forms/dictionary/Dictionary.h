@@ -22,9 +22,10 @@ class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEv
 , public ILessonWorkerLissener
 {
 public:
-    static const int ID_CONTEXTMENU_ITEM1 = 1101;
-    static const int ID_CONTEXTMENU_ITEM2 = 1102;
-    static const int ID_MENU = 1103;
+    static const int ID_MENU_ADD_WORD = 1101;
+    static const int ID_MENU_RESETDB = 1102;
+    static const int ID_MENU_INFO = 1103;
+    static const int ID_MENU = 1104;
 private:
 	ListView * __pList;
 
@@ -37,6 +38,8 @@ private:
 	void InitLessonState();
     void SetupInitSetting();
     void ShowInfoDlg();
+    void PrepareFooter();
+    void PrepareContextMenu();
 
 public:
 

@@ -67,30 +67,40 @@ void Dictionary::ShowInfoDlg()
 	}
 }
 
+void Dictionary::PrepareFooter()
+{
+    Footer *footer = GetFooter();
+    if(footer){
+        ButtonItem btnSave;
+        btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
+        btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
+        footer->SetButton(BUTTON_POSITION_LEFT, btnSave);
+        footer->SetBackButton();
+        footer->SetBackButtonEnabled(true);
+    }
+    footer->AddActionEventListener(*this);
+}
+
+void Dictionary::PrepareContextMenu()
+{
+    __pContextMenu = new ContextMenu();
+    __pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
+    Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
+    Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
+    Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
+    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_INFO"), ID_MENU_INFO, *info);
+    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
+    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_ADD_WORD"), ID_MENU_ADD_WORD, *add_word);
+    __pContextMenu->AddActionEventListener(*this);
+}
+
 result Dictionary::OnInitializing(void)
 {
 	if (!CommonSetting::GetInstance().NSHDictionary)
 		ShowInfoDlg();
 
-	Footer *footer = GetFooter();
-
-	if (footer)
-	{
-		ButtonItem btnSave;
-		btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
-		btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
-		footer->SetButton(BUTTON_POSITION_LEFT ,btnSave);
-		footer->SetBackButton();
-		footer->SetBackButtonEnabled(true);
-	}
-	footer->AddActionEventListener(*this);
-
-	__pContextMenu = new ContextMenu();
-	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
-
-	__pContextMenu->AddItem("Item1", ID_CONTEXTMENU_ITEM1);
-	__pContextMenu->AddItem("Item2", ID_CONTEXTMENU_ITEM2);
-	__pContextMenu->AddActionEventListener(*this);
+    PrepareFooter();
+    PrepareContextMenu();
 
 	InitLessonState();
 	//BaseWebForm::OnInitializing();
@@ -125,6 +135,10 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		__pContextMenu->SetShowState(true);
 		__pContextMenu->Show();
 
+	}
+	else if (actionId == ID_MENU_INFO)
+	{
+		ShowInfoDlg();
 	}
 	else BaseWordForm::OnActionPerformed(source, actionId);
 }

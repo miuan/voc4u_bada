@@ -6,6 +6,7 @@
     <text id="IDS_BTN_BEGIN">Begin</text>
     <text id="IDS_SELECT_NATIVE_LANG">Select your native language:</text>
     <text id="IDS_BTN_NOSHOWMORE">No show more</text>
+    <text id="DIC_MENU_RESET_DB">       Reset DB</text>
     <text id="IDS_LANGUAGE_SELECT">Language selector</text>
     <text id="IDS_INFORMATION_DICTIONARY">On this form you can select the lesson for your training. Any lesson have example with words which contain. </text>
     <text id="IDS_NOT_SELECTED_YET">Not selected yet...</text>
@@ -20,12 +21,14 @@
     <text id="IDS_ADD_WORD_BUTTON">add word</text>
     <text id="IDS_LESSON_4">Intermediate</text>
     <text id="IDS_LESSON_3">Pre-Intermediate</text>
+    <text id="DIC_MENU_ADD_WORD">       Add word</text>
     <text id="IDS_LESSON_2">Elementary</text>
     <text id="IDS_LESSON_1">Basic</text>
     <text id="IDS_BTN_TRAIN">TRAIN</text>
     <text id="IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD">For save add word, must be filled both field!</text>
     <text id="IDS_ADD_WORD_TITLE">Add custom word</text>
     <text id="IDS_HINT_LERN_WORD">lern word</text>
+    <text id="DIC_MENU_INFO">       Help</text>
     <text id="IDS_LANG_ENGLISH">english</text>
     <text id="IDS_LANG_FRANCE">franch</text>
 </string_table>
