@@ -189,6 +189,7 @@ void WordCtrl::OnLessonTask(const int lesson)
 		__lwLissener->OnLessonTask(lesson);
 }
 
+
 bool WordCtrl::DeleteLesson(const int lesson)
 {
 	String statement;
@@ -196,11 +197,15 @@ bool WordCtrl::DeleteLesson(const int lesson)
 	if (__db->BeginTransaction() != E_SUCCESS)
 		return false;
 
-	statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
+	if(lesson > 0)
+		statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
+	else
+		statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
 
 	DbStatement * pStmt = __db->CreateStatementN(statement);
 
-	pStmt->BindInt(0, lesson);
+	if(lesson > 0)
+		pStmt->BindInt(0, lesson);
 
 	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
 

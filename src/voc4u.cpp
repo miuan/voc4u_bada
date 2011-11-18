@@ -60,7 +60,7 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 	{
 		// if not, is probably first start
 		// make init setting
-		Init * init = new Init();
+		InitFrm * init = new InitFrm();
 		init->Initialize();
 		pForm = init;
 	}

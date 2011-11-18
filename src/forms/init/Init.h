@@ -8,17 +8,20 @@
 #include "LangSelect.h"
 #include "setting/CommonSetting.h"
 #include "forms/dictionary/Dictionary.h"
+#include "dialogs/information/Information.h"
 
-class Init :
+class InitFrm :
 	public Osp::Ui::Controls::Form,
 	public Osp::Ui::IActionEventListener,
 	public ILangSelectListener
 {
 		CommonSetting *__setting;
+
+		Information __infoDlg;
 // Construction
 public:
-	Init(void);
-	virtual ~Init(void);
+	InitFrm(void);
+	virtual ~InitFrm(void);
 	bool Initialize(void);
 
 // Implementation

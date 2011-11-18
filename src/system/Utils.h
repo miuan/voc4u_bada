@@ -10,6 +10,7 @@
 
 #include <FBase.h>
 #include <FGraphics.h>
+#include <FUi.h>
 
 class Utils
 {
@@ -19,6 +20,8 @@ public:
 
 	static Osp::Base::String GetString(Osp::Base::String ID);
 	static Osp::Graphics::Bitmap * GetBitmap(Osp::Base::String ID);
+
+	static void ShowFront(Osp::Ui::Controls::Form *parent, Osp::Ui::Controls::Form *form);
 };
 
 #endif /* UTILS_H_ */

@@ -24,7 +24,7 @@ using namespace Osp::App;
 
 // No Show More Dictionary
 #define VAL_NSM_DICTIONARY String(L"NSM_DICTIONARY")
-
+#define VAL_NSM_INIT String(L"NSM_INIT")
 
 class CommonSetting
 {
@@ -38,8 +38,7 @@ public:
 
 	// No Show More
 	bool NSHDictionary;
-
-
+	bool NSHInit;
 
 public:
 	CommonSetting();
@@ -55,11 +54,13 @@ public:
 
 	static CommonSetting & GetInstance()
 	{
-		if(!__this.IsInitialized())
+		if (!__this.IsInitialized())
 			__this.Restore();
 		return __this;
 	}
+private:
 
+	result StoreBool(AppRegistry * pReg, String key, bool value);
 
 };
 

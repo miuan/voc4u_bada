@@ -56,9 +56,17 @@ bool LessonWorker::GetLessonFromList(int & lesson)
 
 bool LessonWorker::AddLesson(int lesson, bool remove)
 {
-	AppAssert(lesson != 0);
+	//	AppAssert(lesson != 0);
+	// remove all
 	if (lesson == 0)
+	{
+		__mutex.Acquire();
+		__stop = true;
+		__list.RemoveAll(true);
+		__list.Add(*(new Integer(lesson)));
+		__mutex.Release();
 		return false;
+	}
 
 	bool result = true;
 
@@ -139,10 +147,9 @@ void LessonWorker::LessonAdd(int & lesson, void * vwc)
 
 	count = ncount > lcount ? lcount : ncount;
 
+	WordCtrl * wc = static_cast<WordCtrl*> (vwc);
 
-	WordCtrl * wc = static_cast<WordCtrl*>(vwc);
-
-	for(int i = 0;i < count; i++)
+	for (int i = 0; i < count; i++)
 	{
 		String n = String(native[i]);
 		String l = String(lern[i]);
@@ -151,7 +158,7 @@ void LessonWorker::LessonAdd(int & lesson, void * vwc)
 		//Thread::Sleep(1000);
 		__mutex.Acquire();
 
-		if(__stop)
+		if (__stop)
 		{
 			// break
 			count = 0;
@@ -170,9 +177,9 @@ Object *LessonWorker::Run(void)
 	{
 		while (GetLessonFromList(lesson))
 		{
-			if(lesson > 0)
+			if (lesson > 0)
 			{
-			    LessonAdd(lesson, wc);
+				LessonAdd(lesson, wc);
 			}
 			else
 			{
@@ -204,7 +211,7 @@ bool LessonWorker::IsWait()
 	// wait is can set only one time
 	// because other will be the cycle in Run
 	// will not over
-	if(__wait)
+	if (__wait)
 		__wait = false;
 
 	__mutexWait.Release();

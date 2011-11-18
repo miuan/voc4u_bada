@@ -7,16 +7,17 @@ using namespace Osp::Ui::Controls;
 
 using namespace Osp::Graphics;
 
-Init::Init(void) :
+InitFrm::InitFrm(void) :
 	__pLern(null), __pNative(null)
 {
+	__infoDlg.SetType(L"INIT");
 }
 
-Init::~Init(void)
+InitFrm::~InitFrm(void)
 {
 }
 
-bool Init::Initialize()
+bool InitFrm::Initialize()
 {
 	// Construct an XML form
 	Construct(L"IDF_INIT");
@@ -24,10 +25,11 @@ bool Init::Initialize()
 	return true;
 }
 
-result Init::OnInitializing(void)
+result InitFrm::OnInitializing(void)
 {
 	result r = E_SUCCESS;
 
+	__infoDlg.ShowPopup(this);
 	// TODO: Add your initialization code here
 
 	// Get a button via resource ID
@@ -57,7 +59,7 @@ result Init::OnInitializing(void)
 	return r;
 }
 
-result Init::OnTerminating(void)
+result InitFrm::OnTerminating(void)
 {
 	result r = E_SUCCESS;
 
@@ -66,7 +68,7 @@ result Init::OnTerminating(void)
 	return r;
 }
 
-void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
+void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 	switch (actionId)
 	{
@@ -100,6 +102,7 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		init->RequestRedraw(true);
 		pFrame->RemoveControl(*this);
 
+
 				AppLog("ahoj");
 //		 MessageBox messageBox;
 //		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
@@ -125,7 +128,7 @@ void Init::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 }
 
-void Init::onSelectLang(int type, Locale &selected)
+void InitFrm::onSelectLang(int type, Locale &selected)
 {
 	String str, code;
 	selected.GetLanguageName(str);

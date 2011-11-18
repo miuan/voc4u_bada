@@ -10,25 +10,23 @@
 
 void Information::SetType(String type)
 {
-    __type = type;
+	__type = type;
 }
 
 Information::Information()
 {
-    SetType(L"");
+	SetType(L"");
 }
 
 Information::Information(String type)
 {
-    SetType(type);
+	SetType(type);
 }
 
 Information::~Information()
 {
 
 }
-
-
 
 bool Information::ShowPopup(Form * parent)
 {
@@ -72,13 +70,16 @@ bool Information::ShowPopup(Form * parent)
 	return result;
 }
 
-
 void Information::SetupCheckbox(bool & checked)
 {
 	CommonSetting *cs = &CommonSetting::GetInstance();
 	if (__type == String(IDS_DICTIONARY))
 	{
 		checked = cs->NSHDictionary;
+	}
+	else if (__type == String(IDS_INIT))
+	{
+		checked = cs->NSHInit;
 	}
 	else
 	{
@@ -93,6 +94,10 @@ void Information::SetupCommonSetting(bool checked)
 	if (__type == String(IDS_DICTIONARY))
 	{
 		cs->NSHDictionary = checked;
+	}
+	if (__type == String(IDS_INIT))
+	{
+		cs->NSHInit = checked;
 	}
 
 	cs->Store();

@@ -26,6 +26,7 @@ using namespace Osp::Ui::Controls;
 using namespace Osp::Media;
 
 #define IDS_DICTIONARY L"DICTIONARY"
+#define IDS_INIT L"INIT"
 
 class Information: public Popup, public IActionEventListener
 {
@@ -35,8 +36,7 @@ private:
 	String __type;
 
 	CheckButton *__chkNoShowMore;
-    void SetupCheckbox(bool & checked);
-    void SetupCommonSetting(bool checked);
+
 
 public:
 	static const int ID_BTN_CANCEL = 1;
@@ -48,6 +48,10 @@ public:
 	virtual ~Information();
 	 void SetType(String type);
 	virtual void OnActionPerformed(const Osp::Ui::Control & source, int actionId);
+
+private:
+	void SetupCheckbox(bool & checked);
+	void SetupCommonSetting(bool checked);
 };
 
 #endif /* INFORMATION_H_ */

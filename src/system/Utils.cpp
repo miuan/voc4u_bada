@@ -38,3 +38,12 @@ Bitmap * Utils::GetBitmap(String ID)
 	// TODO: handling the resource (store in list and remove on end)
 	return pApp->GetAppResource()->GetBitmapN(ID, BITMAP_PIXEL_FORMAT_ARGB8888);
 }
+
+void Utils::ShowFront(Osp::Ui::Controls::Form *parent, Osp::Ui::Controls::Form *form)
+{
+	Osp::Ui::Controls::Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
+	pFrame->AddControl(*form);
+	pFrame->SetCurrentForm(*form);
+	form->RequestRedraw(true);
+	pFrame->RemoveControl(*parent);
+}

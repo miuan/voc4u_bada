@@ -6,6 +6,7 @@
  */
 
 #include "Dictionary.h"
+#include "forms/init/Init.h"
 
 Dictionary::Dictionary() :
 	__info(null), __pContextMenu(null)
@@ -69,29 +70,30 @@ void Dictionary::ShowInfoDlg()
 
 void Dictionary::PrepareFooter()
 {
-    Footer *footer = GetFooter();
-    if(footer){
-        ButtonItem btnSave;
-        btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
-        btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
-        footer->SetButton(BUTTON_POSITION_LEFT, btnSave);
-        footer->SetBackButton();
-        footer->SetBackButtonEnabled(true);
-    }
-    footer->AddActionEventListener(*this);
+	Footer *footer = GetFooter();
+	if (footer)
+	{
+		ButtonItem btnSave;
+		btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
+		btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
+		footer->SetButton(BUTTON_POSITION_LEFT, btnSave);
+		footer->SetBackButton();
+		footer->SetBackButtonEnabled(true);
+	}
+	footer->AddActionEventListener(*this);
 }
 
 void Dictionary::PrepareContextMenu()
 {
-    __pContextMenu = new ContextMenu();
-    __pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
-    Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
-    Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
-    Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
-    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_INFO"), ID_MENU_INFO, *info);
-    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
-    __pContextMenu->AddItem(Utils::GetString(L"DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
-    __pContextMenu->AddActionEventListener(*this);
+	__pContextMenu = new ContextMenu();
+	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
+	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
+	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
+	Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
+	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
+	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
+	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
+	__pContextMenu->AddActionEventListener(*this);
 }
 
 result Dictionary::OnInitializing(void)
@@ -99,8 +101,8 @@ result Dictionary::OnInitializing(void)
 	if (!CommonSetting::GetInstance().NSHDictionary)
 		ShowInfoDlg();
 
-    PrepareFooter();
-    PrepareContextMenu();
+	PrepareFooter();
+	PrepareContextMenu();
 
 	InitLessonState();
 	//BaseWebForm::OnInitializing();
@@ -139,6 +141,26 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	else if (actionId == ID_MENU_INFO)
 	{
 		ShowInfoDlg();
+	}
+	else if (actionId == ID_MENU_RESETDB)
+	{
+		MessageBox messageBox;
+		messageBox.Construct(Utils::GetString("IDS_DIC_MENU_RESET_DB"), Utils::GetString("IDS_MSG_RESET_DB"), MSGBOX_STYLE_YESNO);
+		// Calls ShowAndWait - draw, show itself and process events
+		int modalResult = 0;
+		messageBox.ShowAndWait(modalResult);
+		if(modalResult == MSGBOX_RESULT_YES)
+		{
+			CommonSetting *cs = &CommonSetting::GetInstance();
+			cs->lern = "";
+			cs->native = "";
+			cs->Store();
+			// remove all word!
+			__WCtrl->AddLesson(0, true);
+			InitFrm * pInit = new InitFrm();
+			pInit->Initialize();
+			Utils::ShowFront(this, pInit);
+		}
 	}
 	else BaseWordForm::OnActionPerformed(source, actionId);
 }

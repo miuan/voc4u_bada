@@ -68,9 +68,12 @@ public:
 	virtual void OnLessonTask(const int lesson);
 
 private:
+
 	/*
 	 * no call directly, use AddLesson with remove parameter
 	 * because this is called from LessonWorker
+	 *
+	 * 0 = delete all words in db
 	 */
 	bool DeleteLesson(const int lesson);
 };
