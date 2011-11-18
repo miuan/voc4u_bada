@@ -14,6 +14,7 @@
 #include <FGraphics.h>
 
 #include "lang/InitData.h"
+#include "system/Utils.h"
 
 using namespace Osp::App;
 using namespace Osp::Locales;
@@ -56,7 +57,7 @@ public:
 	virtual ~LangSetting();
 
 	static String GetNameOfLesson(int lesson);
-
+	static Osp::Graphics::Bitmap * GetIcon(Locale & lc);
 	static wchar_t ** GetInitDataN(String lang, int lesson, int &count);
 };
 

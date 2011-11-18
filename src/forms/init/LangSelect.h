@@ -14,6 +14,7 @@
 #include <FMedia.h>
 #include <FLclLocale.h>
 #include <FApp.h>
+#include "setting/LangSetting.h"
 
 using namespace Osp::App;
 using namespace Osp::Locales;
@@ -77,8 +78,6 @@ class LangSelect: public Popup, public Osp::Ui::Controls::IListViewItemEventList
 	CustomListElement *__pListElement;
 	int __type;
 
-	static Locale __locales[];
-	static const int __numLocales;
 	Locale **__aUsedLocales;
 	int __numUsedLocales;
 

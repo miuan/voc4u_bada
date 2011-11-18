@@ -33,6 +33,7 @@ String Utils::GetString(String ID)
 
 Bitmap * Utils::GetBitmap(String ID)
 {
+	AppLogDebug("load icons: %S", ID.GetPointer());
 	Application* pApp = Application::GetInstance();
 
 	// TODO: handling the resource (store in list and remove on end)

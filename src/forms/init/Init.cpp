@@ -133,10 +133,14 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 	String str, code;
 	selected.GetLanguageName(str);
 	code = selected.GetLanguageCodeString();
+	Osp::Graphics::Point bpoint(350,25);
+	Osp::Graphics::Bitmap * icon = LangSetting::GetIcon(selected);
+
 
 	if (type == ID_BUTTON_NATIVE)
 	{
 		__pbtnNative->SetText(str);
+		__pbtnNative->SetNormalBitmap(bpoint, *icon);
 		__pNative = &selected;
 
 		// it's necessary the lern and native must be differend
@@ -147,6 +151,7 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 			String title;
 			if (res->GetString(L"IDS_NOT_SELECTED_YET", title) == E_SUCCESS)
 			__pbtnLern->SetText(title);
+			//__pbtnLern->SetNormalBitmap(bpoint, (Bitmap*)null);
 		}
 
 		__setting->native = code;
@@ -154,6 +159,7 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 	if(type == ID_BUTTON_LERN)
 	{
 		__pbtnLern->SetText(str);
+		__pbtnLern->SetNormalBitmap(bpoint, *icon);
 		__pLern =&selected;
 		__setting->lern = code;
 	}

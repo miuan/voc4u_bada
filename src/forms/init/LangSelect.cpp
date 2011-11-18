@@ -7,10 +7,6 @@
 
 #include "LangSelect.h"
 
-Locale LangSelect::__locales[] =
-{ Locale(LANGUAGE_CES, COUNTRY_CZ), Locale(LANGUAGE_ENG, COUNTRY_US), Locale(LANGUAGE_DEU, COUNTRY_DE), Locale(LANGUAGE_FRA, COUNTRY_FR) };
-
-const int LangSelect::__numLocales = 4;
 
 LangSelect::LangSelect(int type, ILangSelectListener * lsl) : __aUsedLocales(null)
 {
@@ -38,14 +34,14 @@ bool LangSelect::Init(Locale * without)
 
 	result result = Construct(false, Dimension(width, height));
 
-	__numUsedLocales = __numLocales;
+	__numUsedLocales = LangSetting::NUM_LOCALES;
 	if(without)
 		__numUsedLocales -= 1;
 
 	__aUsedLocales = new Locale*[__numUsedLocales];
-	for(int i = 0, b = 0; i != __numLocales; i++)
-		if(without == null || without->GetLanguageCode() != __locales[i].GetLanguageCode())
-		__aUsedLocales[b++] = &__locales[i];
+	for(int i = 0, b = 0; i != LangSetting::NUM_LOCALES; i++)
+		if(without == null || without->GetLanguageCode() != LangSetting::LOCALES[i].GetLanguageCode())
+		__aUsedLocales[b++] = &LangSetting::LOCALES[i];
 
 
 
@@ -167,8 +163,8 @@ LangSelect::CreateItem(int index, int itemWidth)
 	pItem->Construct(Osp::Graphics::Dimension(itemWidth, 100), style);
 
 	// Create Bitmap
-		Bitmap *pBitmapNormal = GetBitmapN(0);
-		Bitmap *pBitmapFocused = GetBitmapN(1);
+	Bitmap *pBitmapNormal = LangSetting::GetIcon(*(__aUsedLocales[index]));
+
 
 //	switch (index % 3)
 //	{

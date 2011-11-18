@@ -48,11 +48,10 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	// if setting currently initialized
 	// you can continue normaly
-	if (true ||
-		CommonSetting::GetInstance().IsInitialized())
+	if (CommonSetting::GetInstance().IsInitialized())
 	{
 		// Create a form
-		Dictionary *pDashboard = new Dictionary();
+		Dashboard *pDashboard = new Dashboard();
 		pDashboard->Init();
 		pForm = pDashboard;
 	}

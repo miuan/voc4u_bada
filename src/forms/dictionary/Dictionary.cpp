@@ -194,7 +194,7 @@ void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listVie
 		__progressState[index] = true;
 
 	saveState[index] = add;
-
+	listView.UpdateList();
 }
 
 void Dictionary::OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int index, Osp::Ui::Controls::SweepDirection direction)

@@ -51,7 +51,7 @@ bool LessonWorker::GetLessonFromList(int & lesson)
 	}
 	__mutex.Release();
 
-	return lesson != 0;
+	return __runing;
 }
 
 bool LessonWorker::AddLesson(int lesson, bool remove)
@@ -192,6 +192,9 @@ Object *LessonWorker::Run(void)
 			__mutex.Release();
 		}
 	}
+	__mutex.Acquire();
+	__runing = false;
+	__mutex.Release();
 	return null;
 }
 
@@ -250,7 +253,7 @@ int *LessonWorker::GetLessonInProgressN(int &count)
 	lessons = new int[count + 1];
 	for(int i = 0; i != count; i++)
 	{
-		Integer *pInt = static_cast<Integer*> (__list.GetAt(0));
+		Integer *pInt = static_cast<Integer*> (__list.GetAt(i));
 		lessons[i] =  pInt->ToInt();
 	}
 

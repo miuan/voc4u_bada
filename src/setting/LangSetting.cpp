@@ -9,7 +9,7 @@
 #include "system/Utils.h"
 
 const Locale LangSetting::CZECH(LANGUAGE_CES, COUNTRY_CZ);
-const Locale LangSetting::ENGLISH(LANGUAGE_ENG, COUNTRY_US);
+const Locale LangSetting::ENGLISH(LANGUAGE_ENG, COUNTRY_GB);
 const Locale LangSetting::GERMANY(LANGUAGE_DEU, COUNTRY_DE);
 const Locale LangSetting::SPAIN(LANGUAGE_SPA, COUNTRY_ES);
 const Locale LangSetting::PORTUGAL(LANGUAGE_POR, COUNTRY_PT);
@@ -38,6 +38,18 @@ String LangSetting::GetNameOfLesson(int lesson)
 	String name = L"IDS_LESSON_";
 	name.Append(lesson);
 	return Utils::GetString(name);
+}
+
+Bitmap * LangSetting::GetIcon(Locale & lc)
+{
+	String name = L"ic_";
+	name.Append(lc.GetCountryCodeString());
+	name.Append(L".png");
+	name.ToLowerCase();
+
+
+
+	return Utils::GetBitmap(name);
 }
 
 wchar_t ** LangSetting::GetInitDataN(String lang, int lesson, int &count)
