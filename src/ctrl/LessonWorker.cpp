@@ -241,3 +241,20 @@ void LessonWorker::StopWait()
 	__mutexWait.Release();
 	__mutex.Release();
 }
+
+int *LessonWorker::GetLessonInProgressN(int &count)
+{
+	int *lessons = null;
+	__mutex.Acquire();
+	count = __list.GetCount();
+	lessons = new int[count + 1];
+	for(int i = 0; i != count; i++)
+	{
+		Integer *pInt = static_cast<Integer*> (__list.GetAt(0));
+		lessons[i] =  pInt->ToInt();
+	}
+
+	lessons[count] = __currentLesson;
+	__mutex.Release();
+	return lessons;
+}

@@ -78,6 +78,7 @@ public:
 
 public:
 
+	int *GetLessonInProgressN(int &count);
 	bool GetLessonFromList(int & lesson);
 	bool AddLesson(int lesson, bool remove);
 

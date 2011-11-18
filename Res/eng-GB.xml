@@ -27,6 +27,7 @@
     <text id="IDS_LESSON_3">Pre-Intermediate</text>
     <text id="IDS_LESSON_2">Elementary</text>
     <text id="IDS_LESSON_1">Basic</text>
+    <text id="IDS_PREPARING">[preparing]</text>
     <text id="IDS_BTN_TRAIN">TRAIN</text>
     <text id="IDS_DIC_MENU_INFO">       Help</text>
     <text id="IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD">For save add word, must be filled both field!</text>

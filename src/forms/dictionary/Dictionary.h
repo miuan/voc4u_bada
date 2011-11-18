@@ -31,11 +31,11 @@ private:
 	Information *__info;
 	ContextMenu *__pContextMenu;
 
-	bool initState[LangSetting::NUM_LESSON];
+	bool __progressState[LangSetting::NUM_LESSON];
 	bool saveState[LangSetting::NUM_LESSON];
 
-	void AddItemTitle(CustomItem *& pItem, String name);
-	void AddItemExamples(CustomItem *& pItem, int itemWidth, String examples);
+
+    void GetLessonsInProgress();
     void InitLessonState();
 	void SetupInitSetting();
 	void ShowInfoDlg();
@@ -46,7 +46,7 @@ public:
 
 	static const int ID_FORMAT_STRING = 1;
 	static const int ID_FORMAT_EXAMPLES = 2;
-
+	static const int ID_FORMAT_PREPARING = 3;
 
 	static const int ITEM_HEIGHT = 150;
 	static const int EXAMPLES_MAX = 30;
@@ -76,6 +76,9 @@ public:
 private:
 	CustomItem *CreateLessonItem(int itemWidth, int lesson);
 	CustomItem *CreateCustomWordItem(int itemWidth);
+	void AddItemPreparing(CustomItem *& pItem, int itemWidth);
+	void AddItemTitle(CustomItem *& pItem, String name);
+	void AddItemExamples(CustomItem *& pItem, int itemWidth, String examples);
 };
 
 #endif /* DICTIONARY_H_ */

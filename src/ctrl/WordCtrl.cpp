@@ -166,7 +166,7 @@ bool WordCtrl::AddLesson(const int lesson, bool remove)
 	}
 
 	// add/remove lesson at lesson
-	__lw->AddLesson(lesson, remove);
+	bool result = __lw->AddLesson(lesson, remove);
 
 	// it was create new start new thread
 	// otherwise call StopWait -> continue cycle in Run
@@ -174,7 +174,7 @@ bool WordCtrl::AddLesson(const int lesson, bool remove)
 		__lw->Start();
 	else __lw->StopWait();
 
-	return true;
+	return result;
 }
 
 void WordCtrl::SetLessonWorkerListener(ILessonWorkerLissener *ilwl)
@@ -189,6 +189,16 @@ void WordCtrl::OnLessonTask(const int lesson)
 		__lwLissener->OnLessonTask(lesson);
 }
 
+int * WordCtrl::GetWorkerTaskLessonInProgressN(int &count)
+{
+	if(__lw && __lw->IsRunning())
+		return __lw->GetLessonInProgressN(count);
+	else
+	{
+		count = 0;
+		return null;
+	}
+}
 
 bool WordCtrl::DeleteLesson(const int lesson)
 {

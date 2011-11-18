@@ -66,7 +66,7 @@ public:
 
 	void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
 	virtual void OnLessonTask(const int lesson);
-
+	int * GetWorkerTaskLessonInProgressN(int &count);
 private:
 
 	/*

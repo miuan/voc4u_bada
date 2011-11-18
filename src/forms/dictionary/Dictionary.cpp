@@ -26,17 +26,16 @@ void Dictionary::SetupInitSetting()
 {
 	for (int i = 0; i != LangSetting::NUM_LESSON; i++)
 	{
-
 		__pList->SetItemChecked(i, saveState[i]);
 	}
 }
 
 void Dictionary::InitLessonState()
 {
+	GetLessonsInProgress();
 	for (int i = 0; i != LangSetting::NUM_LESSON; i++)
 	{
-		initState[i] = __WCtrl->GetLessonEnabled((i + 1));
-		saveState[i] = initState[i];
+		saveState[i] = __WCtrl->GetLessonEnabled((i + 1));
 	}
 }
 
@@ -178,13 +177,40 @@ void Dictionary::OnListViewItemLongPressed(Osp::Ui::Controls::ListView &listView
 void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listView, int index, int elementId, Osp::Ui::Controls::ListItemStatus status)
 {
 	bool add = status == LIST_ITEM_STATUS_CHECKED;
-	__WCtrl->AddLesson(index + 1, !add);
+	GetLessonsInProgress();
+
+	if(__WCtrl->AddLesson(index + 1, !add))
+		__progressState[index] = true;
+
 	saveState[index] = add;
 	listView.UpdateList();
 }
 
 void Dictionary::OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int index, Osp::Ui::Controls::SweepDirection direction)
 {
+}
+
+void Dictionary::AddItemPreparing(CustomItem *& pItem, int itemWidth)
+{
+	result r;
+
+	EnrichedText* pEnrichedText = new EnrichedText();
+	r = pEnrichedText->Construct(Dimension(itemWidth, 200));
+	pEnrichedText->SetVerticalAlignment(TEXT_ALIGNMENT_TOP);
+	pEnrichedText->SetHorizontalAlignment(TEXT_ALIGNMENT_RIGHT);
+	TextElement * pTextElement = new TextElement();
+	r = pTextElement->Construct(Utils::GetString("IDS_PREPARING"));
+
+	Font font;
+	font.Construct(FONT_STYLE_PLAIN, 25);
+	pTextElement->SetFont(font);
+	pEnrichedText->Add(*pTextElement);
+
+	AddToDestructList(pTextElement);
+	AddToDestructList(pEnrichedText);
+	int width, height;
+	pEnrichedText->GetSize(width, height);
+	pItem->AddElement(Rectangle(0, 5, itemWidth -10, 30), ID_FORMAT_PREPARING, *pEnrichedText);
 }
 
 void Dictionary::AddItemTitle(CustomItem *& pItem, String name)
@@ -242,6 +268,9 @@ CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
 	pItem->SetBackgroundColor(LIST_ITEM_DRAWING_STATUS_NORMAL, LangSetting::LESSON_COLORS[lesson - 1]);
 
 	String name = LangSetting::GetNameOfLesson(lesson);
+
+	if(__progressState[lesson-1])
+		AddItemPreparing(pItem, itemWidth);
 	AddItemTitle(pItem, name);
 
 	int count;
@@ -305,11 +334,33 @@ bool Dictionary::DeleteItem(int index, Osp::Ui::Controls::ListItemBase *pItem, i
 
 int Dictionary::GetItemCount(void)
 {
-	return LangSetting::NUM_LESSON;
+	// TODO: add special item for custom words
+	return LangSetting::NUM_LESSON; // +1;
+}
+
+void Dictionary::GetLessonsInProgress()
+{
+    int count;
+    int *lessons = __WCtrl->GetWorkerTaskLessonInProgressN(count);
+    if(count > 0){
+        for(int i = 0;i != count;i++){
+            int pos = Math::Abs(lessons[i]) - 1;
+            __progressState[pos] = true;
+        }
+    }
+
+    if(lessons)
+    	delete lessons;
+
 }
 
 void Dictionary::OnLessonTask(const int lesson)
 {
 	AppLog("OnLessonDone %i", lesson);
+	int position = Math::Abs(lesson) -1;
+    GetLessonsInProgress();
+    __progressState[position] = false;
+	__pList->RefreshList(position, LIST_REFRESH_TYPE_ITEM_MODIFY);
+	__pList->UpdateList();
 }
 
