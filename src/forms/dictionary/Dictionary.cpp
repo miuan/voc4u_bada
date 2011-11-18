@@ -43,7 +43,7 @@ void Dictionary::InitLessonState()
 bool Dictionary::Init()
 {
 	CommonSetting *cs = &CommonSetting::GetInstance();
-	cs->lern = L"EN";
+	cs->lern = L"ES";
 	cs->native = L"CS";
 	cs->Store();
 
@@ -149,7 +149,7 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		// Calls ShowAndWait - draw, show itself and process events
 		int modalResult = 0;
 		messageBox.ShowAndWait(modalResult);
-		if(modalResult == MSGBOX_RESULT_YES)
+		if (modalResult == MSGBOX_RESULT_YES)
 		{
 			CommonSetting *cs = &CommonSetting::GetInstance();
 			cs->lern = "";
@@ -187,25 +187,113 @@ void Dictionary::OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int 
 {
 }
 
+void Dictionary::AddItemTitle(CustomItem *& pItem, String name)
+{
+	result r;
+
+	EnrichedText* pEnrichedText = new EnrichedText();
+	r = pEnrichedText->Construct(Dimension(200, 200));
+
+	TextElement * pTextElement = new TextElement();
+	r = pTextElement->Construct(name);
+
+	Font font;
+	font.Construct(FONT_STYLE_BOLD, 40);
+	pTextElement->SetFont(font);
+
+	pEnrichedText->Add(*pTextElement);
+
+	AddToDestructList(pTextElement);
+	AddToDestructList(pEnrichedText);
+	pItem->AddElement(Rectangle(10, 5, 250, 50), ID_FORMAT_STRING, *pEnrichedText);
+}
+
+void Dictionary::AddItemExamples(CustomItem *& pItem, int itemWidth, String examples)
+{
+	result r;
+
+	EnrichedText* pEnrichedText = new EnrichedText();
+	r = pEnrichedText->Construct(Dimension(itemWidth, 200));
+	pEnrichedText->SetTextWrapStyle(TEXT_WRAP_WORD_WRAP);
+	pEnrichedText->SetVerticalAlignment(TEXT_ALIGNMENT_TOP);
+	pEnrichedText->SetHorizontalAlignment(TEXT_ALIGNMENT_LEFT);
+
+	TextElement * pTextElement = new TextElement();
+	r = pTextElement->Construct(examples);
+
+	Font font;
+	font.Construct(FONT_STYLE_PLAIN, 20);
+	pTextElement->SetFont(font);
+
+	pEnrichedText->Add(*pTextElement);
+
+	AddToDestructList(pTextElement);
+	AddToDestructList(pEnrichedText);
+
+	pItem->AddElement(Rectangle(10, 45, itemWidth-80, ITEM_HEIGHT-60), ID_FORMAT_EXAMPLES, *pEnrichedText);
+}
+
 CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
 {
+
 	ListAnnexStyle style = LIST_ANNEX_STYLE_MARK;
 	CustomItem *pItem = new CustomItem();
-	pItem->Construct(Osp::Graphics::Dimension(itemWidth, 100), style);
+	pItem->Construct(Osp::Graphics::Dimension(itemWidth, ITEM_HEIGHT), style);
 	pItem->SetBackgroundColor(LIST_ITEM_DRAWING_STATUS_NORMAL, LangSetting::LESSON_COLORS[lesson - 1]);
 
 	String name = LangSetting::GetNameOfLesson(lesson);
-	pItem->AddElement(Rectangle(5, 5, 250, 50), ID_FORMAT_STRING, name, true);
-	//pItem->
+	AddItemTitle(pItem, name);
 
+	int count;
+	wchar_t ** words = LangSetting::GetInitDataN(CommonSetting::GetInstance().lern, lesson, count);
+	String examples = L"";
+	count = count > EXAMPLES_MAX ? EXAMPLES_MAX : count;
+
+	bool first = true;
+	for (int i = 0; i != count; i++)
+	{
+		int indexOfComa;
+		String word = words[i];
+		//word.IndexOf(",", 0, indexOfComa);
+		if(word.IndexOf(",", 0, indexOfComa) == E_SUCCESS)
+		{
+			String neww;
+			word.SubString(0, indexOfComa, neww);
+			word = neww;
+		}
+
+		if(!first)
+			examples.Append(L", ");
+		examples.Append(word);
+		first = false;
+	}
+
+	AddItemExamples( pItem, itemWidth, examples);
 	SetupInitSetting();
+	return pItem;
+}
+
+CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
+{
+
+	ListAnnexStyle style = LIST_ANNEX_STYLE_NORMAL;
+	CustomItem *pItem = new CustomItem();
+	pItem->Construct(Osp::Graphics::Dimension(itemWidth, ITEM_HEIGHT), style);
+	pItem->SetBackgroundColor(LIST_ITEM_DRAWING_STATUS_NORMAL, LangSetting::CUSTOM_WORD);
+
+	String name = Utils::GetString("IDS_CUSTOM_WORD_ITEM");
+	AddItemTitle(pItem, name);
+
 	return pItem;
 }
 
 // list item provider
 Osp::Ui::Controls::ListItemBase * Dictionary::CreateItem(int index, int itemWidth)
 {
-	CustomItem *pItem = CreateLessonItem(itemWidth, index + 1);
+	CustomItem *pItem;
+	if (index < LangSetting::NUM_LESSON)
+		pItem = CreateLessonItem(itemWidth, index + 1);
+	else pItem = CreateCustomWordItem(itemWidth);
 
 	return pItem;
 }

@@ -23,8 +23,10 @@ class BaseWordForm
 		: public Osp::Ui::Controls::Form,
 		public Osp::Ui::IActionEventListener
 {
+private:
+		ArrayList __destructList;
 public:
-			static const int ID_ADD_WORD = 101;
+		static const int ID_ADD_WORD = 101;
 protected:
 		WordCtrl *__WCtrl;
 
@@ -41,6 +43,9 @@ public:
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 
 	static String GetString(Osp::Base::String ID);
+
+protected:
+	void AddToDestructList(Object *obj);
 };
 
 #endif /* BASEWORDFORM_H_ */

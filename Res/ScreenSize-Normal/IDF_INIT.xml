@@ -6,7 +6,7 @@
 
 <Scene Bversion="2.0.2.v20110930" Dversion="20100701">
     <Form id="IDF_INIT">
-        <property BGColor="" BGColorOpacity="0" Orientation="Automatic" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="Hello bada!" titleAlign="ALIGN_LEFT" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
+        <property BGColor="" BGColorOpacity="0" Orientation="Automatic" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="::IDS_FORM_INIT" titleAlign="ALIGN_LEFT" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
         <layout mode="Portrait" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
         <layout mode="Landscape" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
     </Form>

@@ -9,13 +9,18 @@
 
 BaseWordForm::BaseWordForm(): __pAddWordDlg(null)
 {
-
+	__destructList.Construct(2000);
 }
 
 BaseWordForm::~BaseWordForm()
 {
 	if(__pAddWordDlg)
 		delete __pAddWordDlg;
+
+	if(__destructList.GetCount() > 0)
+	{
+		__destructList.RemoveAll(true);
+	}
 }
 
 bool BaseWordForm::Init()
@@ -64,4 +69,9 @@ void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionI
 		__pAddWordDlg = new AddWord();
 		__pAddWordDlg->ShowPopup(this);
 	}
+}
+
+void BaseWordForm::AddToDestructList(Object *obj)
+{
+	__destructList.Add(*obj);
 }

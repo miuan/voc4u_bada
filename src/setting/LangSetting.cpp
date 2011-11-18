@@ -23,6 +23,7 @@ Locale LangSetting::LOCALES[] =
 const int LangSetting::NUM_LOCALES = 8;
 
 const Color LangSetting::LESSON_COLORS[] = {Color(155,255,100), Color(155,205,100), Color(205,155,100), Color(255,155,100)};
+const Color LangSetting::CUSTOM_WORD = Color::COLOR_BLUE;
 
 LangSetting::LangSetting()
 {

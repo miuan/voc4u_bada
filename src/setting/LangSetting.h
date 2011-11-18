@@ -50,7 +50,7 @@ public:
 	 * colors for lesson
 	 */
 	static const Color LESSON_COLORS[];
-
+	static const Color CUSTOM_WORD;
 public:
 	LangSetting();
 	virtual ~LangSetting();
