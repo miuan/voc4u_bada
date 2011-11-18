@@ -12,7 +12,7 @@
 
 using namespace Osp::Base;
 
-class Word
+class Word : public Object
 {
 public:
 	String __native;

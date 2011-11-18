@@ -161,6 +161,17 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 			Utils::ShowFront(this, pInit);
 		}
 	}
+	else if(actionId == ID_ADD_WORD)
+	{
+		AddWord *aw = new AddWord();
+		aw->SetResultListener(this, ID_MENU_ADD_WORD_SUCCCES);
+		aw->ShowPopup(this);
+		AddToDestructList(aw);
+	}
+	else if(actionId == ID_MENU_ADD_WORD_SUCCCES)
+	{
+		__pList->RefreshList(__pList->GetItemCount() -1, LIST_REFRESH_TYPE_ITEM_MODIFY);
+	}
 	else BaseWordForm::OnActionPerformed(source, actionId);
 }
 // ListViewItemEvents
@@ -183,7 +194,7 @@ void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listVie
 		__progressState[index] = true;
 
 	saveState[index] = add;
-	listView.UpdateList();
+
 }
 
 void Dictionary::OnListViewItemSwept(Osp::Ui::Controls::ListView &listView, int index, Osp::Ui::Controls::SweepDirection direction)
@@ -310,8 +321,30 @@ CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
 	pItem->Construct(Osp::Graphics::Dimension(itemWidth, ITEM_HEIGHT), style);
 	pItem->SetBackgroundColor(LIST_ITEM_DRAWING_STATUS_NORMAL, LangSetting::CUSTOM_WORD);
 
+	String examples = L"";
+
+	ArrayList *words = __WCtrl->GetWordsByLessonN(WordCtrl::CUSTOM_WORD_LESSON_ID);
+
+	if(words && words->GetCount() > 0)
+	{
+		int cnt = words->GetCount();
+		for(int i = 0; i!= cnt; i++)
+		{
+			Word * w = static_cast<Word*>(words->GetAt(i));
+			if(i > 0)
+				examples.Append(",");
+			examples.Append(w->__lern);
+		}
+
+		words->RemoveAll(true);
+		delete words;
+	}
+	else
+		examples = Utils::GetString("IDS_EMPTY_CUSTOM_LIST");
+
 	String name = Utils::GetString("IDS_CUSTOM_WORD_ITEM");
 	AddItemTitle(pItem, name);
+	AddItemExamples(pItem, itemWidth, examples);
 
 	return pItem;
 }
@@ -335,7 +368,7 @@ bool Dictionary::DeleteItem(int index, Osp::Ui::Controls::ListItemBase *pItem, i
 int Dictionary::GetItemCount(void)
 {
 	// TODO: add special item for custom words
-	return LangSetting::NUM_LESSON; // +1;
+	return LangSetting::NUM_LESSON +1;
 }
 
 void Dictionary::GetLessonsInProgress()

@@ -7,7 +7,7 @@
 
 #include "AddWord.h"
 
-AddWord::AddWord()
+AddWord::AddWord() : __resultListener(null), __resultActionCode(0)
 {
 
 }
@@ -75,7 +75,8 @@ void AddWord::OnActionPerformed(const Osp::Ui::Control & source, int actionId)
 		if (wc)
 		{
 			Word w(-1, 0, native, lern, 1, 1);
-			wc->AddWord(w);
+			if(wc->AddWord(w) && __resultListener)
+				__resultListener->OnActionPerformed(source, __resultActionCode);
 		}
 	}
 

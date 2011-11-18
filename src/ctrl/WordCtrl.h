@@ -39,9 +39,12 @@ using namespace Osp::Base::Collection;
 		%ls INTEGER)"
 
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
-
+#define SELECT_WORD L"SELECT %S, %S, %S, %S, %S, %S, %S FROM %S ORDER BY %S DESC, %S DESC %S"
 class WordCtrl: public ILessonWorkerLissener
 {
+public:
+	static const int CUSTOM_WORD_LESSON_ID = 0;
+
 private:
 	static WordCtrl *__wc;
 	Database *__db;
@@ -52,6 +55,8 @@ private:
 	friend Object * LessonWorker::Run(void);
 
 private:
+
+	String SQLSelectWord(String where, String limit);
 	result PrepareDB();
 	void CreateLessonWorker();
 public:
@@ -67,6 +72,8 @@ public:
 	void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
 	virtual void OnLessonTask(const int lesson);
 	int * GetWorkerTaskLessonInProgressN(int &count);
+
+	ArrayList * GetWordsByLessonN(const int lesson);
 private:
 
 	/*

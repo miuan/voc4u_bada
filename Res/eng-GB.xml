@@ -25,6 +25,7 @@
     <text id="IDS_ADD_WORD_BUTTON">add word</text>
     <text id="IDS_LESSON_4">Intermediate</text>
     <text id="IDS_LESSON_3">Pre-Intermediate</text>
+    <text id="IDS_EMPTY_CUSTOM_LIST">Not added custom word yet... You can add custom word to list by button on top-right.</text>
     <text id="IDS_LESSON_2">Elementary</text>
     <text id="IDS_LESSON_1">Basic</text>
     <text id="IDS_PREPARING">[preparing]</text>

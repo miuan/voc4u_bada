@@ -25,6 +25,7 @@ public:
 	static const int ID_MENU_RESETDB = 1102;
 	static const int ID_MENU_INFO = 1103;
 	static const int ID_MENU = 1104;
+	static const int ID_MENU_ADD_WORD_SUCCCES = 1105;
 private:
 	ListView * __pList;
 

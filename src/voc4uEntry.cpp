@@ -17,8 +17,7 @@ _EXPORT_ int OspMain(int argc, char *pArgv[]);
  * The entry function of bada application called by the operating system.
  */
 int
-OspMain(int argc, char *pArgv[])
-{
+OspMain(int argc, char *pArgv[]){
 	result r = E_SUCCESS;
 
 	AppLog("Application started.");

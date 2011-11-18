@@ -191,13 +191,84 @@ void WordCtrl::OnLessonTask(const int lesson)
 
 int * WordCtrl::GetWorkerTaskLessonInProgressN(int &count)
 {
-	if(__lw && __lw->IsRunning())
+	if (__lw && __lw->IsRunning())
 		return __lw->GetLessonInProgressN(count);
 	else
 	{
 		count = 0;
 		return null;
 	}
+}
+//#define SELECT_WORD L"SELECT %S %S, %S, %S, %S, %S, %S FROM %S ORDER BY DESC %S, %S"
+String WordCtrl::SQLSelectWord(String where = L"", String limit = L"")
+{
+	String sql;
+	String table = TABLE_NAME;
+	String orderby = COLUMN_NWEIGHT;
+
+	if (where.GetLength() > 0)
+	{
+		table.Append(" WHERE ");
+		table.Append(where);
+	}
+
+	sql.Format(1000, SELECT_WORD, COLUMN_ID, COLUMN_LESSON, COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT, COLUMN_NWEIGHT, COLUMN_USER_CHANGE, table.GetPointer(), COLUMN_LWEIGHT,
+			COLUMN_NWEIGHT, limit.GetPointer());
+	return sql;
+}
+
+ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
+{
+	result r;
+	ArrayList *result = null;
+	String where = COLUMN_LESSON;
+	where.Append("= ?");
+	//where.Append(lesson);
+	String sql = SQLSelectWord(where);
+
+	AppLogDebug("SQL: (%S)", sql.GetPointer());
+	DbStatement * pStmt = __db->CreateStatementN(sql);
+
+	pStmt->BindInt(0, lesson);
+	DbEnumerator* pEnum = __db->ExecuteStatementN(*pStmt);
+
+	// pEnum = __db->QueryN(sql);
+	if (!pEnum)
+	{
+		AppLog("QueryN not initialized (%1s)", GetErrorMessage(GetLastResult()));
+	}
+
+	int count = 0;
+	if (pEnum)
+	{
+		while (pEnum->MoveNext() == E_SUCCESS)
+		{
+			int id, lesson, lweight, nweight, userchanged;
+			String native, lern;
+
+			pEnum->GetIntAt(0, id);
+			pEnum->GetIntAt(1, lesson);
+			pEnum->GetStringAt(2, lern);
+			pEnum->GetStringAt(3, native);
+			pEnum->GetIntAt(4, lweight);
+			pEnum->GetIntAt(5, nweight);
+			pEnum->GetIntAt(6, userchanged);
+
+			Word * w = new Word(id, lesson, lern, native, lweight, nweight);
+
+			if (!result)
+			{
+				result = new ArrayList();
+				result->Construct();
+			}
+
+			result->Add(*w);
+		}
+
+		delete pEnum;
+	}
+
+	return result;
 }
 
 bool WordCtrl::DeleteLesson(const int lesson)
@@ -207,14 +278,13 @@ bool WordCtrl::DeleteLesson(const int lesson)
 	if (__db->BeginTransaction() != E_SUCCESS)
 		return false;
 
-	if(lesson > 0)
+	if (lesson > 0)
 		statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
-	else
-		statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
+	else statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
 
 	DbStatement * pStmt = __db->CreateStatementN(statement);
 
-	if(lesson > 0)
+	if (lesson > 0)
 		pStmt->BindInt(0, lesson);
 
 	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);

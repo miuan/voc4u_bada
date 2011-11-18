@@ -34,6 +34,9 @@ private:
     void showErrorMessageBox();
 
 
+    IActionEventListener * __resultListener;
+    int __resultActionCode;
+
 public:
 	static const int ID_BTN_CANCEL = 1;
 	static const int ID_BTN_ADD = 2;
@@ -44,6 +47,16 @@ public:
 	virtual ~AddWord();
 
 	virtual void OnActionPerformed(const Osp::Ui::Control & source, int actionId);
+
+	/**
+	 * set ActionEventListener when success add new custom button
+	 * see to dictionary
+	 */
+	void SetResultListener(IActionEventListener * rl, int actionCode)
+	{
+		__resultListener = rl;
+		__resultActionCode = actionCode;
+	}
 };
 
 #endif /* ADD_WORD_H_ */
