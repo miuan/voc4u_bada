@@ -21,7 +21,7 @@ public:
 	static Osp::Base::String GetString(Osp::Base::String ID);
 	static Osp::Graphics::Bitmap * GetBitmap(Osp::Base::String ID);
 
-	static void ShowFront(Osp::Ui::Controls::Form *parent, Osp::Ui::Controls::Form *form);
+	static void ShowFront(Osp::Ui::Controls::Form *form, Osp::Ui::Controls::Form *parent);
 };
 
 #endif /* UTILS_H_ */

@@ -64,7 +64,7 @@ void BaseWordForm::SetBackForm(Form &frm)
 {
 	__pBackForm = &frm;
 
-	if (IsVisible())
+	//if (IsVisible())
 		PrepareFooter();
 }
 
@@ -180,7 +180,7 @@ void BaseWordForm::ShowInfoDlg()
 void BaseWordForm::OnFormBackRequested(Osp::Ui::Controls::Form &source)
 {
 	if (__pBackForm)
-		Utils::ShowFront(&source, __pBackForm);
+		Utils::ShowFront(__pBackForm, &source);
 	else
 	AppLogDebug("call OnFormBackRequested, but the __pBackForm isn\'t set!");
 }

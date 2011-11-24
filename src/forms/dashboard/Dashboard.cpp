@@ -68,7 +68,7 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		Train *train = new Train();
 		train->Init();
 		train->SetBackForm(*this);
-		Utils::ShowFront(this, train);
+		Utils::ShowFront(train, null);
 		break;
 	}
 
