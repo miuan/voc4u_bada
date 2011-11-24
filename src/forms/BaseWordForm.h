@@ -47,7 +47,7 @@ public:
 	virtual String GetResourceID() = 0;
 	virtual result OnInitializing();
 
-	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
 
 	static String GetString(Osp::Base::String ID);
 	void SetBackForm(Form &frm);
@@ -61,6 +61,7 @@ protected:
 
 	virtual  wchar_t* GetShowInfoCode();
 	virtual void OnFormBackRequested (Osp::Ui::Controls::Form &source);
+	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 };
 
 #endif /* BASEWORDFORM_H_ */

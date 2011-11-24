@@ -13,6 +13,9 @@
 class Train: public BaseWordForm
 {
 public:
+	static const int ID_BTN_KNOW = 5001;
+	static const int ID_BTN_DONTKNOW = 5002;
+public:
 	Train();
 	virtual ~Train();
 
@@ -21,6 +24,8 @@ public:
 protected:
 	virtual void PrepareContextMenu();
 	virtual void PrepareFooter();
+
+	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 };
 
 #endif /* TRAIN_H_ */

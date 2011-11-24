@@ -20,19 +20,9 @@
     </Header>
     <ListView id="IDC_LASTLIST" parent="IDF_TRAIN">
         <property BGColor="" BGColorOpacity="0" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="FALSE" itemDivider="TRUE" itemDividerColor="" sweepEnabled="FALSE" textOfEmptyList=""/>
-        <layout height="331" mode="Portrait" width="461" x="10" y="120"/>
+        <layout height="481" mode="Portrait" width="461" x="10" y="120"/>
         <layout height="88" mode="Landscape" width="456" x="335" y="167"/>
     </ListView>
-    <Button id="IDC_DONTKNOW" parent="IDF_TRAIN">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_DONTKNOW" textSize="32" vAlign="ALIGN_MIDDLE"/>
-        <layout height="92" mode="Portrait" width="229" x="12" y="469"/>
-        <layout height="48" mode="Landscape" width="333" x="20" y="266"/>
-    </Button>
-    <Button id="IDC_KNOW" parent="IDF_TRAIN">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_KNOW" textSize="32" vAlign="ALIGN_MIDDLE"/>
-        <layout height="90" mode="Portrait" width="231" x="240" y="470"/>
-        <layout height="48" mode="Landscape" width="256" x="543" y="266"/>
-    </Button>
     <Label id="IDC_TEST" parent="IDF_TRAIN">
         <property BGBitmapPath="" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="hello" textColor="" textSize="77" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
         <layout height="101" mode="Portrait" width="459" x="12" y="10"/>
