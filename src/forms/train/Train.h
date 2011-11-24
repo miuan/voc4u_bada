@@ -15,6 +15,12 @@ class Train: public BaseWordForm
 public:
 	Train();
 	virtual ~Train();
+
+	virtual String GetResourceID();
+	virtual result OnInitializing(void);
+protected:
+	virtual void PrepareContextMenu();
+	virtual void PrepareFooter();
 };
 
 #endif /* TRAIN_H_ */

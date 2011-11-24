@@ -39,8 +39,13 @@
         <layout height="48" mode="Landscape" width="241" x="558" y="176"/>
     </Button>
     <Button id="IDC_BTN_BEGIN" parent="IDF_INIT">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_BEGIN" textSize="32" vAlign="ALIGN_MIDDLE"/>
-        <layout height="68" mode="Portrait" width="458" x="13" y="542"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_MENU" textSize="32" vAlign="ALIGN_MIDDLE"/>
+        <layout height="61" mode="Portrait" width="458" x="13" y="442"/>
         <layout height="48" mode="Landscape" width="333" x="178" y="344"/>
+    </Button>
+    <Button id="IDC_BTN_TRAIN" parent="IDF_INIT">
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="32" vAlign="ALIGN_MIDDLE"/>
+        <layout height="121" mode="Portrait" width="458" x="13" y="512"/>
+        <layout height="48" mode="Landscape" width="333" x="198" y="344"/>
     </Button>
 </Scene>

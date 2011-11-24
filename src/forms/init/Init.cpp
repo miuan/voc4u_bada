@@ -1,5 +1,6 @@
 #include "Init.h"
 #include <FGraphics.h>
+#include "ctrl/WordCtrl.h"
 
 using namespace Osp::Base;
 using namespace Osp::Ui;
@@ -40,20 +41,29 @@ result InitFrm::OnInitializing(void)
 		__pbtnNative->AddActionEventListener(*this);
 	}
 
-	__pbtnLern = static_cast<Button *>(GetControl(L"IDC_BTN_LERN"));
+	__pbtnLern = static_cast<Button *> (GetControl(L"IDC_BTN_LERN"));
 	if (__pbtnLern != null)
 	{
 		__pbtnLern->SetActionId(ID_BUTTON_LERN);
 		__pbtnLern->AddActionEventListener(*this);
 	}
 
-	__pbtnBegin = static_cast<Button *>(GetControl(L"IDC_BTN_BEGIN"));
-	if (__pbtnBegin != null)
+	__pbtnMenu = static_cast<Button *> (GetControl(L"IDC_BTN_BEGIN"));
+	if (__pbtnMenu != null)
 	{
-		AppLog("btnbegin");
-		__pbtnBegin->SetActionId(ID_BUTTON_BEGIN);
-		__pbtnBegin->AddActionEventListener(*this);
-		__pbtnBegin->SetEnabled(false);
+
+		__pbtnMenu->SetActionId(ID_BUTTON_BEGIN);
+		__pbtnMenu->AddActionEventListener(*this);
+		__pbtnMenu->SetEnabled(false);
+	}
+
+	__pbtnTrain = static_cast<Button *> (GetControl(L"IDC_BTN_TRAIN"));
+	if (__pbtnTrain != null)
+	{
+
+		__pbtnTrain->SetActionId(ID_BUTTON_TRAIN);
+		__pbtnTrain->AddActionEventListener(*this);
+		__pbtnTrain->SetEnabled(false);
 	}
 
 	return r;
@@ -80,47 +90,42 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 		if (actionId == ID_BUTTON_LERN)
 			__pPopup->Init(__pNative);
-		else
-			__pPopup->Init(null);
+		else __pPopup->Init(null);
 
 		//__pPopup->Draw();
 		__pPopup->SetShowState(true);
 		__pPopup->Show();
-
 
 		break;
 	}
 	case ID_BUTTON_BEGIN:
 	{
 		__setting->Store();
-		Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
+		WordCtrl::GetInstance()->AddLesson(1, false);
 
-		Dictionary * init = new Dictionary();
-		init->Init();
-		pFrame->AddControl(*init);
-		pFrame->SetCurrentForm(*init);
-		init->RequestRedraw(true);
-		pFrame->RemoveControl(*this);
+		//Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
 
+//		Dictionary * init = new Dictionary();
+//		init->Init();
+//		pFrame->AddControl(*init);
+//		pFrame->SetCurrentForm(*init);
+//		init->RequestRedraw(true);
+//		pFrame->RemoveControl(*this);
+		Dashboard *dash = new Dashboard();
+		dash->Init();
 
-				AppLog("ahoj");
-//		 MessageBox messageBox;
-//		    messageBox.Construct(L"My MessageBox", L"This is MessageBox Sample Code.", MSGBOX_STYLE_OK, 3000);
-//
-//		    // Calls ShowAndWait - draw, show itself and process events
-//		    int modalResult = 0;
-//		    messageBox.ShowAndWait(modalResult);
-//
-//		    switch(modalResult)
-//		    {
-//		    case MSGBOX_RESULT_OK:
-//		        // Todo:
-//		        break;
-//
-//		    default:
-//		        break;
-//		    }
+		Utils::ShowFront(this, dash);
 		break;
+	}
+	case ID_BUTTON_TRAIN:
+	{
+		__setting->Store();
+		WordCtrl::GetInstance()->AddLesson(1, false);
+
+		Train *train = new Train();
+		train->Init();
+
+		Utils::ShowFront(this, train);
 	}
 	default:
 		break;
@@ -133,9 +138,8 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 	String str, code;
 	selected.GetLanguageName(str);
 	code = selected.GetLanguageCodeString();
-	Osp::Graphics::Point bpoint(350,25);
+	Osp::Graphics::Point bpoint(350, 25);
 	Osp::Graphics::Bitmap * icon = LangSetting::GetIcon(selected);
-
 
 	if (type == ID_BUTTON_NATIVE)
 	{
@@ -150,24 +154,25 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 			AppResource *res = Application::GetInstance()->GetAppResource();
 			String title;
 			if (res->GetString(L"IDS_NOT_SELECTED_YET", title) == E_SUCCESS)
-			__pbtnLern->SetText(title);
+				__pbtnLern->SetText(title);
 			//__pbtnLern->SetNormalBitmap(bpoint, (Bitmap*)null);
 		}
 
 		__setting->native = code;
 	}
-	if(type == ID_BUTTON_LERN)
+	if (type == ID_BUTTON_LERN)
 	{
 		__pbtnLern->SetText(str);
 		__pbtnLern->SetNormalBitmap(bpoint, *icon);
-		__pLern =&selected;
+		__pLern = &selected;
 		__setting->lern = code;
 	}
 
-	__pbtnBegin->SetEnabled(__pLern && __pNative);
+	__pbtnMenu->SetEnabled(__pLern && __pNative);
+	__pbtnTrain->SetEnabled(__pLern && __pNative);
 	//__pButtonOk->Show();
-					//__pButtonOk->Draw();
-					Draw();
-					Show();
+	//__pButtonOk->Draw();
+	Draw();
+	Show();
 
-				}
+}

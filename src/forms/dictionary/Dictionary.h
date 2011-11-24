@@ -23,14 +23,13 @@ class Dictionary: public BaseWordForm, public Osp::Ui::Controls::IListViewItemEv
 public:
 	static const int ID_MENU_ADD_WORD = 1101;
 	static const int ID_MENU_RESETDB = 1102;
-	static const int ID_MENU_INFO = 1103;
-	static const int ID_MENU = 1104;
+
 	static const int ID_MENU_ADD_WORD_SUCCCES = 1105;
 private:
 	ListView * __pList;
 
 	Information *__info;
-	ContextMenu *__pContextMenu;
+
 
 	bool __progressState[LangSetting::NUM_LESSON];
 	bool saveState[LangSetting::NUM_LESSON];
@@ -40,8 +39,7 @@ private:
     void InitLessonState();
 	void SetupInitSetting();
 	void ShowInfoDlg();
-	void PrepareFooter();
-	void PrepareContextMenu();
+
 
 public:
 
@@ -74,6 +72,10 @@ public:
 
 	bool Init();
 
+protected:
+	virtual void PrepareFooter();
+	virtual void PrepareContextMenu();
+	virtual wchar_t* GetShowInfoCode(){ return IDS_DICTIONARY;};
 private:
 	CustomItem *CreateLessonItem(int itemWidth, int lesson);
 	CustomItem *CreateCustomWordItem(int itemWidth);

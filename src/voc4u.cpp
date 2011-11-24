@@ -46,6 +46,13 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	Form *pForm;
 
+	CommonSetting &cs = CommonSetting::GetInstance();
+	cs.lern = L"ES";
+	cs.native = L"CS";
+	cs.Store();
+	//cs.Store();
+
+	WordCtrl::GetInstance()->AddLesson(1, false);
 	// if setting currently initialized
 	// you can continue normaly
 	if (CommonSetting::GetInstance().IsInitialized())

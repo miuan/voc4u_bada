@@ -14,7 +14,7 @@
 #include <FApp.h>
 
 #include "dialogs/addword/AddWord.h"
-
+#include "forms/BaseWordForm.h"
 
 using namespace Osp::Ui;
 using namespace Osp::Ui::Controls;
@@ -26,7 +26,7 @@ class Dashboard :
 	public Osp::Ui::IActionEventListener
 {
 public:
-		static const int ID_ADD_WORD = 1001;
+
 public:
 	Dashboard();
 	virtual ~Dashboard();

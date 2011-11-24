@@ -20,12 +20,17 @@
     </Header>
     <Button id="IDC_BTN_TRAIN" parent="IDF_DASHBOARD">
         <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="191" mode="Portrait" width="461" x="10" y="0"/>
+        <layout height="191" mode="Portrait" width="461" x="10" y="150"/>
         <layout height="48" mode="Landscape" width="333" x="210" y="37"/>
     </Button>
     <Button id="IDC_BUTTON1" parent="IDF_DASHBOARD">
         <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="62" mode="Portrait" width="200" x="20" y="272"/>
+        <layout height="134" mode="Portrait" width="221" x="10" y="350"/>
         <layout height="48" mode="Landscape" width="333" x="116" y="139"/>
+    </Button>
+    <Button id="IDC_BUTTON2" parent="IDF_DASHBOARD">
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
+        <layout height="134" mode="Portrait" width="221" x="250" y="350"/>
+        <layout height="48" mode="Landscape" width="333" x="136" y="159"/>
     </Button>
 </Scene>

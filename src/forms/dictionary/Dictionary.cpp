@@ -9,7 +9,7 @@
 #include "forms/init/Init.h"
 
 Dictionary::Dictionary() :
-	__info(null), __pContextMenu(null)
+	__info(null)
 {
 
 }
@@ -18,8 +18,6 @@ Dictionary::~Dictionary()
 {
 	if (__info)
 		delete __info;
-	if (__pContextMenu)
-		delete __pContextMenu;
 }
 
 void Dictionary::SetupInitSetting()
@@ -54,54 +52,26 @@ bool Dictionary::Init()
 	return true;
 }
 
-void Dictionary::ShowInfoDlg()
-{
-	if (__info)
-		delete __info;
-
-	__info = new Information();
-	if (__info)
-	{
-		__info->SetType(IDS_DICTIONARY);
-		__info->ShowPopup(this);
-	}
-}
 
 void Dictionary::PrepareFooter()
 {
-	Footer *footer = GetFooter();
-	if (footer)
-	{
-		ButtonItem btnSave;
-		btnSave.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
-		btnSave.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
-		footer->SetButton(BUTTON_POSITION_LEFT, btnSave);
-		footer->SetBackButton();
-		footer->SetBackButtonEnabled(true);
-	}
-	footer->AddActionEventListener(*this);
+	BaseWordForm::PrepareFooter();
 }
 
 void Dictionary::PrepareContextMenu()
 {
-	__pContextMenu = new ContextMenu();
-	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
+	BaseWordForm::PrepareContextMenu();
+
 	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
 	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
-	Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
-	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
-	__pContextMenu->AddActionEventListener(*this);
 }
 
 result Dictionary::OnInitializing(void)
 {
 	if (!CommonSetting::GetInstance().NSHDictionary)
 		ShowInfoDlg();
-
-	PrepareFooter();
-	PrepareContextMenu();
 
 	InitLessonState();
 	//BaseWebForm::OnInitializing();
@@ -121,23 +91,8 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 
 	//ShowInfoDlg();
-	if (actionId == ID_MENU)
-	{
-		int hp = GetHeight();
 
-		Footer *footer = GetFooter();
-		if (footer)
-			hp -= (footer->GetHeight() - 5);
-
-		// Set the anchor position of the ContextMenu
-		__pContextMenu->SetPosition(Point(10, hp));
-
-		// Show the ContextMenu
-		__pContextMenu->SetShowState(true);
-		__pContextMenu->Show();
-
-	}
-	else if (actionId == ID_MENU_INFO)
+	if (actionId == ID_MENU_INFO)
 	{
 		ShowInfoDlg();
 	}

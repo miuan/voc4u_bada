@@ -7,7 +7,8 @@
 
 #include "LangSelect.h"
 #include "setting/CommonSetting.h"
-#include "forms/dictionary/Dictionary.h"
+#include "forms/dashboard/Dashboard.h"
+#include "forms/train/Train.h"
 #include "dialogs/information/Information.h"
 
 class InitFrm :
@@ -29,9 +30,12 @@ protected:
 	static const int ID_BUTTON_NATIVE = 101;
 	static const int ID_BUTTON_LERN = 102;
 	static const int ID_BUTTON_BEGIN = 103;
+	static const int ID_BUTTON_TRAIN = 104;
 	Osp::Ui::Controls::Button *__pbtnNative;
 	Osp::Ui::Controls::Button *__pbtnLern;
-	Osp::Ui::Controls::Button *__pbtnBegin;
+	Osp::Ui::Controls::Button *__pbtnMenu;
+	Osp::Ui::Controls::Button *__pbtnTrain;
+
 
 	Locale *__pLern, * __pNative;
 

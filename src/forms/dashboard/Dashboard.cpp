@@ -6,6 +6,7 @@
  */
 
 #include "Dashboard.h"
+#include "forms/train/Train.h"
 
 Dashboard::Dashboard()
 {
@@ -22,11 +23,10 @@ result Dashboard::OnInitializing(void)
 {
 	result r = E_SUCCESS;
 
-
 	Button *pBtn_train = static_cast<Button *> (GetControl("IDC_BTN_TRAIN"));
 	if (pBtn_train)
 	{
-		pBtn_train->SetActionId(101);
+		pBtn_train->SetActionId(BaseWordForm::ID_TRAIN);
 		pBtn_train->AddActionEventListener(*this);
 	}
 
@@ -35,7 +35,7 @@ result Dashboard::OnInitializing(void)
 	if (header)
 	{
 		ButtonItem btnAddWord;
-		btnAddWord.Construct(BUTTON_ITEM_STYLE_TEXT, ID_ADD_WORD);
+		btnAddWord.Construct(BUTTON_ITEM_STYLE_TEXT, BaseWordForm::ID_ADD_WORD);
 		btnAddWord.SetText("Add word");
 		HeaderItem headerItem1;
 
@@ -53,26 +53,25 @@ bool Dashboard::Init()
 	return true;
 }
 
-#include "../init/Init.h"
 void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
-
-	if (actionId == ID_ADD_WORD)
+	switch (actionId)
+	{
+	case BaseWordForm::ID_ADD_WORD:
 	{
 		AddWord * pAddWord = new AddWord();
 		pAddWord->ShowPopup(this);
-		//pAddWord->Show();
-
+		break;
 	}
-	else
+	case BaseWordForm::ID_TRAIN:
 	{
-		Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
-
-//		Init * init = new Init();
-//		init->Initialize();
-//		pFrame->RemoveControl(*init);
-//		pFrame->AddControl(*init);
-//		pFrame->SetCurrentForm(*init);
-//		init->RequestRedraw(true);
+		Train *train = new Train();
+		train->Init();
+		train->SetBackForm(*this);
+		Utils::ShowFront(this, train);
+		break;
 	}
+
+	}
+
 }
