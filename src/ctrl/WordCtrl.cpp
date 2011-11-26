@@ -7,6 +7,8 @@
 
 #include "WordCtrl.h"
 
+using namespace Osp::Base::Collection;
+
 WordCtrl * WordCtrl::__wc = null;
 
 WordCtrl::WordCtrl() :
@@ -92,7 +94,8 @@ result WordCtrl::Init()
 		__db->Construct(DB_NAME, true);
 		r = PrepareDB();
 	}
-	else __db->Construct(DB_NAME, false);
+	else
+		__db->Construct(DB_NAME, false);
 
 	return r;
 }
@@ -172,7 +175,8 @@ bool WordCtrl::AddLesson(const int lesson, bool remove)
 	// otherwise call StopWait -> continue cycle in Run
 	if (createnew)
 		__lw->Start();
-	else __lw->StopWait();
+	else
+		__lw->StopWait();
 
 	return result;
 }
@@ -217,6 +221,22 @@ String WordCtrl::SQLSelectWord(String where = L"", String limit = L"")
 	return sql;
 }
 
+Word * WordCtrl::CreateWordFromDbEnumeratorN(DbEnumerator & pEnum)
+{
+	int id, lesson, lweight, nweight, userchanged;
+	String native, lern;
+
+	pEnum.GetIntAt(0, id);
+	pEnum.GetIntAt(1, lesson);
+	pEnum.GetStringAt(2, lern);
+	pEnum.GetStringAt(3, native);
+	pEnum.GetIntAt(4, lweight);
+	pEnum.GetIntAt(5, nweight);
+	pEnum.GetIntAt(6, userchanged);
+
+	return new Word(id, lesson, lern, native, lweight, nweight);
+}
+
 ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
 {
 	result r;
@@ -243,18 +263,9 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
 	{
 		while (pEnum->MoveNext() == E_SUCCESS)
 		{
-			int id, lesson, lweight, nweight, userchanged;
-			String native, lern;
+			Word * w;
 
-			pEnum->GetIntAt(0, id);
-			pEnum->GetIntAt(1, lesson);
-			pEnum->GetStringAt(2, lern);
-			pEnum->GetStringAt(3, native);
-			pEnum->GetIntAt(4, lweight);
-			pEnum->GetIntAt(5, nweight);
-			pEnum->GetIntAt(6, userchanged);
-
-			Word * w = new Word(id, lesson, lern, native, lweight, nweight);
+			w = CreateWordFromDbEnumeratorN(*pEnum);
 
 			if (!result)
 			{
@@ -271,6 +282,95 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
 	return result;
 }
 
+Word * WordCtrl::GetFirstWord(ArrayList *lastList)
+{
+	String where = "";
+	int lastCount = lastList ? lastList->GetCount() : 0;
+	Word * word = null;
+	result r;
+
+	// prepare where
+	if (lastCount)
+	{
+		for (int i = 0; i < lastCount; i++)
+		{
+			where.Append(COLUMN_ID);
+			where.Append(" = ? AND ");
+		}
+		// remove last AND
+		where.Remove(where.GetLength() - 4, 4);
+	}
+
+	String select = SQLSelectWord(where, " LIMIT 1");
+
+	DbStatement * pStmt = __db->CreateStatementN(select);
+
+	// prepare statement for where
+	if (lastCount)
+	{
+		for (int i = 0; i < lastCount; i++)
+		{
+			int lid = ((Integer*) lastList->GetAt(i))->ToInt();
+			r = pStmt->BindInt(i, lid);
+
+			if (IsFailed(r))
+			{
+				AppLog("binding failed with: %s", GetErrorMessage(r));
+			}
+		}
+
+	}
+
+	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+	r = GetLastResult();
+	if (IsFailed(r))
+	{
+		AppLog("Enumeration failed with: %s", GetErrorMessage(r));
+	}
+
+	if (pEnum)
+	{
+		word = CreateWordFromDbEnumeratorN(*pEnum);
+
+		delete pEnum;
+	}
+
+	delete pStmt;
+	return word;
+}
+
+String WordCtrl::SQLUpdateWord()
+{
+	String update;
+	update.Format(2000, UPDATE_TABLE, TABLE_NAME, COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT, COLUMN_NWEIGHT, COLUMN_USER_CHANGE);
+	return update;
+}
+
+bool WordCtrl::UpdateWord(Word & word)
+{
+	String update = SQLUpdateWord();
+
+	__db->BeginTransaction();
+
+	DbStatement * pStmt = __db->CreateStatementN(update);
+	if (pStmt)
+	{
+
+		pStmt->BindString(0, word.__lern);
+		pStmt->BindString(1, word.__native);
+		pStmt->BindInt(2, word.__lweight);
+		pStmt->BindInt(3, word.__nweight);
+		pStmt->BindInt(4, word.__user);
+
+		DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+		__db->CommitTransaction();
+
+		delete pEnum;
+		delete pStmt;
+	}
+	return true;
+}
+
 bool WordCtrl::DeleteLesson(const int lesson)
 {
 	String statement;
@@ -280,7 +380,8 @@ bool WordCtrl::DeleteLesson(const int lesson)
 
 	if (lesson > 0)
 		statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
-	else statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
+	else
+		statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
 
 	DbStatement * pStmt = __db->CreateStatementN(statement);
 

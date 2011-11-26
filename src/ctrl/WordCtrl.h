@@ -38,6 +38,13 @@ using namespace Osp::Base::Collection;
 		%ls INTEGER,\
 		%ls INTEGER)"
 
+#define UPDATE_TABLE L"UPDATE %S SET\
+		%S = ?,\
+		%S = ?,\
+		%S = ?,\
+		%S = ?,\
+		%S = ?)"
+
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
 #define SELECT_WORD L"SELECT %S, %S, %S, %S, %S, %S, %S FROM %S ORDER BY %S DESC, %S DESC %S"
 class WordCtrl: public ILessonWorkerLissener
@@ -51,38 +58,29 @@ private:
 
 	LessonWorker *__lw;
 	ILessonWorkerLissener * __lwLissener;
-
-	friend Object * LessonWorker::Run(void);
-
+	Word * CreateWordFromDbEnumeratorN(DbEnumerator & pEnum);
+    friend Object *LessonWorker::Run(void);
 private:
-
-	String SQLSelectWord(String where, String limit);
-	result PrepareDB();
-	void CreateLessonWorker();
+    String SQLSelectWord(String where, String limit);
+    String SQLUpdateWord();
+    result PrepareDB();
+    void CreateLessonWorker();
 public:
-	WordCtrl();
-	virtual ~WordCtrl();
-	result Init();
-	static WordCtrl *GetInstance();
-	bool AddWord(Word & word);
-	bool GetLessonEnabled(const int lesson);
-
-	bool AddLesson(const int lesson, bool remove);
-
-	void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
-	virtual void OnLessonTask(const int lesson);
-	int * GetWorkerTaskLessonInProgressN(int &count);
-
-	ArrayList * GetWordsByLessonN(const int lesson);
+    WordCtrl();
+    virtual ~WordCtrl();
+    result Init();
+    static WordCtrl *GetInstance();
+    bool AddWord(Word & word);
+    bool GetLessonEnabled(const int lesson);
+    bool AddLesson(const int lesson, bool remove);
+    void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
+    virtual void OnLessonTask(const int lesson);
+    int *GetWorkerTaskLessonInProgressN(int & count);
+    ArrayList *GetWordsByLessonN(const int lesson);
+    Word *GetFirstWord(Osp::Base::Collection::ArrayList *lastList);
+    bool UpdateWord(Word & word);
 private:
-
-	/*
-	 * no call directly, use AddLesson with remove parameter
-	 * because this is called from LessonWorker
-	 *
-	 * 0 = delete all words in db
-	 */
-	bool DeleteLesson(const int lesson);
+    bool DeleteLesson(const int lesson);
 };
 
 #endif /* WORDCTRL_H_ */

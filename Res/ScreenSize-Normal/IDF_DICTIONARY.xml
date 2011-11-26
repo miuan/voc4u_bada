@@ -20,7 +20,7 @@
     </Header>
     <ListView id="IDC_LESSON" parent="IDF_DICTIONARY">
         <property BGColor="" BGColorOpacity="0" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="FALSE" itemDivider="TRUE" itemDividerColor="" sweepEnabled="FALSE" textOfEmptyList=""/>
-        <layout height="591" mode="Portrait" width="461" x="10" y="10"/>
+        <layout height="611" mode="Portrait" width="480" x="0" y="0"/>
         <layout height="88" mode="Landscape" width="376" x="423" y="33"/>
     </ListView>
 </Scene>

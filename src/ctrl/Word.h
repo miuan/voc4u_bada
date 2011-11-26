@@ -18,12 +18,18 @@ public:
 	String __native;
 	String __lern;
 	const int __id;
-	const int __nweight;
-	const int __lweight;
+	int __nweight;
+	int __lweight;
 	const int __lesson;
+	const int __user;
+
+	int __type;
+	bool __know;
 
 public:
 	Word(int id, int lesson, String native, String lern, int lw, int nw);
+	String GetTestedWord();
+	void SetKnow(bool know);
 	virtual ~Word();
 };
 
