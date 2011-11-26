@@ -38,15 +38,15 @@ using namespace Osp::Base::Collection;
 		%ls INTEGER,\
 		%ls INTEGER)"
 
-#define UPDATE_TABLE L"UPDATE %S SET\
+#define UPDATE_TABLE L"UPDATE %S SET \
 		%S = ?,\
 		%S = ?,\
 		%S = ?,\
 		%S = ?,\
-		%S = ?)"
+		%S = ? WHERE %S = ?"
 
 #define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
-#define SELECT_WORD L"SELECT %S, %S, %S, %S, %S, %S, %S FROM %S ORDER BY %S DESC, %S DESC %S"
+#define SELECT_WORD L"SELECT %S, %S, %S, %S, %S, %S, %S FROM %S ORDER BY %S ASC, %S ASC %S"
 class WordCtrl: public ILessonWorkerLissener
 {
 public:
@@ -77,7 +77,7 @@ public:
     virtual void OnLessonTask(const int lesson);
     int *GetWorkerTaskLessonInProgressN(int & count);
     ArrayList *GetWordsByLessonN(const int lesson);
-    Word *GetFirstWord(Osp::Base::Collection::ArrayList *lastList);
+    Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
     bool UpdateWord(Word & word);
 private:
     bool DeleteLesson(const int lesson);

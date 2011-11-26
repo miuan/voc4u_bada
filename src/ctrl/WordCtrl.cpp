@@ -282,7 +282,7 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
 	return result;
 }
 
-Word * WordCtrl::GetFirstWord(ArrayList *lastList)
+Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 {
 	String where = "";
 	int lastCount = lastList ? lastList->GetCount() : 0;
@@ -302,6 +302,8 @@ Word * WordCtrl::GetFirstWord(ArrayList *lastList)
 	}
 
 	String select = SQLSelectWord(where, " LIMIT 1");
+
+	AppLogDebug("select from db: (%S)", select.GetPointer());
 
 	DbStatement * pStmt = __db->CreateStatementN(select);
 
@@ -328,7 +330,7 @@ Word * WordCtrl::GetFirstWord(ArrayList *lastList)
 		AppLog("Enumeration failed with: %s", GetErrorMessage(r));
 	}
 
-	if (pEnum)
+	if (pEnum && !IsFailed(pEnum->MoveNext()))
 	{
 		word = CreateWordFromDbEnumeratorN(*pEnum);
 
@@ -342,7 +344,7 @@ Word * WordCtrl::GetFirstWord(ArrayList *lastList)
 String WordCtrl::SQLUpdateWord()
 {
 	String update;
-	update.Format(2000, UPDATE_TABLE, TABLE_NAME, COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT, COLUMN_NWEIGHT, COLUMN_USER_CHANGE);
+	update.Format(2000, UPDATE_TABLE, TABLE_NAME, COLUMN_LERN, COLUMN_NATIVE, COLUMN_LWEIGHT, COLUMN_NWEIGHT, COLUMN_USER_CHANGE, COLUMN_ID);
 	return update;
 }
 
@@ -352,7 +354,14 @@ bool WordCtrl::UpdateWord(Word & word)
 
 	__db->BeginTransaction();
 
+	AppLogDebug("update sql : (%S)", update.GetPointer());
 	DbStatement * pStmt = __db->CreateStatementN(update);
+	result r = GetLastResult();
+	if (IsFailed(r))
+	{
+		AppLog("statement failed with: %s", GetErrorMessage(r));
+	}
+
 	if (pStmt)
 	{
 
@@ -361,12 +370,17 @@ bool WordCtrl::UpdateWord(Word & word)
 		pStmt->BindInt(2, word.__lweight);
 		pStmt->BindInt(3, word.__nweight);
 		pStmt->BindInt(4, word.__user);
+		pStmt->BindInt(5, word.__id);
 
 		DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
 		__db->CommitTransaction();
 
 		delete pEnum;
 		delete pStmt;
+	}
+	else
+	{
+		__db->RollbackTransaction();
 	}
 	return true;
 }

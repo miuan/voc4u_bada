@@ -12,9 +12,17 @@
 
 class Train: public BaseWordForm
 {
+private:
+	Word *__word;
+	Label *__lblTest;
+    void GetFirstWord();
+    void UpdateWord(bool know);
+
 public:
 	static const int ID_BTN_KNOW = 5001;
 	static const int ID_BTN_DONTKNOW = 5002;
+
+
 public:
 	Train();
 	virtual ~Train();

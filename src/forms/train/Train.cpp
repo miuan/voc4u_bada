@@ -7,21 +7,37 @@
 
 #include "Train.h"
 
-Train::Train()
+Train::Train(): __word(null)
 {
-	// TODO Auto-generated constructor stub
 
 }
 
 Train::~Train()
 {
-	// TODO Auto-generated destructor stub
+
+}
+
+void Train::GetFirstWord()
+{
+	if(__word)
+		delete __word;
+
+    __word = __WCtrl->GetFirstWordN(null);
+    if (__lblTest != null)
+	{
+		__lblTest->SetText(__word->GetTestWord());
+		__lblTest->Draw();
+		__lblTest->Show();
+	}
 }
 
 result Train::OnInitializing(void)
 {
+	__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
 
-	return E_SUCCESS;
+	GetFirstWord();
+
+    return E_SUCCESS;
 }
 
 void Train::PrepareFooter()
@@ -55,6 +71,14 @@ String Train::GetResourceID()
 	return L"IDF_TRAIN";
 }
 
+void Train::UpdateWord(bool know)
+{
+    if(__word){
+        __word->SetKnow(know);
+        __WCtrl->UpdateWord(*__word);
+    }
+}
+
 void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 	static bool bswitch = false;
@@ -69,10 +93,14 @@ void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	if (ID_BTN_KNOW == actionId)
 	{
 		AppLog("know");
+		UpdateWord(true);
+		GetFirstWord();
 	}
 	else if (ID_BTN_DONTKNOW == actionId)
 	{
 		AppLog("dont know");
+		UpdateWord(false);
+		GetFirstWord();
 	}
 	else
 	{

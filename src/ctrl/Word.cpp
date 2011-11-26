@@ -16,7 +16,7 @@ Word::Word(int id, int lesson, String native, String lern, int lw, int nw) :
 	__know = false;
 }
 
-String Word::GetTestedWord()
+String Word::GetTestWord()
 {
 	return __type ? __native : __lern;
 }
@@ -31,13 +31,18 @@ void Word::SetKnow(bool know)
 
 	if (know)
 	{
-		weight < 10000 ? weight * 3 : weight + 30000;
+		weight = weight < 10000 ? weight * 3 : weight + 30000;
 	}
 	else
 	{
 		weight = weight / 2;
-		weight < 1 ? 1 : weight;
+		weight = weight < 1 ? 1 : weight;
 	}
+
+//	if(__type)
+//		__nweight = weight;
+//	else
+//		__lweight = weight;
 }
 
 Word::~Word()
