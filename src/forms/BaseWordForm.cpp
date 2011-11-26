@@ -7,6 +7,7 @@
 
 #include "BaseWordForm.h"
 #include "dialogs/information/Information.h"
+#include "forms/dictionary/Dictionary.h"
 
 BaseWordForm::BaseWordForm() :
 	__pAddWordDlg(null), __pContextMenu(null), __pBackForm(null)
@@ -65,7 +66,7 @@ void BaseWordForm::SetBackForm(Form &frm)
 	__pBackForm = &frm;
 
 	//if (IsVisible())
-		PrepareFooter();
+	PrepareFooter();
 }
 
 String BaseWordForm::GetString(Osp::Base::String ID)
@@ -80,15 +81,19 @@ result BaseWordForm::OnInitializing()
 
 void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
-	if (actionId == ID_ADD_WORD)
+	switch (actionId)
+	{
+	case ID_ADD_WORD:
 	{
 		if (__pAddWordDlg)
 			delete __pAddWordDlg;
 
 		__pAddWordDlg = new AddWord();
 		__pAddWordDlg->ShowPopup(this);
+
+		break;
 	}
-	else if (actionId == ID_MENU)
+	case ID_MENU:
 	{
 		int hp = GetHeight();
 
@@ -102,6 +107,16 @@ void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionI
 		// Show the ContextMenu
 		__pContextMenu->SetShowState(true);
 		__pContextMenu->Show();
+
+		break;
+	}
+	case ID_DICTIONARY:
+	{
+		Dictionary * pDic = new Dictionary();
+		pDic->Init();
+		Utils::ShowFront((Form*)pDic, null);
+		pDic->SetBackForm(*this);
+	}
 	}
 }
 
@@ -180,7 +195,11 @@ void BaseWordForm::ShowInfoDlg()
 void BaseWordForm::OnFormBackRequested(Osp::Ui::Controls::Form &source)
 {
 	if (__pBackForm)
+	{
 		Utils::ShowFront(__pBackForm, &source);
+	}
 	else
-	AppLogDebug("call OnFormBackRequested, but the __pBackForm isn\'t set!");
+	{
+		AppLogDebug("call OnFormBackRequested, but the __pBackForm isn\'t set!");
+	}
 }

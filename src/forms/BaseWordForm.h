@@ -33,6 +33,7 @@ public:
 		static const int ID_TRAIN = 102;
 		static const int ID_MENU = 103;
 		static const int ID_MENU_INFO = 104;
+		static const int ID_DICTIONARY = 105;
 
 protected:
 		WordCtrl *__WCtrl;

@@ -44,9 +44,9 @@ void Train::PrepareFooter()
 void Train::PrepareContextMenu()
 {
 	BaseWordForm::PrepareContextMenu();
-	//Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
+	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
 	//	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
-	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
+	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_DICTIONARY, *info);
 	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }
 
@@ -57,6 +57,15 @@ String Train::GetResourceID()
 
 void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
+	static bool bswitch = false;
+
+	bswitch = !bswitch;
+
+	if(!bswitch)
+	{
+		return;
+	}
+
 	if (ID_BTN_KNOW == actionId)
 	{
 		AppLog("know");

@@ -38,7 +38,6 @@ private:
     void GetLessonsInProgress();
     void InitLessonState();
 	void SetupInitSetting();
-	void ShowInfoDlg();
 
 
 public:
