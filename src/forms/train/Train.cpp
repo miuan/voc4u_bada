@@ -21,10 +21,12 @@ Train::~Train()
 
 bool Train::GetFirstWord()
 {
-	if (__word)
-		delete __word;
+	// dont delete because the word is
+	// stored in lastList and also delete
+	//if (__word)
+	//	delete __word;
 
-	__word = __WCtrl->GetFirstWordN(null);
+	__word = __WCtrl->GetFirstWordN(__llProv.GetArray());
 	if (!__word)
 	{
 		Dictionary *pDic = new Dictionary();
@@ -54,10 +56,13 @@ bool Train::GetFirstWord()
 
 result Train::OnInitializing(void)
 {
-		__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
+	__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
 
-		if(!GetFirstWord())
-			return E_FAILURE;
+	if (!GetFirstWord())
+		return E_FAILURE;
+
+	__lastList = static_cast<ListView* >(GetControl(L"IDC_LASTLIST"));
+	__lastList->SetItemProvider(__llProv);
 
 	return E_SUCCESS;
 }
@@ -99,7 +104,14 @@ void Train::UpdateWord(bool know)
 	{
 		__word->SetKnow(know);
 		__WCtrl->UpdateWord(*__word);
+
+		__llProv.AddWord(*__word);
+		__lastList->UpdateList();
+		__lastList->Draw();
+		__lastList->Show();
 	}
+
+
 }
 
 void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)

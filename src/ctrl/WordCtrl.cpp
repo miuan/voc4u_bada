@@ -282,14 +282,32 @@ String WordCtrl::PrepareWordWhere(const WORD_TYPE type, const int lesson)
 	return where;
 }
 
-ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TYPE type)
+ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TYPE type, ArrayList * withoutWords)
 {
 	result r;
+	int withoutCount = withoutWords ? withoutWords->GetCount() : 0;
 	ArrayList *result = null;
 	String where = L"";
 	String sqllimit = L"";
 
 	where = PrepareWordWhere(type, lesson);
+
+	// prepare where for
+	if (withoutCount)
+	{
+		if (where.GetLength() > 0)
+			where.Append(" AND ");
+
+		for (int i = 0; i < withoutCount; i++)
+		{
+			String condition;
+			Word *word = static_cast<Word *>(withoutWords->GetAt(i));
+			condition.Format(1000, L"%S <> %d AND ", COLUMN_ID, word->__id);
+			where.Append(condition);
+		}
+		// remove last AND
+		where.Remove(where.GetLength() - 4, 4);
+	}
 
 	if (limit)
 	{
@@ -301,6 +319,8 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 
 	AppLogDebug("SQL: (%S)", sql.GetPointer());
 	DbStatement * pStmt = __db->CreateStatementN(sql);
+
+
 
 	//if (lesson != -1)
 	//	pStmt->BindInt(0, lesson);
@@ -342,11 +362,32 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 {
 	Word *word = null;
+	ArrayList *words = null;
 
 	EnableNextWords();
 
-	// get word from any lessons (-1) and set limit to only one (1)
-	ArrayList *words = GetWordsN(-1, 1, WORD_TYPE_ENABLED);
+	int count = GetWordCount(WORD_TYPE_ENABLED);
+	if(lastList && count <= lastList->GetCount())
+	{
+		int countLL = lastList->GetCount();
+		ArrayList array;
+		array.Construct(count);
+
+		int min = countLL - count;
+		for(int i = countLL -1; i > min; i--)
+		{
+			Word * word = static_cast<Word*>(lastList->GetAt(i));
+			array.Add(*word);
+		}
+
+		// get word from any lessons (-1) and set limit to only one (1)
+		words = GetWordsN(-1, 1, WORD_TYPE_ENABLED, &array);
+	}
+	else
+	{
+		// get word from any lessons (-1) and set limit to only one (1)
+		words = GetWordsN(-1, 1, WORD_TYPE_ENABLED, lastList);
+	}
 
 	if (words)
 	{
@@ -437,7 +478,7 @@ bool WordCtrl::EnableNextWords()
 
 	// experiment
 	// when have 3 word which youd dont know absolutly
-	if (countDK < 3)
+	if (countDK > 2)
 		return false;
 
 	AppLog("enable next 5 words!!!");
@@ -445,11 +486,11 @@ bool WordCtrl::EnableNextWords()
 	// experiment
 	// enable 7 new words
 	ArrayList *list = GetWordsN(-1, 7, WORD_TYPE_DISABLED);
-	if(list)
+	if (list)
 	{
 		for (int i = 0; i < list->GetCount(); i++)
 		{
-			Word * word = (Word*)list->GetAt(i);
+			Word * word = (Word*) list->GetAt(i);
 			word->__lweight = 1;
 			word->__nweight = 1;
 			UpdateWord(*word);
@@ -458,5 +499,5 @@ bool WordCtrl::EnableNextWords()
 		list->RemoveAll(true);
 		delete list;
 	}
-		return true;
+	return true;
 }

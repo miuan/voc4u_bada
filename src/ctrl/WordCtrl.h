@@ -95,7 +95,14 @@ public:
     void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
     virtual void OnLessonTask(const int lesson);
     int *GetWorkerTaskLessonInProgressN(int & count);
-    ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL);
+
+    /**
+     * lesson : id ( -1 is all lesson)
+     * limit : maximum word loaded ( -1 is infinity )
+     * type : type of word see to enum WORD_TYPE for more
+     * withoutWords : list with words and theirs id will be escaped
+     */
+    ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL, Osp::Base::Collection::ArrayList *withoutWords = null);
     Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
     bool UpdateWord(Word & word);
 private:

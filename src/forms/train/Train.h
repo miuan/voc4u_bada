@@ -9,12 +9,17 @@
 #define TRAIN_H_
 
 #include "../BaseWordForm.h"
+#include "LastListProvider.h"
 
 class Train: public BaseWordForm
 {
 private:
 	Word *__word;
 	Label *__lblTest;
+	ListView *__lastList;
+
+	LastListProvider __llProv;
+
     bool GetFirstWord();
     void UpdateWord(bool know);
 
