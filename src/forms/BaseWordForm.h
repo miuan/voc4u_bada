@@ -49,8 +49,6 @@ public:
 	virtual String GetResourceID() = 0;
 	virtual result OnInitializing();
 
-
-
 	static String GetString(Osp::Base::String ID);
 	void SetBackForm(Form &frm);
 protected:

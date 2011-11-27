@@ -33,7 +33,7 @@ void Dictionary::InitLessonState()
 	GetLessonsInProgress();
 	for (int i = 0; i != LangSetting::NUM_LESSON; i++)
 	{
-		saveState[i] = __WCtrl->GetLessonEnabled((i + 1));
+		saveState[i] = __WCtrl->GetLessonLoaded((i + 1));
 	}
 }
 
@@ -110,7 +110,7 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 			cs->native = "";
 			cs->Store();
 			// remove all word!
-			__WCtrl->AddLesson(0, true);
+			__WCtrl->LoadLesson(0, true);
 			InitFrm * pInit = new InitFrm();
 			pInit->Initialize();
 			Utils::ShowFront(this, pInit);
@@ -145,7 +145,7 @@ void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listVie
 	bool add = status == LIST_ITEM_STATUS_CHECKED;
 	GetLessonsInProgress();
 
-	if(__WCtrl->AddLesson(index + 1, !add))
+	if(__WCtrl->LoadLesson(index + 1, !add))
 		__progressState[index] = true;
 
 	saveState[index] = add;
@@ -278,7 +278,7 @@ CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
 
 	String examples = L"";
 
-	ArrayList *words = __WCtrl->GetWordsByLessonN(WordCtrl::CUSTOM_WORD_LESSON_ID);
+	ArrayList *words = __WCtrl->GetWordsN(WordCtrl::CUSTOM_WORD_LESSON_ID);
 
 	if(words && words->GetCount() > 0)
 	{

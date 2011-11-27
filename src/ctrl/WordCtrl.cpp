@@ -42,12 +42,19 @@ WordCtrl * WordCtrl::GetInstance()
 	return __wc;
 }
 
-bool WordCtrl::GetLessonEnabled(const int lesson)
+int WordCtrl::GetWordCount(const WORD_TYPE type, const int lesson)
 {
-	result r;
-
 	String sql;
-	sql.Format(1000, LESSON_EXISTS, TABLE_NAME, COLUMN_LESSON, lesson);
+	String where;
+
+	where = PrepareWordWhere(type, lesson);
+
+	sql.Format(1000, WORD_COUNT, TABLE_NAME);
+	if (where.GetLength() > 0)
+	{
+		sql.Append(" WHERE ");
+		sql.Append(where);
+	}
 
 	AppLogDebug("SQL: (%S)", sql.GetPointer());
 	DbEnumerator* pEnum = __db->QueryN(sql);
@@ -63,7 +70,13 @@ bool WordCtrl::GetLessonEnabled(const int lesson)
 
 		delete pEnum;
 	}
-	return count > 0;
+
+	return count;
+}
+
+bool WordCtrl::GetLessonLoaded(const int lesson)
+{
+	return GetWordCount(WORD_TYPE_ALL, lesson) > 0;
 }
 
 result WordCtrl::PrepareDB()
@@ -138,7 +151,7 @@ void WordCtrl::CreateLessonWorker()
 	__lw->SetLessonWorkerLissener(this);
 }
 
-bool WordCtrl::AddLesson(const int lesson, bool remove)
+bool WordCtrl::LoadLesson(const int lesson, bool unload)
 {
 	bool createnew = false;
 
@@ -169,7 +182,7 @@ bool WordCtrl::AddLesson(const int lesson, bool remove)
 	}
 
 	// add/remove lesson at lesson
-	bool result = __lw->AddLesson(lesson, remove);
+	bool result = __lw->AddLesson(lesson, unload);
 
 	// it was create new start new thread
 	// otherwise call StopWait -> continue cycle in Run
@@ -237,19 +250,24 @@ Word * WordCtrl::CreateWordFromDbEnumeratorN(DbEnumerator & pEnum)
 	return new Word(id, lesson, lern, native, lweight, nweight);
 }
 
-ArrayList * WordCtrl::GetWordsByLessonN(const int lesson, const int limit, const bool only_enabled)
+String WordCtrl::PrepareWordWhere(const WORD_TYPE type, const int lesson)
 {
-	result r;
-	ArrayList *result = null;
 	String where = L"";
-	String sqllimit = L"";
-
-	if (only_enabled)
+	if (type == WORD_TYPE_ENABLED)
 	{
 		where.Format(1000, L"%S > 0 AND %S > 0", COLUMN_LWEIGHT, COLUMN_NWEIGHT);
-//		where.Append(" > 0 AND ");
-//		where.Append(COLUMN_NWEIGHT);
-//		where.Append(" > 0");
+		if (lesson != -1)
+			where.Append(" ");
+	}
+	else if (type == WORD_TYPE_ENABLED_DONTKNOW)
+	{
+		where.Format(1000, L"%S = 1 OR %S = 1", COLUMN_LWEIGHT, COLUMN_NWEIGHT);
+		if (lesson != -1)
+			where.Append(" ");
+	}
+	else if (type == WORD_TYPE_DISABLED)
+	{
+		where.Format(1000, L"%S = 0 AND %S = 0", COLUMN_LWEIGHT, COLUMN_NWEIGHT);
 		if (lesson != -1)
 			where.Append(" ");
 	}
@@ -257,8 +275,21 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson, const int limit, const
 	if (lesson != -1)
 	{
 		where.Append(COLUMN_LESSON);
-		where.Append("= ?");
+		where.Append("= ");
+		where.Append(lesson);
 	}
+
+	return where;
+}
+
+ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TYPE type)
+{
+	result r;
+	ArrayList *result = null;
+	String where = L"";
+	String sqllimit = L"";
+
+	where = PrepareWordWhere(type, lesson);
 
 	if (limit)
 	{
@@ -271,8 +302,8 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson, const int limit, const
 	AppLogDebug("SQL: (%S)", sql.GetPointer());
 	DbStatement * pStmt = __db->CreateStatementN(sql);
 
-	if (lesson != -1)
-		pStmt->BindInt(0, lesson);
+	//if (lesson != -1)
+	//	pStmt->BindInt(0, lesson);
 
 	DbEnumerator* pEnum = __db->ExecuteStatementN(*pStmt);
 
@@ -303,6 +334,8 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson, const int limit, const
 		delete pEnum;
 	}
 
+	delete pStmt;
+
 	return result;
 }
 
@@ -310,8 +343,10 @@ Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 {
 	Word *word = null;
 
+	EnableNextWords();
+
 	// get word from any lessons (-1) and set limit to only one (1)
-	ArrayList *words = GetWordsByLessonN(-1, 1, true);
+	ArrayList *words = GetWordsN(-1, 1, WORD_TYPE_ENABLED);
 
 	if (words)
 	{
@@ -322,60 +357,6 @@ Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 		delete words;
 	}
 
-	//	String where = "";
-	//	int lastCount = lastList ? lastList->GetCount() : 0;
-	//	Word * word = null;
-	//	result r;
-	//
-	//	// prepare where
-	//	if (lastCount)
-	//	{
-	//		for (int i = 0; i < lastCount; i++)
-	//		{
-	//			where.Append(COLUMN_ID);
-	//			where.Append(" = ? AND ");
-	//		}
-	//		// remove last AND
-	//		where.Remove(where.GetLength() - 4, 4);
-	//	}
-	//
-	//	String select = SQLSelectWord(where, " LIMIT 1");
-	//
-	//	AppLogDebug("select from db: (%S)", select.GetPointer());
-	//
-	//	DbStatement * pStmt = __db->CreateStatementN(select);
-	//
-	//	// prepare statement for where
-	//	if (lastCount)
-	//	{
-	//		for (int i = 0; i < lastCount; i++)
-	//		{
-	//			int lid = ((Integer*) lastList->GetAt(i))->ToInt();
-	//			r = pStmt->BindInt(i, lid);
-	//
-	//			if (IsFailed(r))
-	//			{
-	//				AppLog("binding failed with: %s", GetErrorMessage(r));
-	//			}
-	//		}
-	//
-	//	}
-	//
-	//	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
-	//	r = GetLastResult();
-	//	if (IsFailed(r))
-	//	{
-	//		AppLog("Enumeration failed with: %s", GetErrorMessage(r));
-	//	}
-	//
-	//	if (pEnum && !IsFailed(pEnum->MoveNext()))
-	//	{
-	//		word = CreateWordFromDbEnumeratorN(*pEnum);
-	//
-	//		delete pEnum;
-	//	}
-	//
-	//	delete pStmt;
 	return word;
 }
 
@@ -402,7 +383,6 @@ bool WordCtrl::UpdateWord(Word & word)
 
 	if (pStmt)
 	{
-
 		pStmt->BindString(0, word.__lern);
 		pStmt->BindString(1, word.__native);
 		pStmt->BindInt(2, word.__lweight);
@@ -449,4 +429,34 @@ bool WordCtrl::DeleteLesson(const int lesson)
 
 	AppLog("Delete lesson: %d", lesson);
 	return true;
+}
+
+bool WordCtrl::EnableNextWords()
+{
+	int countDK = GetWordCount(WORD_TYPE_ENABLED_DONTKNOW);
+
+	// experiment
+	// when have 3 word which youd dont know absolutly
+	if (countDK < 3)
+		return false;
+
+	AppLog("enable next 5 words!!!");
+
+	// experiment
+	// enable 7 new words
+	ArrayList *list = GetWordsN(-1, 7, WORD_TYPE_DISABLED);
+	if(list)
+	{
+		for (int i = 0; i < list->GetCount(); i++)
+		{
+			Word * word = (Word*)list->GetAt(i);
+			word->__lweight = 1;
+			word->__nweight = 1;
+			UpdateWord(*word);
+		}
+
+		list->RemoveAll(true);
+		delete list;
+	}
+		return true;
 }

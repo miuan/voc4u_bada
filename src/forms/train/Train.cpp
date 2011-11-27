@@ -29,8 +29,14 @@ bool Train::GetFirstWord()
 	{
 		Dictionary *pDic = new Dictionary();
 		pDic->Init();
+
+		// remove this from Frame
 		Utils::ShowFront((Form*) pDic, this);
 
+		// create new train
+		// because this is called from OnInitialize
+		// and return with false ->
+		// NOT INITIALIZED SUCCESS
 		Train *pTrain = new Train();
 		pTrain->Init();
 		pDic->SetBackForm(*pTrain);

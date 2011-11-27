@@ -101,7 +101,7 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	case ID_BUTTON_BEGIN:
 	{
 		__setting->Store();
-		WordCtrl::GetInstance()->AddLesson(1, false);
+		WordCtrl::GetInstance()->LoadLesson(1, false);
 
 		//Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
 
@@ -120,7 +120,7 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	case ID_BUTTON_TRAIN:
 	{
 		__setting->Store();
-		WordCtrl::GetInstance()->AddLesson(1, false);
+		WordCtrl::GetInstance()->LoadLesson(1, false);
 
 		Train *train = new Train();
 		train->Init();

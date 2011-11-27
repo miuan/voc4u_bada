@@ -45,8 +45,19 @@ using namespace Osp::Base::Collection;
 		%S = ?,\
 		%S = ? WHERE %S = ?"
 
-#define LESSON_EXISTS L"SELECT COUNT(*) FROM %S WHERE %S = %d"
+#define WORD_COUNT L"SELECT COUNT(*) FROM %S"
+#define LESSON_EXISTS L"SELECT COUNT(*) FROM %S"
 #define SELECT_WORD L"SELECT %S, %S, %S, %S, %S, %S, %S FROM %S ORDER BY %S ASC, %S ASC %S"
+
+enum WORD_TYPE
+{
+	WORD_TYPE_ALL,
+	WORD_TYPE_ENABLED,
+	WORD_TYPE_ENABLED_DONTKNOW,
+	WORD_TYPE_DISABLED
+};
+
+
 class WordCtrl: public ILessonWorkerLissener
 {
 public:
@@ -58,9 +69,14 @@ private:
 
 	LessonWorker *__lw;
 	ILessonWorkerLissener * __lwLissener;
-	Word * CreateWordFromDbEnumeratorN(DbEnumerator & pEnum);
-    friend Object *LessonWorker::Run(void);
+
+	 friend Object *LessonWorker::Run(void);
 private:
+
+	String PrepareWordWhere(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
+	Word * CreateWordFromDbEnumeratorN(DbEnumerator & pEnum);
+
+
     String SQLSelectWord(String where, String limit);
     String SQLUpdateWord();
     result PrepareDB();
@@ -70,13 +86,16 @@ public:
     virtual ~WordCtrl();
     result Init();
     static WordCtrl *GetInstance();
+
+    bool EnableNextWords();
     bool AddWord(Word & word);
-    bool GetLessonEnabled(const int lesson);
-    bool AddLesson(const int lesson, bool remove);
+    bool GetLessonLoaded(const int lesson);
+    int GetWordCount(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
+    bool LoadLesson(const int lesson, bool unload);
     void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
     virtual void OnLessonTask(const int lesson);
     int *GetWorkerTaskLessonInProgressN(int & count);
-    ArrayList *GetWordsByLessonN(const int lesson = -1, const int limit = -1, const bool only_enabled = false);
+    ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL);
     Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
     bool UpdateWord(Word & word);
 private:

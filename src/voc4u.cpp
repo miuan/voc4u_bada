@@ -52,7 +52,7 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 	cs.Store();
 	//cs.Store();
 
-	WordCtrl::GetInstance()->AddLesson(1, false);
+	WordCtrl::GetInstance()->LoadLesson(1, false);
 	// if setting currently initialized
 	// you can continue normaly
 	if (CommonSetting::GetInstance().IsInitialized())
