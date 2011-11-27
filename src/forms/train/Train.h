@@ -15,7 +15,7 @@ class Train: public BaseWordForm
 private:
 	Word *__word;
 	Label *__lblTest;
-    void GetFirstWord();
+    bool GetFirstWord();
     void UpdateWord(bool know);
 
 public:
@@ -26,6 +26,7 @@ public:
 public:
 	Train();
 	virtual ~Train();
+
 
 	virtual String GetResourceID();
 	virtual result OnInitializing(void);

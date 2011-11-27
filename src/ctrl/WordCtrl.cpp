@@ -237,19 +237,43 @@ Word * WordCtrl::CreateWordFromDbEnumeratorN(DbEnumerator & pEnum)
 	return new Word(id, lesson, lern, native, lweight, nweight);
 }
 
-ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
+ArrayList * WordCtrl::GetWordsByLessonN(const int lesson, const int limit, const bool only_enabled)
 {
 	result r;
 	ArrayList *result = null;
-	String where = COLUMN_LESSON;
-	where.Append("= ?");
+	String where = L"";
+	String sqllimit = L"";
+
+	if (only_enabled)
+	{
+		where.Format(1000, L"%S > 0 AND %S > 0", COLUMN_LWEIGHT, COLUMN_NWEIGHT);
+//		where.Append(" > 0 AND ");
+//		where.Append(COLUMN_NWEIGHT);
+//		where.Append(" > 0");
+		if (lesson != -1)
+			where.Append(" ");
+	}
+
+	if (lesson != -1)
+	{
+		where.Append(COLUMN_LESSON);
+		where.Append("= ?");
+	}
+
+	if (limit)
+	{
+		sqllimit.Append("LIMIT ");
+		sqllimit.Append(limit);
+	}
 	//where.Append(lesson);
-	String sql = SQLSelectWord(where);
+	String sql = SQLSelectWord(where, sqllimit);
 
 	AppLogDebug("SQL: (%S)", sql.GetPointer());
 	DbStatement * pStmt = __db->CreateStatementN(sql);
 
-	pStmt->BindInt(0, lesson);
+	if (lesson != -1)
+		pStmt->BindInt(0, lesson);
+
 	DbEnumerator* pEnum = __db->ExecuteStatementN(*pStmt);
 
 	// pEnum = __db->QueryN(sql);
@@ -284,60 +308,74 @@ ArrayList * WordCtrl::GetWordsByLessonN(const int lesson)
 
 Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 {
-	String where = "";
-	int lastCount = lastList ? lastList->GetCount() : 0;
-	Word * word = null;
-	result r;
+	Word *word = null;
 
-	// prepare where
-	if (lastCount)
+	// get word from any lessons (-1) and set limit to only one (1)
+	ArrayList *words = GetWordsByLessonN(-1, 1, true);
+
+	if (words)
 	{
-		for (int i = 0; i < lastCount; i++)
-		{
-			where.Append(COLUMN_ID);
-			where.Append(" = ? AND ");
-		}
-		// remove last AND
-		where.Remove(where.GetLength() - 4, 4);
+		if (words->GetCount() > 0)
+			word = (Word*) words->GetAt(0);
+
+		words->RemoveAll(false);
+		delete words;
 	}
 
-	String select = SQLSelectWord(where, " LIMIT 1");
-
-	AppLogDebug("select from db: (%S)", select.GetPointer());
-
-	DbStatement * pStmt = __db->CreateStatementN(select);
-
-	// prepare statement for where
-	if (lastCount)
-	{
-		for (int i = 0; i < lastCount; i++)
-		{
-			int lid = ((Integer*) lastList->GetAt(i))->ToInt();
-			r = pStmt->BindInt(i, lid);
-
-			if (IsFailed(r))
-			{
-				AppLog("binding failed with: %s", GetErrorMessage(r));
-			}
-		}
-
-	}
-
-	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
-	r = GetLastResult();
-	if (IsFailed(r))
-	{
-		AppLog("Enumeration failed with: %s", GetErrorMessage(r));
-	}
-
-	if (pEnum && !IsFailed(pEnum->MoveNext()))
-	{
-		word = CreateWordFromDbEnumeratorN(*pEnum);
-
-		delete pEnum;
-	}
-
-	delete pStmt;
+	//	String where = "";
+	//	int lastCount = lastList ? lastList->GetCount() : 0;
+	//	Word * word = null;
+	//	result r;
+	//
+	//	// prepare where
+	//	if (lastCount)
+	//	{
+	//		for (int i = 0; i < lastCount; i++)
+	//		{
+	//			where.Append(COLUMN_ID);
+	//			where.Append(" = ? AND ");
+	//		}
+	//		// remove last AND
+	//		where.Remove(where.GetLength() - 4, 4);
+	//	}
+	//
+	//	String select = SQLSelectWord(where, " LIMIT 1");
+	//
+	//	AppLogDebug("select from db: (%S)", select.GetPointer());
+	//
+	//	DbStatement * pStmt = __db->CreateStatementN(select);
+	//
+	//	// prepare statement for where
+	//	if (lastCount)
+	//	{
+	//		for (int i = 0; i < lastCount; i++)
+	//		{
+	//			int lid = ((Integer*) lastList->GetAt(i))->ToInt();
+	//			r = pStmt->BindInt(i, lid);
+	//
+	//			if (IsFailed(r))
+	//			{
+	//				AppLog("binding failed with: %s", GetErrorMessage(r));
+	//			}
+	//		}
+	//
+	//	}
+	//
+	//	DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+	//	r = GetLastResult();
+	//	if (IsFailed(r))
+	//	{
+	//		AppLog("Enumeration failed with: %s", GetErrorMessage(r));
+	//	}
+	//
+	//	if (pEnum && !IsFailed(pEnum->MoveNext()))
+	//	{
+	//		word = CreateWordFromDbEnumeratorN(*pEnum);
+	//
+	//		delete pEnum;
+	//	}
+	//
+	//	delete pStmt;
 	return word;
 }
 

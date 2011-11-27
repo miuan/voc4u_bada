@@ -79,6 +79,14 @@ result BaseWordForm::OnInitializing()
 	return E_SUCCESS;
 }
 
+void BaseWordForm::ShowDictionary()
+{
+    Dictionary *pDic = new Dictionary();
+    pDic->Init();
+    Utils::ShowFront((Form*)pDic, null);
+    pDic->SetBackForm(*this);
+}
+
 void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 	switch (actionId)
@@ -112,10 +120,7 @@ void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionI
 	}
 	case ID_DICTIONARY:
 	{
-		Dictionary * pDic = new Dictionary();
-		pDic->Init();
-		Utils::ShowFront((Form*)pDic, null);
-		pDic->SetBackForm(*this);
+	    ShowDictionary();
 	}
 	}
 }

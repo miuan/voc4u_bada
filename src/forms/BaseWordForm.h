@@ -39,6 +39,7 @@ protected:
 		WordCtrl *__WCtrl;
 		ContextMenu *__pContextMenu;
 		AddWord *__pAddWordDlg;
+    void ShowDictionary();
 public:
 	BaseWordForm();
 	virtual ~BaseWordForm();

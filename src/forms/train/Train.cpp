@@ -6,8 +6,10 @@
  */
 
 #include "Train.h"
+#include "forms/dictionary/Dictionary.h"
 
-Train::Train(): __word(null)
+Train::Train() :
+	__word(null)
 {
 
 }
@@ -17,27 +19,41 @@ Train::~Train()
 
 }
 
-void Train::GetFirstWord()
+bool Train::GetFirstWord()
 {
-	if(__word)
+	if (__word)
 		delete __word;
 
-    __word = __WCtrl->GetFirstWordN(null);
-    if (__lblTest != null)
+	__word = __WCtrl->GetFirstWordN(null);
+	if (!__word)
+	{
+		Dictionary *pDic = new Dictionary();
+		pDic->Init();
+		Utils::ShowFront((Form*) pDic, this);
+
+		Train *pTrain = new Train();
+		pTrain->Init();
+		pDic->SetBackForm(*pTrain);
+
+		return false;
+	}
+	else if (__lblTest != null)
 	{
 		__lblTest->SetText(__word->GetTestWord());
 		__lblTest->Draw();
 		__lblTest->Show();
 	}
+	return true;
 }
 
 result Train::OnInitializing(void)
 {
-	__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
+		__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
 
-	GetFirstWord();
+		if(!GetFirstWord())
+			return E_FAILURE;
 
-    return E_SUCCESS;
+	return E_SUCCESS;
 }
 
 void Train::PrepareFooter()
@@ -73,10 +89,11 @@ String Train::GetResourceID()
 
 void Train::UpdateWord(bool know)
 {
-    if(__word){
-        __word->SetKnow(know);
-        __WCtrl->UpdateWord(*__word);
-    }
+	if (__word)
+	{
+		__word->SetKnow(know);
+		__WCtrl->UpdateWord(*__word);
+	}
 }
 
 void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
@@ -85,7 +102,7 @@ void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 	bswitch = !bswitch;
 
-	if(!bswitch)
+	if (!bswitch)
 	{
 		return;
 	}

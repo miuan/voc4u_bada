@@ -76,7 +76,7 @@ public:
     void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
     virtual void OnLessonTask(const int lesson);
     int *GetWorkerTaskLessonInProgressN(int & count);
-    ArrayList *GetWordsByLessonN(const int lesson);
+    ArrayList *GetWordsByLessonN(const int lesson = -1, const int limit = -1, const bool only_enabled = false);
     Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
     bool UpdateWord(Word & word);
 private:
