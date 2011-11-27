@@ -153,7 +153,7 @@ void LessonWorker::LessonAdd(int & lesson, void * vwc)
 	{
 		String n = String(native[i]);
 		String l = String(lern[i]);
-		Word word(-1, lesson, n, l, 0, 0);
+		Word word(-1, lesson, l, n, 0, 0);
 		wc->AddWord(word);
 		//Thread::Sleep(1000);
 		__mutex.Acquire();

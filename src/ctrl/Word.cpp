@@ -7,7 +7,7 @@
 
 #include "Word.h"
 
-Word::Word(int id, int lesson, String native, String lern, int lw, int nw) :
+Word::Word(int id, int lesson, String lern, String native, int lw, int nw) :
 	__id(id), __lesson(lesson), __lweight(lw), __nweight(nw), __user(0)
 {
 	__native = native;

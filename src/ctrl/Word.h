@@ -27,7 +27,7 @@ public:
 	bool __know;
 
 public:
-	Word(int id, int lesson, String native, String lern, int lw, int nw);
+	Word(int id, int lesson, String lern, String native, int lw, int nw);
 	String GetTestWord();
 	void SetKnow(bool know);
 	virtual ~Word();

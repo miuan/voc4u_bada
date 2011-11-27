@@ -74,7 +74,7 @@ void AddWord::OnActionPerformed(const Osp::Ui::Control & source, int actionId)
 		WordCtrl * wc = WordCtrl::GetInstance();
 		if (wc)
 		{
-			Word w(-1, 0, native, lern, 1, 1);
+			Word w(-1, 0, lern, native, 1, 1);
 			if(wc->AddWord(w) && __resultListener)
 				__resultListener->OnActionPerformed(source, __resultActionCode);
 		}
