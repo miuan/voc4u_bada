@@ -96,11 +96,15 @@ ListItemBase * LastListProvider::CreateItem(int index, int itemWidth)
 	//AddToDestructList(pTextElement);
 	//AddToDestructList(pEnrichedText);
 
+	Color blue(133,133,255);
+
+	Color cl = word->__type || word->__know ? blue : Color::COLOR_RED;
+	Color cn = !word->__type || word->__know ? blue : Color::COLOR_RED;
 	if(pELern)
-		pItem->AddElement(Rectangle(10, 5, columnWidth, 50), 1, *pELern);
+		pItem->AddElement(Rectangle(10, 5, columnWidth, 50), 1, word->__lern, 30, cl,cl,cl);
 
 	if(pENative)
-		pItem->AddElement(Rectangle(10, 55, columnWidth, 50), 2, *pENative);
+		pItem->AddElement(Rectangle(10, 55, columnWidth, 50), 2, word->__native, 30, cn,cn,cn);
 
 	pItem->SetElementTextHorizontalAlignment(1, ALIGNMENT_CENTER );
 	pItem->SetElementTextHorizontalAlignment(2, ALIGNMENT_CENTER );

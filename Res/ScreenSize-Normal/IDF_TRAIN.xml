@@ -20,12 +20,12 @@
     </Header>
     <ListView id="IDC_LASTLIST" parent="IDF_TRAIN">
         <property BGColor="#E4E4E4" BGColorOpacity="0" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="FALSE" itemDivider="TRUE" itemDividerColor="" sweepEnabled="FALSE" textOfEmptyList=""/>
-        <layout height="511" mode="Portrait" width="461" x="10" y="91"/>
+        <layout height="542" mode="Portrait" width="461" x="10" y="61"/>
         <layout height="88" mode="Landscape" width="456" x="335" y="167"/>
     </ListView>
     <Label id="IDC_TEST" parent="IDF_TRAIN">
-        <property BGBitmapPath="" BGColor="#B7B7B7" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="hello" textColor="#0080FF" textSize="77" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
-        <layout height="91" mode="Portrait" width="480" x="0" y="0"/>
+        <property BGBitmapPath="" BGColor="#B7B7B7" BGColorOpacity="100" hAlign="ALIGN_CENTER" text="hello" textColor="#0080FF" textSize="40" textStyle="LABEL_TEXT_STYLE_BOLD" vAlign="ALIGN_MIDDLE"/>
+        <layout height="61" mode="Portrait" width="480" x="0" y="0"/>
         <layout height="37" mode="Landscape" width="333" x="35" y="8"/>
     </Label>
 </Scene>

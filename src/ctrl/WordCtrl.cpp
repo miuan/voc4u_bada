@@ -366,6 +366,10 @@ Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 
 	EnableNextWords();
 
+	// if in the DB fewer word or the same as in Lastlist
+	// make new last list with DB maximum -1
+	// the last list is countet from end because
+	// last word was showed recently
 	int count = GetWordCount(WORD_TYPE_ENABLED);
 	if(lastList && count <= lastList->GetCount())
 	{

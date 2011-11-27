@@ -47,7 +47,7 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 	Form *pForm;
 
 	CommonSetting &cs = CommonSetting::GetInstance();
-	cs.lern = L"ES";
+	cs.lern = L"EN";
 	cs.native = L"CS";
 	cs.Store();
 	//cs.Store();
