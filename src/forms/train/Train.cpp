@@ -87,9 +87,9 @@ void Train::PrepareFooter()
 void Train::PrepareContextMenu()
 {
 	BaseWordForm::PrepareContextMenu();
-	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
+	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_dictionary.png");
 	//	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
-	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_DICTIONARY, *info);
+	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_DICTIONARY"), ID_DICTIONARY, *info);
 	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }
 

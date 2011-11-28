@@ -12,6 +12,7 @@
     <text id="IDS_START">start</text>
     <text id="IDS_SAVE_DICTIONARY">save dictionary</text>
     <text id="IDS_NOT_SELECTED_YET">Not selected yet...</text>
+    <text id="IDS_DIC_MENU_DICTIONARY">       Dictionary</text>
     <text id="IDS_SELECT_LERN_LANG">Select your lern language:</text>
     <text id="IDS_LANGUAGE_SELECT">Language selector</text>
     <text id="IDS_BTN_KNOW">Know</text>
@@ -37,7 +38,7 @@
     <text id="IDS_DIC_MENU_ADD_WORD">       Add word</text>
     <text id="IDS_PREPARING">[preparing]</text>
     <text id="IDS_MSG_RESET_DB">From DB will be removed all lessons with their setting. You will must select language setting as on first. Do you want to continue?</text>
-    <text id="IDS_LANG_ENGLISH">english</text>
     <text id="IDS_FORM_INIT">Initialize setting</text>
+    <text id="IDS_LANG_ENGLISH">english</text>
     <text id="IDS_SELECT_NATIVE_LANG">Select your native language:</text>
 </string_table>
