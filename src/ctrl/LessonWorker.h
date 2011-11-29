@@ -70,7 +70,15 @@ class LessonWorker: public Osp::Base::Runtime::Thread
 	 * ILessonWorkerLissener::OnLessonDone
 	 */
 	ILessonWorkerLissener * __lwLissener;
-    void LessonAdd(int & lesson, void * wc);
+
+	/**
+	 * counter in LessonAdd
+	 * must be global because can be get for store
+	 * when user terminate app middle in adding lesson
+	 */
+	int __currentWordAdding;
+
+	void LessonAdd(int & lesson, void * wc);
 
 public:
 	LessonWorker();
@@ -90,6 +98,12 @@ public:
 	bool IsWait();
 	bool StartWait();
 	void StopWait();
+
+
+	/**
+	 * get @__currentWordAdding see for more
+	 */
+	int GetCurrentWordAdding();
 };
 
 #endif /* LESSONWORKER_H_ */

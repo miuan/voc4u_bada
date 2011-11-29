@@ -7,9 +7,10 @@
 
 #include "CommonSetting.h"
 
-CommonSetting CommonSetting::__this = CommonSetting();
+CommonSetting *CommonSetting::__this = null;
 
-CommonSetting::CommonSetting()
+CommonSetting::CommonSetting() :
+	__lesson(-1), __word(-1)
 {
 	__initialized = false;
 	NSHDictionary = false;
@@ -41,6 +42,15 @@ void CommonSetting::Restore()
 	TryReturnVoid(pReg->Get(VAL_NSM_INIT, nsh) == E_SUCCESS
 			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
 	NSHInit = nsh == 1 ? true : false;
+
+	if (IsFailed(pReg->Get(VAL_LESSON, __lesson)))
+	{
+		__lesson = -1;
+	}
+	if (IsFailed(pReg->Get(VAL_WORD, __word)))
+	{
+		__word = -1;
+	}
 
 	__initialized = true;
 	return;
@@ -80,9 +90,54 @@ bool CommonSetting::Store()
 	if (IsFailed(StoreBool(pReg, VAL_NSM_INIT, NSHInit)))
 		goto CATCH;
 
+	//if(__lesson > -1 && __word > -1)
+	{
+		if (IsFailed(pReg->Set(VAL_LESSON, __lesson)) && IsFailed(pReg->Add(VAL_LESSON, __lesson)))
+		{
+			AppAssertf(false, "Storing lesson isn't correct!");
+		}
+		if (IsFailed(pReg->Set(VAL_WORD, __word)) && IsFailed(pReg->Add(VAL_WORD, __word)))
+		{
+			AppAssertf(false, "Storing word isn't correct!");
+		}
+	}
+	//	else
+	//	{
+	//		pReg->Remove(VAL_LESSON);
+	//		pReg->Remove(VAL_WORD);
+	//	}
+
 	pReg->Save();
 	return true;
 
 	CATCH: AppLog("Store error by : (%s)", GetErrorMessage(r));
 	return false;
+}
+
+bool CommonSetting::AddContinueLesson(const int lesson, const int word)
+{
+	__lesson = lesson;
+	__word = word;
+
+	return Store();
+}
+
+bool CommonSetting::IsContinueLesson(int &lesson, int &word, bool remove)
+{
+	Restore();
+
+	lesson = __lesson;
+	word = __word;
+
+	if (remove)
+	{
+		__lesson = -1;
+		__word = -1;
+
+		// you can get the lesson and word
+		// only one time!
+		Store();
+	}
+
+	return lesson > -1 && word > -1;
 }

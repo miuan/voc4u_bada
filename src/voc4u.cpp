@@ -46,17 +46,19 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	Form *pForm;
 
-	CommonSetting &cs = CommonSetting::GetInstance();
-	cs.lern = L"EN";
-	cs.native = L"CS";
-	cs.Store();
-	//cs.Store();
 
-	WordCtrl::GetInstance()->LoadLesson(1, false);
+
 	// if setting currently initialized
 	// you can continue normaly
 	if (CommonSetting::GetInstance().IsInitialized())
 	{
+		// when app exit before finish lesson task
+		// try continue
+		int lesson, word;
+		CommonSetting &cs = CommonSetting::GetInstance();
+		if (cs.IsContinueLesson(lesson, word))
+			WordCtrl::GetInstance()->LoadLesson(lesson);
+
 		// Create a form
 		Dashboard *pDashboard = new Dashboard();
 		pDashboard->Init();
@@ -86,9 +88,22 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 bool voc4u::OnAppTerminating(AppRegistry& appRegistry, bool forcedTermination)
 {
-	// TODO:
-	// Deallocate resources allocated by this application for termination.
-	// The application's permanent data and context can be saved via appRegistry.
+	WordCtrl * wctrl = WordCtrl::GetInstance();
+	int num;
+	int * c = wctrl->GetWorkerTaskLessonInProgressN(num);
+
+	if (!num)
+	{
+		return true;
+	}
+
+	AppLogDebug("still on work (last:%d)", c[0]);
+
+	CommonSetting &cs = CommonSetting::GetInstance();
+	wctrl->LoadLesson(c[0], true);
+	cs.AddContinueLesson(c[0], wctrl->GetCurrentWordAdding());
+
+	delete[] c;
 	return true;
 }
 

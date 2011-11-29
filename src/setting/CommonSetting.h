@@ -22,6 +22,9 @@ using namespace Osp::App;
 #define VAL_LERN String(L"lern")
 #define VAL_NATIVE String(L"native")
 
+#define VAL_LESSON String(L"lesson_not_complete")
+#define VAL_WORD String(L"word_from_non_complete_lesson")
+
 // No Show More Dictionary
 #define VAL_NSM_DICTIONARY String(L"NSM_DICTIONARY")
 #define VAL_NSM_INIT String(L"NSM_INIT")
@@ -31,7 +34,7 @@ class CommonSetting
 private:
 	bool __initialized;
 public:
-	static CommonSetting __this;
+	static CommonSetting *__this;
 
 	String lern;
 	String native;
@@ -39,6 +42,10 @@ public:
 	// No Show More
 	bool NSHDictionary;
 	bool NSHInit;
+
+private:
+	int __lesson;
+	int __word;
 
 public:
 	CommonSetting();
@@ -54,10 +61,21 @@ public:
 
 	static CommonSetting & GetInstance()
 	{
-		if (!__this.IsInitialized())
-			__this.Restore();
-		return __this;
+		if (__this == null)
+		{
+			__this = new CommonSetting();
+		}
+
+		if (!__this->IsInitialized())
+		{
+			__this->Restore();
+		}
+
+		return *__this;
 	}
+
+	bool AddContinueLesson(const int lesson, const int word);
+	bool IsContinueLesson(int &lesson, int &word, bool remove = false);
 private:
 
 	result StoreBool(AppRegistry * pReg, String key, bool value);

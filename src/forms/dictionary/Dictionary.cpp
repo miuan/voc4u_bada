@@ -39,10 +39,10 @@ void Dictionary::InitLessonState()
 
 bool Dictionary::Init()
 {
-	CommonSetting *cs = &CommonSetting::GetInstance();
-	cs->lern = L"ES";
-	cs->native = L"CS";
-	cs->Store();
+//	CommonSetting *cs = &CommonSetting::GetInstance();
+//	cs->lern = L"ES";
+//	cs->native = L"CS";
+//	cs->Store();
 
 	BaseWordForm::Init();
 	__pList = static_cast<ListView *> (GetControl(L"IDC_LESSON"));

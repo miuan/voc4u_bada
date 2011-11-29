@@ -140,32 +140,57 @@ bool LessonWorker::IsRunning()
 
 void LessonWorker::LessonAdd(int & lesson, void * vwc)
 {
-	CommonSetting cs = CommonSetting::GetInstance();
+	int startWord = 0;
+	CommonSetting *cs = &CommonSetting::GetInstance();
 	int ncount, lcount, count;
-	wchar_t ** native = LangSetting::GetInitDataN(cs.native, lesson, ncount);
-	wchar_t ** lern = LangSetting::GetInitDataN(cs.lern, lesson, lcount);
+	wchar_t ** native = LangSetting::GetInitDataN(cs->native, lesson, ncount);
+	wchar_t ** lern = LangSetting::GetInitDataN(cs->lern, lesson, lcount);
+
+	// when app exit before finaly this function
+	// try continue, futher set start word to
+	// one after last previously add
+	int cl, cw;
+	if(cs->IsContinueLesson(cl, cw, true) && cl == lesson)
+	{
+		startWord = cw;
+	}
 
 	count = ncount > lcount ? lcount : ncount;
 
 	WordCtrl * wc = static_cast<WordCtrl*> (vwc);
 
-	for (int i = 0; i < count; i++)
+
+	for (__currentWordAdding = startWord; __currentWordAdding < count;)
 	{
-		String n = String(native[i]);
-		String l = String(lern[i]);
+		String n = String(native[__currentWordAdding]);
+		String l = String(lern[__currentWordAdding]);
 		Word word(-1, lesson, l, n, 0, 0);
 		wc->AddWord(word);
 		//Thread::Sleep(1000);
-		__mutex.Acquire();
 
+		__mutex.Acquire();
 		if (__stop)
 		{
 			// break
 			count = 0;
 		}
+		else
+		{
+			__currentWordAdding++;
+		}
 		__mutex.Release();
 	}
 }
+
+int LessonWorker::GetCurrentWordAdding()
+{
+	int result;
+	__mutex.Acquire();
+	result = __currentWordAdding;
+	__mutex.Release();
+	return result;
+}
+
 
 Object *LessonWorker::Run(void)
 {
@@ -249,15 +274,24 @@ int *LessonWorker::GetLessonInProgressN(int &count)
 {
 	int *lessons = null;
 	__mutex.Acquire();
-	count = __list.GetCount();
-	lessons = new int[count + 1];
-	for(int i = 0; i != count; i++)
-	{
-		Integer *pInt = static_cast<Integer*> (__list.GetAt(i));
-		lessons[i] =  pInt->ToInt();
-	}
 
-	lessons[count] = __currentLesson;
+	if (__runing)
+	{
+		count = __list.GetCount();
+		lessons = new int[count];
+		for (int i = 0; i != count; i++)
+		{
+			Integer *pInt = static_cast<Integer*> (__list.GetAt(i));
+			lessons[i] = pInt->ToInt();
+		}
+
+		lessons[count] = __currentLesson;
+		count += 1;
+	}
+	else
+		count = 0;
+
+
 	__mutex.Release();
 	return lessons;
 }

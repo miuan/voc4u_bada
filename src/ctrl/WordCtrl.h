@@ -91,7 +91,7 @@ public:
     bool AddWord(Word & word);
     bool GetLessonLoaded(const int lesson);
     int GetWordCount(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
-    bool LoadLesson(const int lesson, bool unload);
+    bool LoadLesson(const int lesson, bool unload = false);
     void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
     virtual void OnLessonTask(const int lesson);
     int *GetWorkerTaskLessonInProgressN(int & count);
@@ -105,6 +105,14 @@ public:
     ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL, Osp::Base::Collection::ArrayList *withoutWords = null);
     Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
     bool UpdateWord(Word & word);
+
+public:
+    /**
+     * be carefully because this
+     * is designed for Voc4u::OnTerminting()
+     */
+    int GetCurrentWordAdding(){ return __lw? __lw->GetCurrentWordAdding() : -1; };
+
 private:
     bool DeleteLesson(const int lesson);
 };

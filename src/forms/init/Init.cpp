@@ -114,18 +114,19 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		Dashboard *dash = new Dashboard();
 		dash->Init();
 
-		Utils::ShowFront(this, dash);
+		Utils::ShowFront(dash, this);
 		break;
 	}
 	case ID_BUTTON_TRAIN:
 	{
 		__setting->Store();
-		WordCtrl::GetInstance()->LoadLesson(1, false);
+		WordCtrl::GetInstance()->LoadLesson(1);
 
+		Thread::GetCurrentThread()->Sleep(500);
 		Train *train = new Train();
 		train->Init();
 
-		Utils::ShowFront(this, train);
+		Utils::ShowFront(train, this);
 	}
 	default:
 		break;
@@ -137,7 +138,7 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 {
 	String str, code;
 	selected.GetLanguageName(str);
-	code = selected.GetLanguageCodeString();
+	code = selected.GetCountryCodeString();
 	Osp::Graphics::Point bpoint(350, 25);
 	Osp::Graphics::Bitmap * icon = LangSetting::GetIcon(selected);
 
