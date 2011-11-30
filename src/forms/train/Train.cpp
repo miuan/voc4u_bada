@@ -73,8 +73,10 @@ void Train::PrepareFooter()
 	Footer * footer = GetFooter();
 	if (footer)
 	{
+		Bitmap * pB1 = Utils::GetBitmap("bg_listener_normal.png");
 		FooterItem f1;
 		f1.Construct(ID_BTN_DONTKNOW);
+		f1.SetIcon(FOOTER_ITEM_STATUS_NORMAL ,pB1);
 		f1.SetText(GetString("IDS_BTN_DONTKNOW"));
 		footer->AddItem(f1);
 		FooterItem f2;
