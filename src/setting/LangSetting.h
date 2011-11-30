@@ -59,6 +59,7 @@ public:
 	static String GetNameOfLesson(int lesson);
 	static Osp::Graphics::Bitmap * GetIcon(Locale & lc);
 	static wchar_t ** GetInitDataN(String lang, int lesson, int &count);
+	static Locale & GetLocaleFromCode(String langCode);
 };
 
 #endif /* LANGSETTING_H_ */

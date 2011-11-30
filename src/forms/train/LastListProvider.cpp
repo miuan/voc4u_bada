@@ -7,12 +7,21 @@
 
 #include "LastListProvider.h"
 
+#include <FLclLocale.h>
+#include "setting/LangSetting.h"
+#include "setting/CommonSetting.h"
+
+using namespace Osp::Locales;
+
 LastListProvider::LastListProvider()
 {
 	array.Construct();
 
 	__pTextToSpeech = new TextToSpeech();
 	result r = __pTextToSpeech->Construct(*this);
+	Locale &loc = LangSetting::GetLocaleFromCode(CommonSetting::GetInstance().lern);
+	__pTextToSpeech->SetLocale(loc);
+
 	if (IsFailed(r))
 	{
 		delete __pTextToSpeech;

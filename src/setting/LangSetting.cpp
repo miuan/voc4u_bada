@@ -22,7 +22,8 @@ Locale LangSetting::LOCALES[] =
 
 const int LangSetting::NUM_LOCALES = 8;
 
-const Color LangSetting::LESSON_COLORS[] = {Color(155,255,100), Color(155,205,100), Color(205,155,100), Color(255,155,100)};
+const Color LangSetting::LESSON_COLORS[] =
+{ Color(155, 255, 100), Color(155, 205, 100), Color(205, 155, 100), Color(255, 155, 100) };
 const Color LangSetting::CUSTOM_WORD = Color::COLOR_BLUE;
 
 LangSetting::LangSetting()
@@ -47,12 +48,25 @@ Bitmap * LangSetting::GetIcon(Locale & lc)
 	name.Append(L".png");
 	name.ToLowerCase();
 
-
-
 	return Utils::GetBitmap(name);
 }
 
 wchar_t ** LangSetting::GetInitDataN(String lang, int lesson, int &count)
 {
 	return getInitData(lang, lesson, count);
+}
+
+Locale & LangSetting::GetLocaleFromCode(String langCode)
+{
+	for (int i = 0; i < LangSetting::NUM_LOCALES; i++)
+	{
+		Locale & loc = LOCALES[i];
+
+		// be carefully with this function
+		// when changet to LanguageCode you must changed
+		// also in InitFrm::onSelectLang
+		if (loc.GetCountryCodeString() == langCode)
+			return loc;
+	}
+	return LOCALES[0];
 }

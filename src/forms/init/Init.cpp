@@ -138,6 +138,9 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 {
 	String str, code;
 	selected.GetLanguageName(str);
+	// be carefully with this function
+	// when changet to LanguageCode you must changed
+	// also in LangSetting::GetLocaleFromCode
 	code = selected.GetCountryCodeString();
 	Osp::Graphics::Point bpoint(350, 25);
 	Osp::Graphics::Bitmap * icon = LangSetting::GetIcon(selected);
