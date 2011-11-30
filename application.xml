@@ -8,7 +8,7 @@
     <Vendor/>
     <Description/>
     <Icons>
-        <MainMenu>Splash.png<Type1>Splash.png</Type1>
+        <MainMenu>voc4u.png<Type1>voc4u.png</Type1>
             <Type2/>
             <Type3/>
             <Type4/>
@@ -16,7 +16,7 @@
         <Setting/>
         <Ticker/>
         <QuickPanel/>
-        <LaunchImage>voc4u.png<Type1>voc4u.png</Type1>
+        <LaunchImage>Splash.png<Type1>Splash.png</Type1>
             <Type2/>
             <Type3/>
             <Type4/>
