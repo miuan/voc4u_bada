@@ -13,14 +13,29 @@
 
 using namespace Osp::Locales;
 
+void LastListProvider::Play(String text)
+{
+	//__pTextToSpeech->SetLocale()
+	result res = __pTextToSpeech->Initialize();
+	Locale & loc = LangSetting::GetLocaleFromCode(CommonSetting::GetInstance().lern);
+	__pTextToSpeech->SetLocale(loc);
+	if (IsFailed(res))
+	{
+		delete __pTextToSpeech;
+		__pTextToSpeech = null;
+	}
+	else
+	{
+		__text = text;
+	}
+}
+
 LastListProvider::LastListProvider()
 {
 	array.Construct();
 
 	__pTextToSpeech = new TextToSpeech();
 	result r = __pTextToSpeech->Construct(*this);
-	Locale &loc = LangSetting::GetLocaleFromCode(CommonSetting::GetInstance().lern);
-	__pTextToSpeech->SetLocale(loc);
 
 	if (IsFailed(r))
 	{
@@ -28,17 +43,10 @@ LastListProvider::LastListProvider()
 		__pTextToSpeech = null;
 	}
 
-
 	if (__pTextToSpeech != null)
 	{
-
-		//__pTextToSpeech->SetLocale()
-		r = __pTextToSpeech->Initialize();
-		if (IsFailed(r))
-		{
-			delete __pTextToSpeech;
-			__pTextToSpeech = null;
-		}
+		//String text = L"Hello bada";
+		//Play(text);
 	}
 }
 
@@ -70,16 +78,17 @@ void LastListProvider::OnListViewItemLongPressed(ListView &listView, int index, 
 
 void LastListProvider::OnListViewItemStateChanged(ListView &listView, int index, int elementId, ListItemStatus status)
 {
-	Word *word = static_cast<Word *>(array.GetAt(index));
+	Word *word = GetWordAt(index);
 	AppLog("text to speech: %S", word->__lern.GetPointer());
 
-	if(__pTextToSpeech && word)
+	if (__pTextToSpeech && word)
 	{
-		result r = __pTextToSpeech->Speak(word->__lern);
-		if(IsFailed(r))
-		{
-			AppLog("text speach failed: %s", GetErrorMessage(r));
-		}
+		Play(word->__lern);
+		//		result r = __pTextToSpeech->Speak(word->__lern);
+		//		if(IsFailed(r))
+		//		{
+		//			AppLog("text speach failed: %s", GetErrorMessage(r));
+		//		}
 	}
 }
 
@@ -169,7 +178,7 @@ void LastListProvider::OnTextToSpeechStatusChanged(Osp::Uix::TextToSpeechStatus 
 	if (status == TTS_STATUS_INITIALIZED)
 	{
 		if(__pTextToSpeech)
-			__pTextToSpeech->Speak("Hello bada");
+			__pTextToSpeech->Speak(__text);
 	}
 	// Add your code
 }
@@ -178,6 +187,4 @@ void LastListProvider::OnTextToSpeechErrorOccurred(Osp::Uix::TextToSpeechError e
 {
 	// Add your code
 }
-
-
 

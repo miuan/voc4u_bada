@@ -30,8 +30,11 @@ private:
 	ArrayList array;
 	EnrichedText *PrepareText(String text, bool know, bool bold);
 	Word *GetWordAt(int index);
+    void Play(String text);
 	Osp::Uix::TextToSpeech *__pTextToSpeech;
 
+	// text for TTS
+	String __text;
 public:
 	LastListProvider();
 	virtual ~LastListProvider();
