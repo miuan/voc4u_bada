@@ -63,7 +63,7 @@ result Train::OnInitializing(void)
 
 	__lastList = static_cast<ListView* >(GetControl(L"IDC_LASTLIST"));
 	__lastList->SetItemProvider(__llProv);
-
+	__lastList->AddListViewItemEventListener(__llProv);
 	return E_SUCCESS;
 }
 

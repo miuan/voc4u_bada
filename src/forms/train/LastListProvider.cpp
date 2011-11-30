@@ -52,6 +52,7 @@ void LastListProvider::AddWord(Word &word)
 
 void LastListProvider::OnListViewContextItemStateChanged(ListView &listView, int index, int elementId, ListContextItemStatus status)
 {
+
 }
 
 void LastListProvider::OnListViewItemLongPressed(ListView &listView, int index, int elementId, bool &invokeListViewItemCallback)
@@ -60,10 +61,22 @@ void LastListProvider::OnListViewItemLongPressed(ListView &listView, int index, 
 
 void LastListProvider::OnListViewItemStateChanged(ListView &listView, int index, int elementId, ListItemStatus status)
 {
+	Word *word = static_cast<Word *>(array.GetAt(index));
+	AppLog("text to speech: %S", word->__lern.GetPointer());
+
+	if(__pTextToSpeech && word)
+	{
+		result r = __pTextToSpeech->Speak(word->__lern);
+		if(IsFailed(r))
+		{
+			AppLog("text speach failed: %s", GetErrorMessage(r));
+		}
+	}
 }
 
 void LastListProvider::OnListViewItemSwept(ListView &listView, int index, SweepDirection direction)
 {
+
 }
 
 EnrichedText *LastListProvider::PrepareText(String text, bool know, bool bold)
@@ -128,6 +141,7 @@ ListItemBase * LastListProvider::CreateItem(int index, int itemWidth)
 
 	pItem->SetElementTextHorizontalAlignment(1, ALIGNMENT_CENTER);
 	pItem->SetElementTextHorizontalAlignment(2, ALIGNMENT_CENTER);
+
 	return pItem;
 }
 
@@ -155,4 +169,6 @@ void LastListProvider::OnTextToSpeechErrorOccurred(Osp::Uix::TextToSpeechError e
 {
 	// Add your code
 }
+
+
 
