@@ -17,10 +17,12 @@
     <text id="IDS_LANGUAGE_SELECT">Language selector</text>
     <text id="IDS_BTN_KNOW">Know</text>
     <text id="IDS_BTN_NOSHOWMORE">No show more</text>
+    <text id="IDS_FORM_TRAIN">Train</text>
     <text id="IDS_CUSTOM_WORD_EMPTY">Not add word yet</text>
     <text id="IDS_DIC_MENU_INFO">       Help</text>
     <text id="IDS_CUSTOM_WORD_ITEM">Custom words</text>
     <text id="IDS_MSG_MUST_BE_FILL_BOTH_EDIT_FIELD">For save add word, must be filled both field!</text>
+    <text id="IDS_TRAIN_EMPTY_LIST">In this list you can see few last word. You can click to they and hear their pronouciation.</text>
     <text id="IDS_DIC_MENU_RESET_DB">       Reset DB</text>
     <text id="IDS_BTN_DONTKNOW">Don't know</text>
     <text id="IDS_BTN_MENU">Menu</text>
@@ -32,13 +34,14 @@
     <text id="IDS_LESSON_3">Pre-Intermediate</text>
     <text id="IDS_LESSON_2">Elementary</text>
     <text id="IDS_LESSON_1">Basic</text>
+    <text id="IDS_INFORMATION_TRAIN">Here you can train the your vocabulary. Two button \"know\" and \"don\'t know\" do display to you next word, but when use the \"don\'t know\" the word will be show more frequently. Words in Train you can manage in Dictionary access from options menu.</text>
     <text id="IDS_HINT_LERN_WORD">lern word</text>
     <text id="IDS_INFORMATION_DICTIONARY">On this form you can select the lesson for your training. Any lesson have example with words which contain. </text>
     <text id="IDS_LANG_CZECH">czech</text>
     <text id="IDS_DIC_MENU_ADD_WORD">       Add word</text>
     <text id="IDS_PREPARING">[preparing]</text>
     <text id="IDS_MSG_RESET_DB">From DB will be removed all lessons with their setting. You will must select language setting as on first. Do you want to continue?</text>
-    <text id="IDS_FORM_INIT">Initialize setting</text>
     <text id="IDS_LANG_ENGLISH">english</text>
+    <text id="IDS_FORM_INIT">Initialize setting</text>
     <text id="IDS_SELECT_NATIVE_LANG">Select your native language:</text>
 </string_table>

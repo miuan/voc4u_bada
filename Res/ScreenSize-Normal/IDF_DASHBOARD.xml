@@ -6,7 +6,7 @@
 
 <Scene Bversion="2.0.2.v20110930" Dversion="20100701">
     <Form id="IDF_DASHBOARD">
-        <property BGColor="" BGColorOpacity="0" Orientation="Portrait" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="" titleAlign="ALIGN_CENTER" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
+        <property BGColor="#FFFFFF" BGColorOpacity="100" Orientation="Portrait" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="" titleAlign="ALIGN_CENTER" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
         <layout mode="Portrait" style="FORM_STYLE_INDICATOR|FORM_STYLE_HEADER" type="NONE"/>
         <layout mode="Landscape" style="FORM_STYLE_INDICATOR|FORM_STYLE_HEADER" type="NONE"/>
     </Form>
@@ -19,18 +19,23 @@
         <itemSet/>
     </Header>
     <Button id="IDC_BTN_TRAIN" parent="IDF_DASHBOARD">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="191" mode="Portrait" width="461" x="10" y="150"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_lights_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="bg_lights_press.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="40" vAlign="ALIGN_MIDDLE"/>
+        <layout height="255" mode="Portrait" width="300" x="91" y="60"/>
         <layout height="48" mode="Landscape" width="333" x="210" y="37"/>
     </Button>
     <Button id="IDC_BUTTON1" parent="IDF_DASHBOARD">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="134" mode="Portrait" width="221" x="10" y="350"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_RIGHT" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_listener_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="bg_listener_press.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
+        <layout height="135" mode="Portrait" width="135" x="91" y="346"/>
         <layout height="48" mode="Landscape" width="333" x="116" y="139"/>
     </Button>
     <Button id="IDC_BUTTON2" parent="IDF_DASHBOARD">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="134" mode="Portrait" width="221" x="250" y="350"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_speaker_normal.png.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="bg_speaker_pressed.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
+        <layout height="135" mode="Portrait" width="135" x="256" y="346"/>
         <layout height="48" mode="Landscape" width="333" x="136" y="159"/>
     </Button>
+    <Label id="IDC_LABEL1" parent="IDF_DASHBOARD">
+        <property BGBitmapPath="voc4u.png" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="" textColor="" textSize="42" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
+        <layout height="150" mode="Portrait" width="150" x="166" y="530"/>
+        <layout height="37" mode="Landscape" width="333" x="286" y="317"/>
+    </Label>
 </Scene>
