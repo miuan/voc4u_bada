@@ -34,14 +34,17 @@ void CommonSetting::Restore()
 	TryReturnVoid(pReg->Get(VAL_NATIVE, native) == E_SUCCESS
 			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
 
-	int nsh;
-	TryReturnVoid(pReg->Get(VAL_NSM_DICTIONARY, nsh) == E_SUCCESS
+	TryReturnVoid(RestoreBool(*pReg, VAL_NSM_DICTIONARY, NSHDictionary)
 			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
-	NSHDictionary = nsh == 1 ? true : false;
 
-	TryReturnVoid(pReg->Get(VAL_NSM_INIT, nsh) == E_SUCCESS
+	TryReturnVoid(RestoreBool(*pReg, VAL_NSM_INIT, NSHInit)
 			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
-	NSHInit = nsh == 1 ? true : false;
+
+	TryReturnVoid(RestoreBool(*pReg, VAL_NSM_DASHBOARD, NSHDashboard)
+			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
+
+	TryReturnVoid(RestoreBool(*pReg, VAL_NSM_TRAIN, NSHTrain)
+			, "can not GetValue for native %s", GetErrorMessage(GetLastResult()));
 
 	if (IsFailed(pReg->Get(VAL_LESSON, __lesson)))
 	{
@@ -67,21 +70,50 @@ result CommonSetting::StoreBool(AppRegistry * pReg, String key, bool value)
 	return r;
 }
 
+bool CommonSetting::RestoreBool(AppRegistry & reg, String key, bool &value)
+{
+	int nsh = 0;
+	result r = reg.Get(key, nsh);
+	if (r == E_SUCCESS)
+	{
+		value = nsh == 1 ? true : false;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 bool CommonSetting::Store()
 {
 	result r;
 	AppRegistry* pReg = Osp::App::Application::GetInstance()->GetAppRegistry();
 
-	r = pReg->Set(VAL_LERN, lern);
-	if (r == E_KEY_NOT_FOUND)
-		r = pReg->Add(VAL_LERN, lern);
+	if (lern.GetLength() == 0)
+	{
+		r = pReg->Remove(VAL_LERN);
+	}
+	else
+	{
+		r = pReg->Set(VAL_LERN, lern);
+		if (r == E_KEY_NOT_FOUND)
+			r = pReg->Add(VAL_LERN, lern);
+	}
 
 	if (IsFailed(r))
 		goto CATCH;
 
-	r = pReg->Set(VAL_NATIVE, native);
-	if (r == E_KEY_NOT_FOUND)
-		r = pReg->Add(VAL_NATIVE, native);
+	if (native.GetLength() == 0)
+	{
+		r = pReg->Remove(VAL_NATIVE);
+	}
+	else
+	{
+		r = pReg->Set(VAL_NATIVE, native);
+		if (r == E_KEY_NOT_FOUND)
+			r = pReg->Add(VAL_NATIVE, native);
+	}
 
 	r = StoreBool(pReg, VAL_NSM_DICTIONARY, NSHDictionary);
 	if (IsFailed(r))
@@ -90,6 +122,11 @@ bool CommonSetting::Store()
 	if (IsFailed(StoreBool(pReg, VAL_NSM_INIT, NSHInit)))
 		goto CATCH;
 
+	if (IsFailed(StoreBool(pReg, VAL_NSM_DASHBOARD, NSHDashboard)))
+		goto CATCH;
+
+	if (IsFailed(StoreBool(pReg, VAL_NSM_TRAIN, NSHTrain)))
+		goto CATCH;
 	//if(__lesson > -1 && __word > -1)
 	{
 		if (IsFailed(pReg->Set(VAL_LESSON, __lesson)) && IsFailed(pReg->Add(VAL_LESSON, __lesson)))

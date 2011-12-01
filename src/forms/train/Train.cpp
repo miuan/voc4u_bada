@@ -56,6 +56,9 @@ bool Train::GetFirstWord()
 
 result Train::OnInitializing(void)
 {
+	if (!CommonSetting::GetInstance().NSHTrain)
+		ShowInfoDlg();
+
 	__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
 
 	if (!GetFirstWord())

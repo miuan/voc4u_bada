@@ -83,8 +83,9 @@ void BaseWordForm::ShowDictionary()
 {
     Dictionary *pDic = new Dictionary();
     pDic->Init();
-    Utils::ShowFront((Form*)pDic, null);
     pDic->SetBackForm(*this);
+
+    Utils::ShowFront((Form*)pDic);
 }
 
 void BaseWordForm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)

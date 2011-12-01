@@ -105,15 +105,16 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		messageBox.ShowAndWait(modalResult);
 		if (modalResult == MSGBOX_RESULT_YES)
 		{
+			// remove all word!
+			__WCtrl->DeleteLesson(0);
 			CommonSetting *cs = &CommonSetting::GetInstance();
 			cs->lern = "";
 			cs->native = "";
 			cs->Store();
-			// remove all word!
-			__WCtrl->LoadLesson(0, true);
+
 			InitFrm * pInit = new InitFrm();
 			pInit->Initialize();
-			Utils::ShowFront(this, pInit);
+			Utils::ShowFront(pInit, this);
 		}
 	}
 	else if(actionId == ID_ADD_WORD)

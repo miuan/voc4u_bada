@@ -28,6 +28,8 @@ using namespace Osp::App;
 // No Show More Dictionary
 #define VAL_NSM_DICTIONARY String(L"NSM_DICTIONARY")
 #define VAL_NSM_INIT String(L"NSM_INIT")
+#define VAL_NSM_TRAIN String(L"NSM_TRAIN")
+#define VAL_NSM_DASHBOARD String(L"NSM_DASHBOARD")
 
 class CommonSetting
 {
@@ -42,6 +44,8 @@ public:
 	// No Show More
 	bool NSHDictionary;
 	bool NSHInit;
+	bool NSHTrain;
+	bool NSHDashboard;
 
 private:
 	int __lesson;
@@ -79,7 +83,7 @@ public:
 private:
 
 	result StoreBool(AppRegistry * pReg, String key, bool value);
-
+	bool RestoreBool(AppRegistry & reg, String key, bool &value);
 };
 
 #endif /* COMMONSETTING_H_ */

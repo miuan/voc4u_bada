@@ -10,6 +10,7 @@
 
 #include "../BaseWordForm.h"
 #include "LastListProvider.h"
+#include "dialogs/information/Information.h"
 
 class Train: public BaseWordForm
 {
@@ -32,7 +33,7 @@ public:
 	Train();
 	virtual ~Train();
 
-
+	virtual wchar_t* GetShowInfoCode(){ return IDS_TRAIN;};
 	virtual String GetResourceID();
 	virtual result OnInitializing(void);
 protected:

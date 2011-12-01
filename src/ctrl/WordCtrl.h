@@ -113,7 +113,7 @@ public:
      */
     int GetCurrentWordAdding(){ return __lw? __lw->GetCurrentWordAdding() : -1; };
 
-private:
+public:
     bool DeleteLesson(const int lesson);
 };
 

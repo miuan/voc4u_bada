@@ -6,7 +6,7 @@
 
 <Scene Bversion="2.0.2.v20110930" Dversion="20100701">
     <Form id="IDF_INIT">
-        <property BGColor="" BGColorOpacity="0" Orientation="Automatic" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="::IDS_FORM_INIT" titleAlign="ALIGN_LEFT" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
+        <property BGColor="#FFFFFF" BGColorOpacity="100" Orientation="Portrait" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="" title="::IDS_FORM_INIT" titleAlign="ALIGN_LEFT" titleIcon="" translucentFooter="FALSE" translucentHeader="FALSE" translucentIndicator="FALSE"/>
         <layout mode="Portrait" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
         <layout mode="Landscape" style="FORM_STYLE_INDICATOR|FORM_STYLE_TITLE" type="NONE"/>
     </Form>
@@ -24,12 +24,12 @@
         <layout height="103" mode="Landscape" width="401" x="200" y="108"/>
     </Button>
     <Label id="IDC_LABEL1" parent="IDF_INIT">
-        <property BGBitmapPath="" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="::IDS_SELECT_NATIVE_LANG" textColor="" textSize="34" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
+        <property BGBitmapPath="" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="::IDS_SELECT_NATIVE_LANG" textColor="#000000" textSize="34" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
         <layout height="51" mode="Portrait" width="462" x="11" y="22"/>
         <layout height="37" mode="Landscape" width="333" x="36" y="0"/>
     </Label>
     <Label id="IDC_LABEL2" parent="IDF_INIT">
-        <property BGBitmapPath="" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="::IDS_SELECT_LERN_LANG" textColor="" textSize="34" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
+        <property BGBitmapPath="" BGColor="" BGColorOpacity="0" hAlign="ALIGN_LEFT" text="::IDS_SELECT_LERN_LANG" textColor="#000000" textSize="34" textStyle="LABEL_TEXT_STYLE_NORMAL" vAlign="ALIGN_TOP"/>
         <layout height="42" mode="Portrait" width="461" x="12" y="201"/>
         <layout height="37" mode="Landscape" width="333" x="40" y="85"/>
     </Label>
@@ -39,13 +39,13 @@
         <layout height="48" mode="Landscape" width="241" x="558" y="176"/>
     </Button>
     <Button id="IDC_BTN_BEGIN" parent="IDF_INIT">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_MENU" textSize="32" vAlign="ALIGN_MIDDLE"/>
-        <layout height="61" mode="Portrait" width="458" x="13" y="442"/>
+        <property disableTextColor="" disabledBitmapPath="" disabledColor="#C0C0C0" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="bg_menu_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="#FFFFFF" pressedBGBitmapPath="bg_menu_pressed.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_MENU" textSize="10" vAlign="ALIGN_MIDDLE"/>
+        <layout height="120" mode="Portrait" width="129" x="343" y="372"/>
         <layout height="48" mode="Landscape" width="333" x="178" y="344"/>
     </Button>
     <Button id="IDC_BTN_TRAIN" parent="IDF_INIT">
-        <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="0" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="" pressedBGBitmapPath="" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="32" vAlign="ALIGN_MIDDLE"/>
-        <layout height="121" mode="Portrait" width="458" x="13" y="512"/>
+        <property disableTextColor="#C0C0C0" disabledBitmapPath="" disabledColor="#C0C0C0" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="0" highlightedTextColor="" normalBGBitmapPath="bg_lights_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="0" normalTextColor="#FFFFFF" pressedBGBitmapPath="bg_lights_press.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="0" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="32" vAlign="ALIGN_MIDDLE"/>
+        <layout height="120" mode="Portrait" width="300" x="11" y="372"/>
         <layout height="48" mode="Landscape" width="333" x="198" y="344"/>
     </Button>
 </Scene>

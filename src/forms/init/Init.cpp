@@ -105,12 +105,12 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 		//Frame *pFrame = Application::GetInstance()->GetAppFrame()->GetFrame();
 
-//		Dictionary * init = new Dictionary();
-//		init->Init();
-//		pFrame->AddControl(*init);
-//		pFrame->SetCurrentForm(*init);
-//		init->RequestRedraw(true);
-//		pFrame->RemoveControl(*this);
+		//		Dictionary * init = new Dictionary();
+		//		init->Init();
+		//		pFrame->AddControl(*init);
+		//		pFrame->SetCurrentForm(*init);
+		//		init->RequestRedraw(true);
+		//		pFrame->RemoveControl(*this);
 		Dashboard *dash = new Dashboard();
 		dash->Init();
 
@@ -123,10 +123,16 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		WordCtrl::GetInstance()->LoadLesson(1);
 
 		Thread::GetCurrentThread()->Sleep(500);
+		Dashboard *dash = new Dashboard();
+		dash->Init();
+
+		Utils::ShowFront(dash, this);
+
 		Train *train = new Train();
 		train->Init();
+		train->SetBackForm(*dash);
 
-		Utils::ShowFront(train, this);
+		Utils::ShowFront(train, null);
 	}
 	default:
 		break;

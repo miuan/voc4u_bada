@@ -72,14 +72,26 @@ bool Information::ShowPopup(Form * parent)
 
 void Information::SetupCheckbox(bool & checked)
 {
-	CommonSetting *cs = &CommonSetting::GetInstance();
+	CommonSetting &cs = CommonSetting::GetInstance();
 	if (__type == String(IDS_DICTIONARY))
 	{
-		checked = cs->NSHDictionary;
+		checked = cs.NSHDictionary;
 	}
 	else if (__type == String(IDS_INIT))
 	{
-		checked = cs->NSHInit;
+		checked = cs.NSHInit;
+	}
+	else if (__type == String(IDS_TRAIN))
+	{
+		checked = cs.NSHInit;
+	}
+	else if (__type == String(IDS_DASHBOARD))
+	{
+		checked = cs.NSHDashboard;
+	}
+	else if (__type == String(IDS_TRAIN))
+	{
+		checked = cs.NSHTrain;
 	}
 	else
 	{
@@ -98,6 +110,14 @@ void Information::SetupCommonSetting(bool checked)
 	if (__type == String(IDS_INIT))
 	{
 		cs->NSHInit = checked;
+	}
+	if (__type == String(IDS_DASHBOARD))
+	{
+		cs->NSHDashboard = checked;
+	}
+	if (__type == String(IDS_TRAIN))
+	{
+		cs->NSHTrain = checked;
 	}
 
 	cs->Store();

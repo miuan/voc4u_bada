@@ -23,6 +23,9 @@ result Dashboard::OnInitializing(void)
 {
 	result r = E_SUCCESS;
 
+	if (!CommonSetting::GetInstance().NSHDashboard)
+		ShowInfoDlg();
+
 	Button *pBtn_train = static_cast<Button *> (GetControl("IDC_BTN_TRAIN"));
 	if (pBtn_train)
 	{
@@ -74,4 +77,10 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 	}
 
+}
+
+void Dashboard::ShowInfoDlg()
+{
+	__info.SetType(IDS_DASHBOARD);
+	__info.ShowPopup(this);
 }

@@ -27,6 +27,8 @@ using namespace Osp::Media;
 
 #define IDS_DICTIONARY L"DICTIONARY"
 #define IDS_INIT L"INIT"
+#define IDS_DASHBOARD L"DASHBOARD"
+#define IDS_TRAIN L"TRAIN"
 
 class Information: public Popup, public IActionEventListener
 {

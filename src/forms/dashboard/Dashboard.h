@@ -15,6 +15,7 @@
 
 #include "dialogs/addword/AddWord.h"
 #include "forms/BaseWordForm.h"
+#include "dialogs/information/Information.h"
 
 using namespace Osp::Ui;
 using namespace Osp::Ui::Controls;
@@ -25,6 +26,8 @@ class Dashboard :
 	public Osp::Ui::Controls::Form,
 	public Osp::Ui::IActionEventListener
 {
+private:
+		Information __info;
 public:
 
 public:
@@ -35,6 +38,8 @@ public:
 	result OnInitializing(void);
 
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
+	void ShowInfoDlg();
 };
 
 #endif /* DASHBOARD_H_ */
