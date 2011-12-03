@@ -23,8 +23,7 @@ using namespace Osp::App;
 using namespace Osp::Graphics;
 
 class Dashboard :
-	public Osp::Ui::Controls::Form,
-	public Osp::Ui::IActionEventListener
+	public BaseWordForm
 {
 private:
 		Information __info;
@@ -33,13 +32,12 @@ public:
 public:
 	Dashboard();
 	virtual ~Dashboard();
-
-	bool Init();
+	virtual String GetResourceID(){return L"IDF_DASHBOARD";};
 	result OnInitializing(void);
-
+	virtual wchar_t* GetShowInfoCode(){ return IDS_DASHBOARD;};
+protected:
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 
-	void ShowInfoDlg();
 };
 
 #endif /* DASHBOARD_H_ */

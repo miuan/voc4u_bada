@@ -33,39 +33,20 @@ result Dashboard::OnInitializing(void)
 		pBtn_train->AddActionEventListener(*this);
 	}
 
-	Header *header = GetHeader();
 
-	if (header)
-	{
-		ButtonItem btnAddWord;
-		btnAddWord.Construct(BUTTON_ITEM_STYLE_TEXT, BaseWordForm::ID_ADD_WORD);
-		btnAddWord.SetText("Add word");
-		HeaderItem headerItem1;
-
-		header->SetTitleText("voc4u");
-		header->SetButton(BUTTON_POSITION_RIGHT, btnAddWord);
-		header->PlayWaitingAnimation(HEADER_ANIMATION_POSITION_BUTTON_LEFT);
-		header->AddActionEventListener(*this);
-	}
 	return r;
-}
-
-bool Dashboard::Init()
-{
-	Construct(L"IDF_DASHBOARD");
-	return true;
 }
 
 void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 	switch (actionId)
 	{
-	case BaseWordForm::ID_ADD_WORD:
+	/*case BaseWordForm::ID_ADD_WORD:
 	{
 		AddWord * pAddWord = new AddWord();
 		pAddWord->ShowPopup(this);
 		break;
-	}
+	}*/
 	case BaseWordForm::ID_TRAIN:
 	{
 		Train *train = new Train();
@@ -74,13 +55,14 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 		Utils::ShowFront(train, null);
 		break;
 	}
-
+	default:
+		BaseWordForm::OnActionPerformed(source, actionId);
 	}
 
 }
 
-void Dashboard::ShowInfoDlg()
-{
-	__info.SetType(IDS_DASHBOARD);
-	__info.ShowPopup(this);
-}
+//void Dashboard::ShowInfoDlg()
+//{
+//	__info.SetType(IDS_DASHBOARD);
+//	__info.ShowPopup(this);
+//}

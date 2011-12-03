@@ -64,7 +64,7 @@ result Train::OnInitializing(void)
 	if (!GetFirstWord())
 		return E_FAILURE;
 
-	__lastList = static_cast<ListView* >(GetControl(L"IDC_LASTLIST"));
+	__lastList = static_cast<ListView*> (GetControl(L"IDC_LASTLIST"));
 	__lastList->SetItemProvider(__llProv);
 	__lastList->AddListViewItemEventListener(__llProv);
 	return E_SUCCESS;
@@ -79,7 +79,7 @@ void Train::PrepareFooter()
 		Bitmap * pB1 = Utils::GetBitmap("bg_listener_normal.png");
 		FooterItem f1;
 		f1.Construct(ID_BTN_DONTKNOW);
-		f1.SetIcon(FOOTER_ITEM_STATUS_NORMAL ,pB1);
+		f1.SetIcon(FOOTER_ITEM_STATUS_NORMAL, pB1);
 		f1.SetText(GetString("IDS_BTN_DONTKNOW"));
 		footer->AddItem(f1);
 		FooterItem f2;
@@ -116,7 +116,6 @@ void Train::UpdateWord(bool know)
 		__lastList->Show();
 	}
 
-
 }
 
 void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
@@ -125,19 +124,24 @@ void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 
 	bswitch = !bswitch;
 
-	if (!bswitch)
-	{
-		return;
-	}
-
 	if (ID_BTN_KNOW == actionId)
 	{
+
+		if (!bswitch)
+		{
+			return;
+		}
 		AppLog("know");
 		UpdateWord(true);
 		GetFirstWord();
 	}
 	else if (ID_BTN_DONTKNOW == actionId)
 	{
+		if (!bswitch)
+		{
+			return;
+		}
+
 		AppLog("dont know");
 		UpdateWord(false);
 		GetFirstWord();
