@@ -8,10 +8,13 @@
 #include "Train.h"
 #include "forms/dictionary/Dictionary.h"
 
+LastListProvider *Train::__llProv = null;
+
 Train::Train() :
 	__word(null)
 {
-
+	if(!__llProv)
+		__llProv = new LastListProvider();
 }
 
 Train::~Train()
@@ -26,7 +29,7 @@ bool Train::GetFirstWord()
 	//if (__word)
 	//	delete __word;
 
-	__word = __WCtrl->GetFirstWordN(__llProv.GetArray());
+	__word = __WCtrl->GetFirstWordN(__llProv->GetArray());
 	if (!__word)
 	{
 		Dictionary *pDic = new Dictionary();
@@ -65,8 +68,8 @@ result Train::OnInitializing(void)
 		return E_FAILURE;
 
 	__lastList = static_cast<ListView*> (GetControl(L"IDC_LASTLIST"));
-	__lastList->SetItemProvider(__llProv);
-	__lastList->AddListViewItemEventListener(__llProv);
+	__lastList->SetItemProvider(*__llProv);
+	__lastList->AddListViewItemEventListener(*__llProv);
 	return E_SUCCESS;
 }
 
@@ -110,7 +113,7 @@ void Train::UpdateWord(bool know)
 		__word->SetKnow(know);
 		__WCtrl->UpdateWord(*__word);
 
-		__llProv.AddWord(*__word);
+		__llProv->AddWord(*__word);
 		__lastList->UpdateList();
 		__lastList->Draw();
 		__lastList->Show();

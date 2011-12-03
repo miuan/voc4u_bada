@@ -27,7 +27,8 @@ class BaseWordForm
 private:
 		ArrayList __destructList;
 		Form * __pBackForm;
-
+		static Bitmap *__pBGLogo;
+		static Bitmap *__pICHeader;
 public:
 		static const int ID_ADD_WORD = 101;
 		static const int ID_TRAIN = 102;
@@ -62,6 +63,8 @@ protected:
 	virtual  wchar_t* GetShowInfoCode();
 	virtual void OnFormBackRequested (Osp::Ui::Controls::Form &source);
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
+	virtual result OnDraw(void);
 };
 
 #endif /* BASEWORDFORM_H_ */

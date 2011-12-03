@@ -9,6 +9,9 @@
 #include "dialogs/information/Information.h"
 #include "forms/dictionary/Dictionary.h"
 
+Bitmap * BaseWordForm::__pBGLogo = null;
+Bitmap * BaseWordForm::__pICHeader = null;
+
 BaseWordForm::BaseWordForm() :
 	__pAddWordDlg(null), __pContextMenu(null), __pBackForm(null)
 {
@@ -32,11 +35,14 @@ void BaseWordForm::PrepareHeader()
 
 	if (header)
 	{
+		if(!__pICHeader)
+			__pICHeader = Utils::GetBitmap("ic_header.png");
+
+		header->SetTitleIcon(__pICHeader);
 		header->RemoveAllButtons();
 		header->RemoveAllItems();
 
 		if (__pContextMenu)
-			header->SetTitleText("voc4u");
 		{
 			ButtonItem btnMenu;
 			btnMenu.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
@@ -52,7 +58,7 @@ void BaseWordForm::PrepareHeader()
 		//		 header->SetTitleText("voc4u");
 		//		 header->SetButton(BUTTON_POSITION_RIGHT, btnAddWord);
 		//		 header->PlayWaitingAnimation(HEADER_ANIMATION_POSITION_BUTTON_LEFT);
-		header->SetTitleText("voc4u");
+		header->SetTitleText("Voc4u");
 		header->AddActionEventListener(*this);
 	}
 }
@@ -228,4 +234,31 @@ void BaseWordForm::OnFormBackRequested(Osp::Ui::Controls::Form &source)
 	{
 		AppLogDebug("call OnFormBackRequested, but the __pBackForm isn\'t set!");
 	}
+}
+
+
+result BaseWordForm::OnDraw(void)
+{
+	result r = Form::OnDraw();
+	Rectangle bound = GetBounds();
+	Canvas * canvas = GetCanvasN(bound);
+
+
+	if(!__pBGLogo)
+		__pBGLogo = Utils::GetBitmap("bg_logo.png");
+
+	int x = bound.width/2 - (__pBGLogo->GetWidth() / 2);
+	int y = bound.height - __pBGLogo->GetHeight() - 15;
+
+	Footer * footer = GetFooter();
+	if(footer)
+	{
+		y -= footer->GetHeight();
+	}
+
+	canvas->DrawBitmap(Point(x, y), *__pBGLogo);
+
+	delete canvas;
+
+	return r;
 }

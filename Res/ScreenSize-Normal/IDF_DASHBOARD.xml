@@ -20,17 +20,17 @@
     </Header>
     <Button id="IDC_BTN_TRAIN" parent="IDF_DASHBOARD">
         <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_lights_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="#FFFFFF" pressedBGBitmapPath="bg_lights_press.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="::IDS_BTN_TRAIN" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="120" mode="Portrait" width="300" x="100" y="200"/>
+        <layout height="120" mode="Portrait" width="300" x="100" y="110"/>
         <layout height="48" mode="Landscape" width="333" x="210" y="37"/>
     </Button>
     <Button id="IDC_BUTTON1" parent="IDF_DASHBOARD">
         <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_listener_normal.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="bg_listener_press.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="100" mode="Portrait" width="100" x="260" y="340"/>
+        <layout height="100" mode="Portrait" width="100" x="260" y="250"/>
         <layout height="48" mode="Landscape" width="333" x="116" y="139"/>
     </Button>
     <Button id="IDC_BUTTON2" parent="IDF_DASHBOARD">
         <property disableTextColor="" disabledBitmapPath="" disabledColor="" disabledColorOpacity="100" hAlign="ALIGN_CENTER" highlightedBGBitmapPath="" highlightedColor="" highlightedColorOpacity="100" highlightedTextColor="" normalBGBitmapPath="bg_speaker_normal.png.png" normalBitmapPath="" normalColor="" normalColorOpacity="100" normalTextColor="" pressedBGBitmapPath="bg_speaker_pressed.png" pressedBitmapPath="" pressedColor="" pressedColorOpacity="100" pressedTextColor="" text="" textSize="28" vAlign="ALIGN_MIDDLE"/>
-        <layout height="100" mode="Portrait" width="100" x="140" y="340"/>
+        <layout height="100" mode="Portrait" width="100" x="140" y="250"/>
         <layout height="48" mode="Landscape" width="333" x="136" y="159"/>
     </Button>
 </Scene>

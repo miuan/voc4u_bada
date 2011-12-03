@@ -19,7 +19,7 @@
         <itemSet/>
     </Header>
     <ListView id="IDC_LASTLIST" parent="IDF_TRAIN">
-        <property BGColor="#E4E4E4" BGColorOpacity="0" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="FALSE" itemDivider="TRUE" itemDividerColor="" sweepEnabled="FALSE" textOfEmptyList="::IDS_TRAIN_EMPTY_LIST"/>
+        <property BGColor="#E4E4E4" BGColorOpacity="90" bitmapPathOfEmptyList="" colorOfEmptyListText="" fastScroll="FALSE" itemDivider="TRUE" itemDividerColor="" sweepEnabled="FALSE" textOfEmptyList=" "/>
         <layout height="542" mode="Portrait" width="461" x="10" y="61"/>
         <layout height="88" mode="Landscape" width="456" x="335" y="167"/>
     </ListView>

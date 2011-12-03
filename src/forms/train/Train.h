@@ -19,7 +19,7 @@ private:
 	Label *__lblTest;
 	ListView *__lastList;
 
-	LastListProvider __llProv;
+	static LastListProvider *__llProv;
 
     bool GetFirstWord();
     void UpdateWord(bool know);
