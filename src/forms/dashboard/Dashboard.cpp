@@ -7,6 +7,8 @@
 
 #include "Dashboard.h"
 #include "forms/train/Train.h"
+#include "forms/speaker/Speaker.h"
+#include "forms/listener/Listener.h"
 
 Dashboard::Dashboard()
 {
@@ -33,6 +35,19 @@ result Dashboard::OnInitializing(void)
 		pBtn_train->AddActionEventListener(*this);
 	}
 
+	Button *pBtn_speaker = static_cast<Button *> (GetControl("IDC_BTN_SPEAKER"));
+	if (pBtn_speaker)
+	{
+		pBtn_speaker->SetActionId(BaseWordForm::ID_SPEAKER);
+		pBtn_speaker->AddActionEventListener(*this);
+	}
+
+	Button *pBtn_listener = static_cast<Button *> (GetControl("IDC_BTN_LISTENER"));
+	if (pBtn_listener)
+	{
+		pBtn_listener->SetActionId(BaseWordForm::ID_LISTENER);
+		pBtn_listener->AddActionEventListener(*this);
+	}
 
 	return r;
 }
@@ -42,17 +57,38 @@ void Dashboard::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	switch (actionId)
 	{
 	/*case BaseWordForm::ID_ADD_WORD:
-	{
-		AddWord * pAddWord = new AddWord();
-		pAddWord->ShowPopup(this);
-		break;
-	}*/
+	 {
+	 AddWord * pAddWord = new AddWord();
+	 pAddWord->ShowPopup(this);
+	 break;
+	 }*/
 	case BaseWordForm::ID_TRAIN:
 	{
 		Train *train = new Train();
 		train->Init();
 		train->SetBackForm(*this);
 		Utils::ShowFront(train, null);
+		break;
+	}
+	case BaseWordForm::ID_SPEAKER:
+	{
+		Speaker *speaker = new Speaker();
+		speaker->Init();
+		speaker->SetBackForm(*this);
+		Utils::ShowFront(speaker, null);
+		break;
+	}
+	case BaseWordForm::ID_LISTENER:
+	{
+//		Speaker *speaker = new Speaker();
+//				speaker->Init();
+//				speaker->SetBackForm(*this);
+//				Utils::ShowFront(speaker, null);
+//				break;
+		Listener *listener = new Listener();
+		listener->Init();
+		listener->SetBackForm(*this);
+		Utils::ShowFront(listener, null);
 		break;
 	}
 	default:

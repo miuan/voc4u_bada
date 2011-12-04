@@ -35,6 +35,9 @@ public:
 		static const int ID_MENU = 103;
 		static const int ID_MENU_INFO = 104;
 		static const int ID_DICTIONARY = 105;
+		static const int ID_SPEAKER = 106;
+		static const int ID_LISTENER = 107;
+
 
 protected:
 		WordCtrl *__WCtrl;
