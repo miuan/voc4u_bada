@@ -8,7 +8,7 @@
 #include "LangSelect.h"
 #include "setting/CommonSetting.h"
 #include "forms/dashboard/Dashboard.h"
-#include "forms/train/Train.h"
+#include "forms/trainforms/train/Train.h"
 #include "dialogs/information/Information.h"
 
 class InitFrm :

@@ -6,9 +6,9 @@
  */
 
 #include "Dashboard.h"
-#include "forms/train/Train.h"
-#include "forms/speaker/Speaker.h"
-#include "forms/listener/Listener.h"
+#include "forms/trainforms/train/Train.h"
+#include "forms/trainforms/speaker/Speaker.h"
+#include "forms/trainforms/listener/Listener.h"
 
 Dashboard::Dashboard()
 {

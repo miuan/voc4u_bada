@@ -8,20 +8,15 @@
 #ifndef TRAIN_H_
 #define TRAIN_H_
 
-#include "../BaseWordForm.h"
-#include "LastListProvider.h"
+#include "../BaseTrainer.h"
+#include "../LastListProvider.h"
 #include "dialogs/information/Information.h"
 
-class Train: public BaseWordForm
+class Train: public BaseTrainer
 {
-private:
-	Word *__word;
-	Label *__lblTest;
-	ListView *__lastList;
 
 	static LastListProvider *__llProv;
 
-    bool GetFirstWord();
     void UpdateWord(bool know);
 
 public:
@@ -34,13 +29,15 @@ public:
 	virtual ~Train();
 
 	virtual wchar_t* GetShowInfoCode(){ return IDS_TRAIN;};
-	virtual String GetResourceID();
-	virtual result OnInitializing(void);
+	virtual String GetResourceID(){return L"IDF_TRAIN";};
 protected:
 	virtual void PrepareContextMenu();
 	virtual void PrepareFooter();
 
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
+
+	virtual LastListProvider & GetProvider(){ return *__llProv;};
+	virtual BaseTrainer * NewThisN(){return new Train();};
 };
 
 #endif /* TRAIN_H_ */

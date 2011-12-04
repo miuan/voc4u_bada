@@ -10,8 +10,7 @@
 
 LastListProvider *Train::__llProv = null;
 
-Train::Train() :
-	__word(null)
+Train::Train()
 {
 	if(!__llProv)
 		__llProv = new LastListProvider();
@@ -22,56 +21,7 @@ Train::~Train()
 
 }
 
-bool Train::GetFirstWord()
-{
-	// dont delete because the word is
-	// stored in lastList and also delete
-	//if (__word)
-	//	delete __word;
 
-	__word = __WCtrl->GetFirstWordN(__llProv->GetArray());
-	if (!__word)
-	{
-		Dictionary *pDic = new Dictionary();
-		pDic->Init();
-
-		// remove this from Frame
-		Utils::ShowFront((Form*) pDic, this);
-
-		// create new train
-		// because this is called from OnInitialize
-		// and return with false ->
-		// NOT INITIALIZED SUCCESS
-		Train *pTrain = new Train();
-		pTrain->Init();
-		pDic->SetBackForm(*pTrain);
-
-		return false;
-	}
-	else if (__lblTest != null)
-	{
-		__lblTest->SetText(__word->GetTestWord());
-		__lblTest->Draw();
-		__lblTest->Show();
-	}
-	return true;
-}
-
-result Train::OnInitializing(void)
-{
-	if (!CommonSetting::GetInstance().NSHTrain)
-		ShowInfoDlg();
-
-	__lblTest = static_cast<Label *> (GetControl(L"IDC_TEST"));
-
-	if (!GetFirstWord())
-		return E_FAILURE;
-
-	__lastList = static_cast<ListView*> (GetControl(L"IDC_LASTLIST"));
-	__lastList->SetItemProvider(*__llProv);
-	__lastList->AddListViewItemEventListener(*__llProv);
-	return E_SUCCESS;
-}
 
 void Train::PrepareFooter()
 {
@@ -101,10 +51,7 @@ void Train::PrepareContextMenu()
 	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }
 
-String Train::GetResourceID()
-{
-	return L"IDF_TRAIN";
-}
+
 
 void Train::UpdateWord(bool know)
 {

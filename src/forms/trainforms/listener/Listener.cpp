@@ -7,10 +7,12 @@
 
 #include "Listener.h"
 
+LastListProvider *Listener::__llProv = null;
+
 Listener::Listener()
 {
-	// TODO Auto-generated constructor stub
-
+	if (!__llProv)
+		__llProv = new LastListProvider();
 }
 
 Listener::~Listener()
