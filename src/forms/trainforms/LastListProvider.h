@@ -11,18 +11,16 @@
 #include <FBase.h>
 #include <FGraphics.h>
 #include <FUi.h>
-#include <FUix.h>
 #include "ctrl/Word.h"
+#include "TextToSpeechHelper.h"
 
 using namespace Osp::Base::Collection;
 using namespace Osp::Ui::Controls;
 using namespace Osp::Graphics;
-using namespace Osp::Uix;
 using namespace Osp::Base;
 
 class LastListProvider: public IListViewItemEventListener,
-public IListViewItemProvider,
-public ITextToSpeechEventListener
+public IListViewItemProvider
 {
 public:
 	static const int MAX_IN_LAST_LIST = 15;
@@ -30,13 +28,14 @@ private:
 	ArrayList array;
 	EnrichedText *PrepareText(String text, bool know, bool bold);
 	Word *GetWordAt(int index);
-    void Play(String text);
-	Osp::Uix::TextToSpeech *__pTextToSpeech;
+	TextToSpeechHelper * __pTTSH;
+
+	const int __maxInList;
 
 	// text for TTS
 	String __text;
 public:
-	LastListProvider();
+	LastListProvider(TextToSpeechHelper *pTTSH = null, int maxInList = MAX_IN_LAST_LIST);
 	virtual ~LastListProvider();
 
 	ArrayList *GetArray()
@@ -54,10 +53,6 @@ public:
 	virtual ListItemBase * CreateItem(int index, int itemWidth);
 	virtual bool DeleteItem(int index, ListItemBase *pItem, int itemWidth);
 	virtual int GetItemCount(void);
-
-	// ITextToSpeechEventListener
-	virtual void OnTextToSpeechErrorOccurred(Osp::Uix::TextToSpeechError error);
-	virtual void OnTextToSpeechStatusChanged(Osp::Uix::TextToSpeechStatus status);
 };
 
 #endif /* LASTLISTPROVIDER_H_ */

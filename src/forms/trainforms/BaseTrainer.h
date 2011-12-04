@@ -11,14 +11,19 @@
 #include "../BaseWordForm.h"
 #include "LastListProvider.h"
 #include "forms/dictionary/Dictionary.h"
+#include "TextToSpeechHelper.h"
 
 class BaseTrainer: public BaseWordForm
 {
+private:
+	static TextToSpeechHelper * __pTTSH;
 protected:
 	Word *__word;
 	Label *__lblTest;
 	ListView *__lastList;
 
+
+	TextToSpeechHelper * GetTextToSpeechHelper();
 public:
 	bool GetFirstWord();
 
@@ -30,6 +35,10 @@ public:
 	virtual LastListProvider & GetProvider() = 0;
 	virtual BaseTrainer * NewThisN() = 0;
 	virtual result OnInitializing(void);
+
+protected:
+	void UpdateListWithWord();
+	virtual String GetTextForTestLabel();
 };
 
 #endif /* BASETRAINER_H_ */

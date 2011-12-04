@@ -36,7 +36,7 @@ protected:
 
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 
-	virtual LastListProvider & GetProvider(){ return *__llProv;};
+	virtual LastListProvider & GetProvider();
 	virtual BaseTrainer * NewThisN(){return new Train();};
 };
 

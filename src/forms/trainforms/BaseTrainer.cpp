@@ -7,15 +7,21 @@
 
 #include "BaseTrainer.h"
 
+TextToSpeechHelper *BaseTrainer::__pTTSH = null;
+
 BaseTrainer::BaseTrainer(): __word(null), __lblTest(null), __lastList(null)
 {
-	// TODO Auto-generated constructor stub
 
 }
 
 BaseTrainer::~BaseTrainer()
 {
-	// TODO Auto-generated destructor stub
+
+}
+
+String BaseTrainer::GetTextForTestLabel()
+{
+    return __word->GetTestWord();
 }
 
 bool BaseTrainer::GetFirstWord()
@@ -46,7 +52,7 @@ bool BaseTrainer::GetFirstWord()
 	}
 	else if (__lblTest != null)
 	{
-		__lblTest->SetText(__word->GetTestWord());
+		__lblTest->SetText(GetTextForTestLabel());
 		__lblTest->Draw();
 		__lblTest->Show();
 	}
@@ -68,4 +74,20 @@ result BaseTrainer::OnInitializing(void)
 	__lastList->AddListViewItemEventListener(GetProvider());
 
 	return E_SUCCESS;
+}
+
+void BaseTrainer::UpdateListWithWord()
+{
+	GetProvider().AddWord(*__word);
+	__lastList->UpdateList();
+	__lastList->Draw();
+	__lastList->Show();
+}
+
+TextToSpeechHelper * BaseTrainer::GetTextToSpeechHelper()
+{
+	if(!__pTTSH)
+		__pTTSH = new TextToSpeechHelper();
+
+	return __pTTSH;
 }

@@ -7,61 +7,22 @@
 
 #include "LastListProvider.h"
 
-#include <FLclLocale.h>
-#include "setting/LangSetting.h"
-#include "setting/CommonSetting.h"
-
-using namespace Osp::Locales;
-
-void LastListProvider::Play(String text)
-{
-	//__pTextToSpeech->SetLocale()
-	result res = __pTextToSpeech->Initialize();
-	Locale & loc = LangSetting::GetLocaleFromCode(CommonSetting::GetInstance().lern);
-	__pTextToSpeech->SetLocale(loc);
-	if (IsFailed(res))
-	{
-		delete __pTextToSpeech;
-		__pTextToSpeech = null;
-	}
-	else
-	{
-		__text = text;
-	}
-}
-
-LastListProvider::LastListProvider()
+LastListProvider::LastListProvider(TextToSpeechHelper *pTTSH, int maxInList) :
+	__pTTSH(pTTSH), __maxInList(maxInList)
 {
 	array.Construct();
-
-	__pTextToSpeech = new TextToSpeech();
-	result r = __pTextToSpeech->Construct(*this);
-
-	if (IsFailed(r))
-	{
-		delete __pTextToSpeech;
-		__pTextToSpeech = null;
-	}
-
-	if (__pTextToSpeech != null)
-	{
-		//String text = L"Hello bada";
-		//Play(text);
-	}
 }
 
 LastListProvider::~LastListProvider()
 {
 	array.RemoveAll(true);
-	delete __pTextToSpeech;
-	__pTextToSpeech = null;
 }
 
 void LastListProvider::AddWord(Word &word)
 {
 	array.Add(word);
 
-	if (array.GetCount() > MAX_IN_LAST_LIST)
+	if (array.GetCount() > __maxInList)
 	{
 		array.RemoveAt(0, true);
 	}
@@ -78,17 +39,20 @@ void LastListProvider::OnListViewItemLongPressed(ListView &listView, int index, 
 
 void LastListProvider::OnListViewItemStateChanged(ListView &listView, int index, int elementId, ListItemStatus status)
 {
-	Word *word = GetWordAt(index);
-	AppLog("text to speech: %S", word->__lern.GetPointer());
-
-	if (__pTextToSpeech && word)
+	if (__pTTSH)
 	{
-		Play(word->__lern);
-		//		result r = __pTextToSpeech->Speak(word->__lern);
-		//		if(IsFailed(r))
-		//		{
-		//			AppLog("text speach failed: %s", GetErrorMessage(r));
-		//		}
+		Word *word = GetWordAt(index);
+		AppLog("text to speech: %S", word->__lern.GetPointer());
+
+		if (word)
+		{
+			__pTTSH->Play(word->__lern);
+			//		result r = __pTextToSpeech->Speak(word->__lern);
+			//		if(IsFailed(r))
+			//		{
+			//			AppLog("text speach failed: %s", GetErrorMessage(r));
+			//		}
+		}
 	}
 }
 
@@ -112,8 +76,7 @@ EnrichedText *LastListProvider::PrepareText(String text, bool know, bool bold)
 	Font font;
 	if (bold)
 		font.Construct(FONT_STYLE_BOLD, 30);
-	else
-		font.Construct(FONT_STYLE_PLAIN, 30);
+	else font.Construct(FONT_STYLE_PLAIN, 30);
 	pTextElement->SetFont(font);
 	pTextElement->SetTextColor(know ? Color::COLOR_BLUE : Color::COLOR_RED);
 	pEnrichedText->Add(*pTextElement);
@@ -171,20 +134,5 @@ bool LastListProvider::DeleteItem(int index, ListItemBase *pItem, int itemWidth)
 int LastListProvider::GetItemCount(void)
 {
 	return array.GetCount();
-}
-
-void LastListProvider::OnTextToSpeechStatusChanged(Osp::Uix::TextToSpeechStatus status)
-{
-	if (status == TTS_STATUS_INITIALIZED)
-	{
-		if(__pTextToSpeech)
-			__pTextToSpeech->Speak(__text);
-	}
-	// Add your code
-}
-
-void LastListProvider::OnTextToSpeechErrorOccurred(Osp::Uix::TextToSpeechError error)
-{
-	// Add your code
 }
 

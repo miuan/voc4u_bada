@@ -12,16 +12,13 @@ LastListProvider *Train::__llProv = null;
 
 Train::Train()
 {
-	if(!__llProv)
-		__llProv = new LastListProvider();
+
 }
 
 Train::~Train()
 {
 
 }
-
-
 
 void Train::PrepareFooter()
 {
@@ -51,8 +48,6 @@ void Train::PrepareContextMenu()
 	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }
 
-
-
 void Train::UpdateWord(bool know)
 {
 	if (__word)
@@ -60,10 +55,7 @@ void Train::UpdateWord(bool know)
 		__word->SetKnow(know);
 		__WCtrl->UpdateWord(*__word);
 
-		__llProv->AddWord(*__word);
-		__lastList->UpdateList();
-		__lastList->Draw();
-		__lastList->Show();
+		UpdateListWithWord();
 	}
 
 }
@@ -100,4 +92,13 @@ void Train::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 	{
 		BaseWordForm::OnActionPerformed(source, actionId);
 	}
+}
+
+
+LastListProvider & Train::GetProvider()
+{
+	if (!__llProv)
+			__llProv = new LastListProvider(GetTextToSpeechHelper());
+
+	return *__llProv;
 }
