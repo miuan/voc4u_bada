@@ -30,6 +30,7 @@ public:
 	Word(int id, int lesson, String lern, String native, int lw, int nw);
 	String GetTestWord();
 	String GetLern(){return __lern;};
+	String GetNative(){return __native;};
 	void SetKnow(bool know);
 	virtual ~Word();
 };

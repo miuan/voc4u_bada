@@ -56,6 +56,7 @@ bool Information::ShowPopup(Form * parent)
 	{
 		peaText->SetText(text);
 		peaText->SetEnabled(false);
+		peaText->SetCursorPosition(0);
 	}
 
 	Button *pbtnCancel = static_cast<Button *> (GetControl("IDC_BTN_CANCEL"));

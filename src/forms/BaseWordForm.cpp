@@ -11,7 +11,7 @@
 
 Bitmap * BaseWordForm::__pBGLogo = null;
 Bitmap * BaseWordForm::__pICHeader = null;
-
+SpeechToTextHelper *BaseWordForm::__pSTTH = null;
 BaseWordForm::BaseWordForm() :
 	__pAddWordDlg(null), __pContextMenu(null), __pBackForm(null)
 {
@@ -35,7 +35,7 @@ void BaseWordForm::PrepareHeader()
 
 	if (header)
 	{
-		if(!__pICHeader)
+		if (!__pICHeader)
 			__pICHeader = Utils::GetBitmap("ic_header.png");
 
 		header->SetTitleIcon(__pICHeader);
@@ -108,6 +108,11 @@ void BaseWordForm::SetBackForm(Form &frm)
 
 	//if (IsVisible())
 	PrepareFooter();
+}
+
+Form * BaseWordForm::GetBackForm()
+{
+	return __pBackForm;
 }
 
 String BaseWordForm::GetString(Osp::Base::String ID)
@@ -236,22 +241,20 @@ void BaseWordForm::OnFormBackRequested(Osp::Ui::Controls::Form &source)
 	}
 }
 
-
 result BaseWordForm::OnDraw(void)
 {
 	result r = Form::OnDraw();
 	Rectangle bound = GetBounds();
 	Canvas * canvas = GetCanvasN(bound);
 
-
-	if(!__pBGLogo)
+	if (!__pBGLogo)
 		__pBGLogo = Utils::GetBitmap("bg_logo.png");
 
-	int x = bound.width/2 - (__pBGLogo->GetWidth() / 2);
+	int x = bound.width / 2 - (__pBGLogo->GetWidth() / 2);
 	int y = bound.height - __pBGLogo->GetHeight() - 15;
 
 	Footer * footer = GetFooter();
-	if(footer)
+	if (footer)
 	{
 		y -= footer->GetHeight();
 	}
@@ -261,4 +264,73 @@ result BaseWordForm::OnDraw(void)
 	delete canvas;
 
 	return r;
+}
+
+void BaseWordForm::SetSpeechToTextListener(ISpeechToTextEventListener *isttl)
+{
+	// when is isttl null not create new helper
+	if (!__pSTTH && isttl != null)
+	{
+		AppLogDebug("__pSTTH = new SpeechToTextHelper()");
+		__pSTTH = new SpeechToTextHelper();
+	}
+
+	// must set isttl before init because
+	// after init success will call __pSTTH->OnSpeechToTextInitialized
+	// and __pSTTH->OnSpeechToTextInitialized call isttl->OnSpeechToTextInitialized
+	if (__pSTTH)
+	{
+		__pSTTH->SetListener(isttl);
+		// when was initialized before
+		// call OnSpeechToTextInitialized manualy
+//		if (isttl && __pSTTH->IsInitialized())
+//		{
+//			AppLogDebug("__pSTTH->SetListener and __pSTTH->OnSpeechToTextInitialized()");
+//			__pSTTH->OnSpeechToTextInitialized();
+//		}
+//		else
+//			if (__pSTTH->IsNotWorks())
+//		{
+//			AppLogDebug("__pSTTH->SetListener and __pSTTH->OnSpeechToTextErrorOccurred(STT_ERROR_INITIALIZATION_FAILED)");
+//			__pSTTH->OnSpeechToTextErrorOccurred(STT_ERROR_INITIALIZATION_FAILED);
+//			delete __pSTTH;
+//			__pSTTH = null;
+//		}
+	}
+
+	// wasn't initialized -> init
+	if (__pSTTH && !__pSTTH->IsInitialized())
+	{
+		AppLogDebug("call __pSTTH->Init()");
+		if (!__pSTTH->Init())
+		{
+			delete __pSTTH;
+			__pSTTH = null;
+		}
+	}
+
+}
+
+void BaseWordForm::SpeechToTextCancel()
+{
+	if (__pSTTH)
+	{
+		__pSTTH->Cancel();
+	}
+}
+
+void BaseWordForm::SpeechToTextStop()
+{
+	if (__pSTTH)
+	{
+		__pSTTH->Stop();
+	}
+}
+
+void BaseWordForm::SpeechToTextStart()
+{
+	if (__pSTTH)
+	{
+		__pSTTH->Start();
+	}
 }

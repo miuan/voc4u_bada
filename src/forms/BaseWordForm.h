@@ -16,6 +16,7 @@
 #include "ctrl/WordCtrl.h"
 #include "system/Utils.h"
 #include "dialogs/addword/AddWord.h"
+#include "SpeechToTextHelper.h"
 
 using namespace Osp::Ui::Controls;
 
@@ -29,6 +30,7 @@ private:
 		Form * __pBackForm;
 		static Bitmap *__pBGLogo;
 		static Bitmap *__pICHeader;
+		static SpeechToTextHelper *__pSTTH;
 public:
 		static const int ID_ADD_WORD = 101;
 		static const int ID_TRAIN = 102;
@@ -49,12 +51,13 @@ public:
 	virtual ~BaseWordForm();
 
 
-	bool Init();
+	virtual bool Init();
 	virtual String GetResourceID() = 0;
 	virtual result OnInitializing();
 
 	static String GetString(Osp::Base::String ID);
 	void SetBackForm(Form &frm);
+	Form * GetBackForm();
 protected:
 	void AddToDestructList(Object *obj);
 	virtual void PrepareHeader();
@@ -68,6 +71,11 @@ protected:
 	virtual void OnActionPerformed(const Osp::Ui::Control& source, int actionId);
 
 	virtual result OnDraw(void);
+
+	void SetSpeechToTextListener(ISpeechToTextEventListener *isttl);
+	void SpeechToTextCancel();
+	void SpeechToTextStop();
+	void SpeechToTextStart();
 };
 
 #endif /* BASEWORDFORM_H_ */

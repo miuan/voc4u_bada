@@ -12,7 +12,7 @@
 
 using namespace Osp::System;
 
-class Speaker: public BaseTrainer, public ITimerEventListener
+class Speaker: public BaseTrainer, public ITimerEventListener, public Osp::Ui::ITouchEventListener
 {
 private:
 	static LastListProvider *__llProv;
@@ -35,6 +35,14 @@ public:
 
 	virtual LastListProvider & GetProvider();
 	virtual BaseTrainer * NewThisN(){return new Speaker();};
+
+	virtual void OnTouchDoublePressed (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchFocusIn (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchFocusOut (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchLongPressed (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchMoved (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchPressed (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
+	virtual void OnTouchReleased (const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo);
 
 protected:
 	virtual String GetTextForTestLabel();

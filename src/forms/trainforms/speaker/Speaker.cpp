@@ -24,7 +24,6 @@ Speaker::Speaker() :
 
 Speaker::~Speaker()
 {
-
 	if (__pTimer)
 	{
 		__pTimer->Cancel();
@@ -35,6 +34,9 @@ Speaker::~Speaker()
 result Speaker::OnInitializing(void)
 {
 	result r = BaseTrainer::OnInitializing();
+
+	__lblTest->AddTouchEventListener(*this);
+
 	if (!IsFailed(r))
 	{
 		PlayAndGetFirstWord();
@@ -50,6 +52,7 @@ void Speaker::PlayAndGetFirstWord()
 	if (__word)
 	{
 		String lern = __word->GetLern();
+		__word->SetKnow(true);
 		GetTextToSpeechHelper()->Play(lern);
 	}
 
@@ -72,5 +75,47 @@ LastListProvider & Speaker::GetProvider()
 
 String Speaker::GetTextForTestLabel()
 {
-    return L"*** tap for show ***";
+	return Utils::GetString("IDS_TAP_FOR_DISPLAY");
 }
+
+void Speaker::OnTouchDoublePressed(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+
+void Speaker::OnTouchFocusIn(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+
+void Speaker::OnTouchFocusOut(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+
+void Speaker::OnTouchLongPressed(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+
+void Speaker::OnTouchMoved(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+
+void Speaker::OnTouchPressed(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+	__pTimer->Cancel();
+
+	if(__word)
+	{
+		__word->SetKnow(false);
+		String lern = __word->GetLern();
+		GetTextToSpeechHelper()->Play(lern);
+		__lblTest->SetText(lern);
+		__lblTest->Draw();
+		__lblTest->Show();
+	}
+
+	__pTimer->Start(TIMER_TIME);
+}
+
+void Speaker::OnTouchReleased(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
+{
+}
+

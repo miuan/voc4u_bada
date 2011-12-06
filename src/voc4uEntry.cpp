@@ -85,6 +85,34 @@ maintenance
 assuming
 rather
 tethered
+pivotal
+unease
+unsurprisingly
+resilience
+unconventional
+stomping
+decades
+sand
+punctuation
+profanity
+silence
+profound
+boom
+shale
+pronunciation
+leak
+cattle
+scarcer
+scorching
+yearlong drought
+thick
+clutches
+pull
+stare
+vessel
+fledgling
+apparently
+occured
 
 hlas
 posedlost
@@ -156,6 +184,34 @@ ověřit
 za předpokladu, že
 spíše
 upoutané
+rozhodující
+neklid
+Není překvapením
+pružnost
+nekonvenční
+stomping
+desetiletí
+písek
+interpunkce
+neuctivost
+mlčení
+hluboký
+výložník
+břidlice
+výslovnost
+únik
+dobytek
+vzácnější
+sálající
+roční období sucha
+tlustý
+spárů
+táhnout
+pohledem
+plavidlo
+fledgling
+zřejmě
+došlo
  * The entry function of bada application called by the operating system.
  */
 int
