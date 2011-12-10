@@ -162,7 +162,7 @@ void Dictionary::AddItemPreparing(CustomItem *& pItem, int itemWidth)
 	result r;
 
 	EnrichedText* pEnrichedText = new EnrichedText();
-	r = pEnrichedText->Construct(Dimension(itemWidth, 200));
+	r = pEnrichedText->Construct(Dimension(itemWidth, 250));
 	pEnrichedText->SetVerticalAlignment(TEXT_ALIGNMENT_TOP);
 	pEnrichedText->SetHorizontalAlignment(TEXT_ALIGNMENT_RIGHT);
 	TextElement * pTextElement = new TextElement();
@@ -180,12 +180,12 @@ void Dictionary::AddItemPreparing(CustomItem *& pItem, int itemWidth)
 	pItem->AddElement(Rectangle(0, 5, itemWidth -10, 30), ID_FORMAT_PREPARING, *pEnrichedText);
 }
 
-void Dictionary::AddItemTitle(CustomItem *& pItem, String name)
+void Dictionary::AddItemTitle(CustomItem *& pItem, String name, int itemWidth)
 {
 	result r;
 
 	EnrichedText* pEnrichedText = new EnrichedText();
-	r = pEnrichedText->Construct(Dimension(200, 200));
+	r = pEnrichedText->Construct(Dimension(itemWidth, 200));
 
 	TextElement * pTextElement = new TextElement();
 	r = pTextElement->Construct(name);
@@ -198,7 +198,7 @@ void Dictionary::AddItemTitle(CustomItem *& pItem, String name)
 
 	AddToDestructList(pTextElement);
 	AddToDestructList(pEnrichedText);
-	pItem->AddElement(Rectangle(10, 5, 250, 50), ID_FORMAT_STRING, *pEnrichedText);
+	pItem->AddElement(Rectangle(10, 5, itemWidth -10, 50), ID_FORMAT_STRING, *pEnrichedText);
 }
 
 void Dictionary::AddItemExamples(CustomItem *& pItem, int itemWidth, String examples)
@@ -238,7 +238,7 @@ CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
 
 	if(__progressState[lesson-1])
 		AddItemPreparing(pItem, itemWidth);
-	AddItemTitle(pItem, name);
+	AddItemTitle(pItem, name, itemWidth);
 
 	int count;
 	wchar_t ** words = LangSetting::GetInitDataN(CommonSetting::GetInstance().lern, lesson, count);
@@ -299,7 +299,7 @@ CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
 		examples = Utils::GetString("IDS_EMPTY_CUSTOM_LIST");
 
 	String name = Utils::GetString("IDS_CUSTOM_WORD_ITEM");
-	AddItemTitle(pItem, name);
+	AddItemTitle(pItem, name, itemWidth);
 	AddItemExamples(pItem, itemWidth, examples);
 
 	return pItem;

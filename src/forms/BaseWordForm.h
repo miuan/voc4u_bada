@@ -72,10 +72,10 @@ protected:
 
 	virtual result OnDraw(void);
 
-	void SetSpeechToTextListener(ISpeechToTextEventListener *isttl);
+	bool SetSpeechToTextListener(ISpeechToTextEventListener *isttl);
 	void SpeechToTextCancel();
 	void SpeechToTextStop();
-	void SpeechToTextStart();
+	bool SpeechToTextStart();
 };
 
 #endif /* BASEWORDFORM_H_ */

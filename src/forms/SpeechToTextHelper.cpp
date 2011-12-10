@@ -6,6 +6,8 @@
  */
 
 #include "SpeechToTextHelper.h"
+#include "setting/LangSetting.h"
+#include "setting/CommonSetting.h"
 
 SpeechToTextHelper::SpeechToTextHelper() :
 	__pSpeechToText(null), __pISTTEL(null), __initialized(false), __errorOccurred(false)
@@ -22,7 +24,14 @@ bool SpeechToTextHelper::Init()
 {
 	__pSpeechToText = new SpeechToText();
 
-	return __pSpeechToText && __pSpeechToText->Construct(*this) == E_SUCCESS;
+	String grammar = "web_search";
+
+	return __pSpeechToText
+			&& __pSpeechToText->Construct(*this) == E_SUCCESS
+			&& __pSpeechToText->SetPunctuationOverrideEnabled(false) == E_SUCCESS
+			&& __pSpeechToText->SetProfanityFilterEnabled(false) == E_SUCCESS
+			&& __pSpeechToText->SetSilenceDetectionEnabled(true) == E_SUCCESS
+			&& __pSpeechToText->SetGrammar(grammar) == E_SUCCESS;
 
 }
 
@@ -43,9 +52,18 @@ void SpeechToTextHelper::Stop()
 		__pSpeechToText->Stop();
 }
 
-void SpeechToTextHelper::Start()
+bool SpeechToTextHelper::Start()
 {
 	__pSpeechToText->Initialize();
+	Locale & loc = LangSetting::GetLocaleFromCode(CommonSetting::GetInstance().lern);
+
+	// TODO: is locale supported
+//	if(!__pSpeechToText->IsLocaleSupported(loc))
+//		return false;
+
+	__pSpeechToText->SetLocale(loc);
+
+	return true;
 //	if (__pSpeechToText)
 //	{
 //		__pSpeechToText->Start();
@@ -138,7 +156,7 @@ void SpeechToTextHelper::OnSpeechToTextErrorOccurred(Osp::Uix::SpeechToTextError
 
 void SpeechToTextHelper::OnSpeechToTextCompleted(Osp::Base::String & result, Osp::Uix::SpeechToTextWarning warning)
 {
-	AppLogDebug("*");
+	AppLogDebug("%S", result.GetPointer());
 	//__initialized = false;
 
 	if (__pISTTEL)

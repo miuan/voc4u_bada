@@ -79,7 +79,7 @@ private:
 	CustomItem *CreateLessonItem(int itemWidth, int lesson);
 	CustomItem *CreateCustomWordItem(int itemWidth);
 	void AddItemPreparing(CustomItem *& pItem, int itemWidth);
-	void AddItemTitle(CustomItem *& pItem, String name);
+	void AddItemTitle(CustomItem *& pItem, String name, int itemWidth);
 	void AddItemExamples(CustomItem *& pItem, int itemWidth, String examples);
 };
 

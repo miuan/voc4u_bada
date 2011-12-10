@@ -266,7 +266,7 @@ result BaseWordForm::OnDraw(void)
 	return r;
 }
 
-void BaseWordForm::SetSpeechToTextListener(ISpeechToTextEventListener *isttl)
+bool BaseWordForm::SetSpeechToTextListener(ISpeechToTextEventListener *isttl)
 {
 	// when is isttl null not create new helper
 	if (!__pSTTH && isttl != null)
@@ -306,9 +306,11 @@ void BaseWordForm::SetSpeechToTextListener(ISpeechToTextEventListener *isttl)
 		{
 			delete __pSTTH;
 			__pSTTH = null;
+			return false;
 		}
 	}
 
+	return true;
 }
 
 void BaseWordForm::SpeechToTextCancel()
@@ -327,10 +329,7 @@ void BaseWordForm::SpeechToTextStop()
 	}
 }
 
-void BaseWordForm::SpeechToTextStart()
+bool BaseWordForm::SpeechToTextStart()
 {
-	if (__pSTTH)
-	{
-		__pSTTH->Start();
-	}
+	return __pSTTH && __pSTTH->Start();
 }

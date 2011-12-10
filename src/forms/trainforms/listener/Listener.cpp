@@ -7,13 +7,15 @@
 
 #include "Listener.h"
 
+using namespace Osp::Base::Collection;
+
 LastListProvider *Listener::__llProv = null;
 
 Listener::Listener() :
 	__pSttDlg(null)
 {
 	if (!__llProv)
-		__llProv = new LastListProvider();
+		__llProv = new LastListProvider(null, 100);
 }
 
 Listener::~Listener()
@@ -32,8 +34,26 @@ result Listener::OnInitializing()
 {
 	result r = BaseTrainer::OnInitializing();
 
-	SetSpeechToTextListener(this);
-	SpeechToTextStart();
+	if (r == E_SUCCESS)
+	{
+		r = E_FAILURE;
+
+		if (SetSpeechToTextListener(this))
+		{
+			if (SpeechToTextStart())
+			{
+				r = E_SUCCESS;
+			}
+			else
+			{
+				int res;
+				MessageBox msg;
+				msg.Construct(Utils::GetString("IDS_FORM_LISTENER"), Utils::GetString("IDS_MSG_OUR_LERN_UNSURPORTED"), MSGBOX_STYLE_CANCEL);
+				msg.ShowAndWait(res);
+			}
+		}
+	}
+
 	return r;
 }
 
@@ -84,18 +104,19 @@ void Listener::Exit()
 
 void Listener::PlayActualWord()
 {
-    TextToSpeechHelper *ttsh = GetTextToSpeechHelper();
-    if(ttsh && __word){
-        String lern = __word->GetLern();
-        ttsh->Play(lern);
-    }
+	TextToSpeechHelper *ttsh = GetTextToSpeechHelper();
+	if (ttsh && __word)
+	{
+		String lern = __word->GetLern();
+		ttsh->Play(lern);
+	}
 }
 
 void Listener::RecognitionWordIsNotSuccess()
 {
-    PlayActualWord();
+	PlayActualWord();
 
-    String body = Utils::GetString("IDS_STT_NOT_SUCCESS");
+	String body = Utils::GetString("IDS_STT_NOT_SUCCESS");
 	MessageBox messageBox;
 	messageBox.Construct(GetTitleText(), body, MSGBOX_STYLE_YESNOCANCEL, 0);
 	// Calls ShowAndWait - draw, show itself and process events
@@ -129,10 +150,10 @@ void Listener::OnSpeechToTextErrorOccurred(Osp::Uix::SpeechToTextError error)
 	//		SetSpeechToTextListener(this);
 	//	}
 	//	else
-	if(error == STT_ERROR_CANCELED)
+	if (error == STT_ERROR_CANCELED)
 		return;
 
-	if(error == STT_ERROR_INITIALIZATION_FAILED)
+	if (error == STT_ERROR_INITIALIZATION_FAILED)
 	{
 		SpeechToTextStart();
 		return;
@@ -162,33 +183,68 @@ void Listener::TestWordIsSuccess()
 
 	int modalResult;
 
-    MessageBox messageBox;
-    messageBox.Construct(GetTitleText(), Utils::GetString("IDS_STT_SUCCESS"), MSGBOX_STYLE_OK, 0);
-    messageBox.ShowAndWait(modalResult);
-    __word->SetKnow(true);
-    __WCtrl->UpdateWord(*__word);
+	MessageBox messageBox;
+	messageBox.Construct(GetTitleText(), Utils::GetString("IDS_STT_SUCCESS"), MSGBOX_STYLE_OK, 0);
+	messageBox.ShowAndWait(modalResult);
+	__word->SetKnow(true);
+	__WCtrl->UpdateWord(*__word);
 
-    UpdateListWithWord();
-    GetFirstWord();
-    SpeechToTextStart();
+	UpdateListWithWord();
+	GetFirstWord();
+	SpeechToTextStart();
 }
+
+
 
 void Listener::OnSpeechToTextCompleted(Osp::Base::String& result, Osp::Uix::SpeechToTextWarning warning)
 {
 	AppLog("Get word: %S", result.GetPointer());
 
 	String lern = __word->GetLern();
+	lern.ToLowerCase();
+	lern.Trim();
 
-	if (result.CompareTo(lern) != 0)
+	result.ToLowerCase();
+	result.Trim();
+
+	ArrayList str1;
+	str1.Construct();
+	Utils::SplitString(lern, " ", str1);
+
+	ArrayList str2;
+	str2.Construct();
+	Utils::SplitString(result, " ",str2);
+
+	bool success = false;
+	for(int i1 = 0; i1 != str1.GetCount(); i1++)
+	{
+		String &s1 = *((String*)str1.GetAt(i1));
+		Utils::RemovePunctuationFromEnd(s1);
+
+		for(int i2 = 0; i2 != str2.GetCount(); i2++)
+		{
+			String &s2 = *((String*)str2.GetAt(i2));
+			Utils::RemovePunctuationFromEnd(s2);
+
+			if(s1.CompareTo(s2) == 0)
+			{
+				success = true;
+				break;
+			}
+		}
+	}
+
+	if (!success)
 	{
 		RecognitionWordIsNotSuccess();
 	}
 	else
 	{
-	    TestWordIsSuccess();
+		TestWordIsSuccess();
 	}
 
-
+	str1.RemoveAll(true);
+	str2.RemoveAll(true);
 	//SetSpeechToTextListener(this);
 
 }
@@ -210,4 +266,9 @@ void Listener::OnUserEventReceivedN(RequestId requestId, Osp::Base::Collection::
 		Exit();
 	}
 	//BaseTrainer::OnUserEventReceivedN(requestId, pArgs);
+}
+
+String Listener::GetTextForTestLabel()
+{
+	return __word->GetNative();
 }

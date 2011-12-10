@@ -49,6 +49,9 @@ public:
 	virtual void OnSpeechToTextCompleted(Osp::Base::String& result, Osp::Uix::SpeechToTextWarning warning);
 
 	virtual void OnUserEventReceivedN (RequestId requestId, Osp::Base::Collection::IList *pArgs);
+
+protected:
+	virtual String GetTextForTestLabel();
 };
 
 #endif /* LISTENER_H_ */

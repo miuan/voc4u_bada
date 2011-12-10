@@ -46,8 +46,17 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	Form *pForm;
 
+	ArrayList str1;
+	str1.Construct();
+	String lern = "ahoj jak je?!.";
+	Utils::SplitString(lern, " ", str1);
+	str1.RemoveAll(true);
 
+	lern = "jedna;;;dva;;;tri;;;.!?";
+	Utils::SplitString(lern, ";;;", str1);
 
+	Utils::RemovePunctuationFromEnd(lern);
+	AppLog("RemovePunctuationFromEnd: %S", lern.GetPointer());
 	// if setting currently initialized
 	// you can continue normaly
 	if (CommonSetting::GetInstance().IsInitialized())

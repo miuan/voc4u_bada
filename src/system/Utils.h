@@ -22,6 +22,9 @@ public:
 	static Osp::Graphics::Bitmap * GetBitmap(Osp::Base::String ID);
 
 	static void ShowFront(Osp::Ui::Controls::Form *form, Osp::Ui::Controls::Form *parent = null);
+	static void SplitString(Osp::Base::String &str, Osp::Base::String separator, Osp::Base::Collection::ArrayList & array);
+
+	static void RemovePunctuationFromEnd(Osp::Base::String &str);
 };
 
 #endif /* UTILS_H_ */

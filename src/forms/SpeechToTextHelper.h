@@ -32,7 +32,7 @@ public:
 	void SetListener(ISpeechToTextEventListener * isttel);
 	void Cancel();
 	void Stop();
-	void Start();
+	bool Start();
 
 	virtual void OnSpeechToTextInitialized(void);
 	virtual void OnSpeechToTextRecordingStatusChanged(Osp::Uix::SpeechToTextRecordingStatus status);
