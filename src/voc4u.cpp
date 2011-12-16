@@ -10,6 +10,7 @@
 #include "forms/init/Init.h"
 #include "forms/dictionary/Dictionary.h"
 #include "setting/CommonSetting.h"
+#include "forms/trainforms/speaker/Speaker.h"
 
 using namespace Osp::App;
 using namespace Osp::Base;
@@ -118,14 +119,15 @@ bool voc4u::OnAppTerminating(AppRegistry& appRegistry, bool forcedTermination)
 
 void voc4u::OnForeground(void)
 {
-	// TODO:
-	// Start or resume drawing when the application is moved to the foreground.
+	// back to foreground
+	Speaker::CanPlay();
 }
 
 void voc4u::OnBackground(void)
 {
-	// TODO:
-	// Stop drawing when the application is moved to the background.
+	// after push to middle button
+	// the app work in background
+	Speaker::Pause();
 }
 
 void voc4u::OnLowMemory(void)

@@ -41,14 +41,14 @@ String LangSetting::GetNameOfLesson(int lesson)
 	return Utils::GetString(name);
 }
 
-Bitmap * LangSetting::GetIcon(Locale & lc)
+Bitmap * LangSetting::GetIconN(Locale & lc)
 {
 	String name = L"ic_";
 	name.Append(lc.GetCountryCodeString());
 	name.Append(L".png");
 	name.ToLowerCase();
 
-	return Utils::GetBitmap(name);
+	return Utils::GetBitmapN(name);
 }
 
 wchar_t ** LangSetting::GetInitDataN(String lang, int lesson, int &count)

@@ -7,8 +7,8 @@
 
 #include "LangSelect.h"
 
-
-LangSelect::LangSelect(int type, ILangSelectListener * lsl) : __aUsedLocales(null)
+LangSelect::LangSelect(int type, ILangSelectListener * lsl) :
+	__aUsedLocales(null)
 {
 	__type = type;
 	__langSelectListener = lsl;
@@ -23,10 +23,6 @@ LangSelect::~LangSelect()
 
 bool LangSelect::Init(Locale * without)
 {
-	// Create Bitmap
-	Bitmap *pBitmapNormal = GetBitmapN(0);
-	Bitmap *pBitmapFocused = GetBitmapN(1);
-
 	AppResource *res = Application::GetInstance()->GetAppResource();
 	Frame * frame = Application::GetInstance()->GetAppFrame()->GetFrame();
 	int width = frame->GetWidth() - 10;
@@ -35,15 +31,13 @@ bool LangSelect::Init(Locale * without)
 	result result = Construct(false, Dimension(width, height));
 
 	__numUsedLocales = LangSetting::NUM_LOCALES;
-	if(without)
+	if (without)
 		__numUsedLocales -= 1;
 
 	__aUsedLocales = new Locale*[__numUsedLocales];
-	for(int i = 0, b = 0; i != LangSetting::NUM_LOCALES; i++)
-		if(without == null || without->GetLanguageCode() != LangSetting::LOCALES[i].GetLanguageCode())
-		__aUsedLocales[b++] = &LangSetting::LOCALES[i];
-
-
+	for (int i = 0, b = 0; i != LangSetting::NUM_LOCALES; i++)
+		if (without == null || without->GetLanguageCode() != LangSetting::LOCALES[i].GetLanguageCode())
+			__aUsedLocales[b++] = &LangSetting::LOCALES[i];
 
 	String title;
 	if (res->GetString(L"IDS_LANGUAGE_SELECT", title) == E_SUCCESS)
@@ -52,7 +46,7 @@ bool LangSelect::Init(Locale * without)
 	__pListElement = new CustomListElement();
 
 	__pList = new ListView();
-	__pList->Construct(Rectangle(5,5, width-10, height-10), true, false);
+	__pList->Construct(Rectangle(5, 5, width - 10, height - 10), true, false);
 	__pList->SetItemProvider(*this);
 	__pList->AddListViewItemEventListener(*this);
 	//__list->AddCustomItemEventListener(*this);
@@ -68,7 +62,6 @@ bool LangSelect::Init(Locale * without)
 	//	__pCustomListItemFormat->SetElementEventEnabled(ID_LIST_BITMAP, true);
 
 	AddControl(*__pList);
-
 
 	// Adds an item to the CustomList
 	//	    for(int i=0;i < __numLocales;i++)
@@ -118,7 +111,7 @@ result LangSelect::AddListItem(CustomList& customList, int index, Bitmap* pBitma
 void LangSelect::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listView, int index, int elementId, Osp::Ui::Controls::ListItemStatus status)
 {
 	SetShowState(false);
-	if(__langSelectListener)
+	if (__langSelectListener)
 		__langSelectListener->onSelectLang(__type, *__aUsedLocales[index]);
 
 	//    switch (elementId)
@@ -158,38 +151,40 @@ int LangSelect::GetItemCount(void)
 Osp::Ui::Controls::ListItemBase*
 LangSelect::CreateItem(int index, int itemWidth)
 {
-	ListAnnexStyle style = LIST_ANNEX_STYLE_RADIO ;
-	CustomItem* pItem = new CustomItem();
-	pItem->Construct(Osp::Graphics::Dimension(itemWidth, 100), style);
-
 	// Create Bitmap
-	Bitmap *pBitmapNormal = LangSetting::GetIcon(*(__aUsedLocales[index]));
+	Bitmap *pBitmapNormal = LangSetting::GetIconN(*(__aUsedLocales[index]));
 
+	const int padding = 5;
+	const int horizspace = 30;
+	// height + 5 and 5 padding
+	const int height = pBitmapNormal->GetHeight() + 2 * padding;
+	const int iconX = padding + horizspace;
+	const int iconY = padding;
+	const int textX = horizspace + iconX + pBitmapNormal->GetWidth();
 
-//	switch (index % 3)
-//	{
-//	case 0:
-		String str = L"";
-		(__aUsedLocales[index])->GetLanguageName(str);
-		pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, str, true);
-//		break;
-//	case 1:
-//		pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, L"Msg", true);
-//		break;
-//	case 2:
-//		pItem->AddElement(Rectangle(80, 25, 200, 50), ID_FORMAT_STRING, L"Alarm", true);
-//		break;
-//	default:
-//		break;
-//	}
-	pItem->AddElement(Rectangle(290, 20, 60, 60), ID_FORMAT_BITMAP, *pBitmapNormal);
-//	pItem->AddElement(Rectangle(290, 20, 60, 60), ID_FORMAT_CUSTOM, *(static_cast<ICustomElement *> (__pListElement)));
-//
-//	ListContextItem* pItemContext = new ListContextItem();
-//	pItemContext->Construct();
-//	pItemContext->AddElement(ID_CONTEXT_ITEM_1, "Test1");
-//	pItemContext->AddElement(ID_CONTEXT_ITEM_2, "Test2");
-//	pItem->SetContextItem(pItemContext);
+	ListAnnexStyle style = LIST_ANNEX_STYLE_RADIO;
+	CustomItem* pItem = new CustomItem();
+	pItem->Construct(Osp::Graphics::Dimension(itemWidth, height), style);
+
+	// add name
+	String str = L"";
+	(__aUsedLocales[index])->GetLanguageName(str);
+	pItem->AddElement(Rectangle(textX, padding, itemWidth - textX, height - 2 * padding), ID_FORMAT_STRING, str, true);
+	pItem->SetElementTextHorizontalAlignment(ID_FORMAT_STRING, ALIGNMENT_LEFT);
+	pItem->SetElementTextVerticalAlignment(ID_FORMAT_STRING, ALIGNMENT_MIDDLE);
+
+	// add icon
+	pItem->AddElement(Rectangle(iconX, iconY, pBitmapNormal->GetWidth(), pBitmapNormal->GetHeight()), ID_FORMAT_BITMAP, *pBitmapNormal);
+	AddToDeleteList(pBitmapNormal);
+
+	//	pItem->AddElement(Rectangle(290, 20, 60, 60), ID_FORMAT_CUSTOM, *(static_cast<ICustomElement *> (__pListElement)));
+	//
+	//	ListContextItem* pItemContext = new ListContextItem();
+	//	pItemContext->Construct();
+	//	pItemContext->AddElement(ID_CONTEXT_ITEM_1, "Test1");
+	//	pItemContext->AddElement(ID_CONTEXT_ITEM_2, "Test2");
+	//	pItem->SetContextItem(pItemContext);
+
 
 	return pItem;
 }

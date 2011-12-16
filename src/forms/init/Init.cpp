@@ -148,8 +148,17 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 	// when changet to LanguageCode you must changed
 	// also in LangSetting::GetLocaleFromCode
 	code = selected.GetCountryCodeString();
-	Osp::Graphics::Point bpoint(350, 25);
-	Osp::Graphics::Bitmap * icon = LangSetting::GetIcon(selected);
+
+	Osp::Graphics::Bitmap * icon = LangSetting::GetIconN(selected);
+
+	int posY = __pbtnNative->GetHeight() / 2 - icon->GetHeight()/ 2;
+
+	Osp::Graphics::Point bpoint(30, posY);
+
+	AddToDeleteList(icon);
+
+	// for icon
+	str = "   " + str;
 
 	if (type == ID_BUTTON_NATIVE)
 	{

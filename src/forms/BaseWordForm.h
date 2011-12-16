@@ -23,7 +23,8 @@ using namespace Osp::Ui::Controls;
 class BaseWordForm
 		: public Osp::Ui::Controls::Form,
 		public Osp::Ui::IActionEventListener,
-		public IFormBackEventListener
+		public IFormBackEventListener,
+		public Osp::Ui::IOrientationEventListener
 {
 private:
 		ArrayList __destructList;
@@ -76,6 +77,8 @@ protected:
 	void SpeechToTextCancel();
 	void SpeechToTextStop();
 	bool SpeechToTextStart();
+
+	virtual void OnOrientationChanged(const Osp::Ui::Control &source, Osp::Ui::OrientationStatus orientationStatus);
 };
 
 #endif /* BASEWORDFORM_H_ */

@@ -15,6 +15,7 @@
 #include <FLclLocale.h>
 #include <FApp.h>
 #include "setting/LangSetting.h"
+#include "system/DeleteListObject.h"
 
 using namespace Osp::App;
 using namespace Osp::Locales;
@@ -70,7 +71,10 @@ public:
 	}
 };
 
-class LangSelect: public Popup, public Osp::Ui::Controls::IListViewItemEventListener, public Osp::Ui::Controls::IListViewItemProvider
+class LangSelect: public Popup,
+	public Osp::Ui::Controls::IListViewItemEventListener,
+	public Osp::Ui::Controls::IListViewItemProvider,
+	public DeleteListObject
 {
 	ILangSelectListener * __langSelectListener;
 	ListView *__pList;
@@ -110,22 +114,22 @@ public:
 
 	result AddListItem(CustomList& customList, int index, Bitmap* pBitmapNormal, Bitmap* pBitmapFocused);
 
-	Bitmap * GetBitmapN(int i)
-	{
-		Bitmap *bitmap;
-		Image* bitmapDecoder = new Image();
-		result r = bitmapDecoder->Construct();
-		if (IsFailed(r))
-		{
-			AppLog("Failed to construct decoder!");
-		}
-
-		// 4. decode the image with alphas (to allow transparency)
-		bitmap = bitmapDecoder->DecodeN(L"/Home/Res/flags_preview_large.png", BITMAP_PIXEL_FORMAT_ARGB8888);
-
-		return bitmap;
-	}
-	;
+//	Bitmap * GetBitmapN(int i)
+//	{
+//		Bitmap *bitmap;
+//		Image* bitmapDecoder = new Image();
+//		result r = bitmapDecoder->Construct();
+//		if (IsFailed(r))
+//		{
+//			AppLog("Failed to construct decoder!");
+//		}
+//
+//		// 4. decode the image with alphas (to allow transparency)
+//		bitmap = bitmapDecoder->DecodeN(L"/Home/Res/flags_preview_large.png", BITMAP_PIXEL_FORMAT_ARGB8888);
+//
+//		return bitmap;
+//	}
+//	;
 
 };
 

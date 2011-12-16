@@ -31,7 +31,7 @@ String Utils::GetString(String ID)
 	return out;
 }
 
-Bitmap * Utils::GetBitmap(String ID)
+Bitmap * Utils::GetBitmapN(String ID)
 {
 	AppLogDebug("load icons: %S", ID.GetPointer());
 	Application* pApp = Application::GetInstance();

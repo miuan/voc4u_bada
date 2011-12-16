@@ -8,12 +8,17 @@
 #include "Speaker.h"
 
 LastListProvider *Speaker::__llProv = null;
+bool Speaker::__paused = false;
+Timer *Speaker::__pTimer = null;
 
-Speaker::Speaker() :
-	__pTimer(null)
+Speaker::Speaker()
 {
 	if (!__llProv)
 		__llProv = new LastListProvider();
+
+	// if exist, but shouldn't exist
+	// only for sure
+	DeleteTimer();
 
 	__pTimer = new Timer();
 	if (__pTimer)
@@ -24,11 +29,43 @@ Speaker::Speaker() :
 
 Speaker::~Speaker()
 {
+    DeleteTimer();
+}
+
+void Speaker::DeleteTimer()
+{
+    if (__pTimer)
+	{
+    	__pTimer->Cancel();
+		delete __pTimer;
+		__pTimer = null;
+	}
+}
+
+/**
+ * static function called from voc4u.cpp when app go to background
+ * stop the speaking word, when the timer is active
+ */
+void Speaker::Pause()
+{
 	if (__pTimer)
 	{
 		__pTimer->Cancel();
-		delete __pTimer;
 	}
+	__paused = true;
+}
+
+/**
+ * caled from voc4u.cpp when app go to foreground
+ * when prev stop the timer, start the timer again
+ */
+void Speaker::CanPlay()
+{
+	if (__pTimer)
+	{
+		__pTimer->Start(10);
+	}
+	__paused = false;
 }
 
 result Speaker::OnInitializing(void)
@@ -60,9 +97,12 @@ void Speaker::PlayAndGetFirstWord()
 
 void Speaker::OnTimerExpired(Timer& timer)
 {
-	UpdateListWithWord();
-	PlayAndGetFirstWord();
-	__pTimer->Start(TIMER_TIME);
+	if (!__paused)
+	{
+		UpdateListWithWord();
+		PlayAndGetFirstWord();
+		__pTimer->Start(TIMER_TIME);
+	}
 }
 
 LastListProvider & Speaker::GetProvider()
@@ -100,9 +140,12 @@ void Speaker::OnTouchMoved(const Osp::Ui::Control &source, const Osp::Graphics::
 
 void Speaker::OnTouchPressed(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition, const Osp::Ui::TouchEventInfo &touchInfo)
 {
+	if(__paused)
+		return;
+
 	__pTimer->Cancel();
 
-	if(__word)
+	if (__word)
 	{
 		__word->SetKnow(false);
 		String lern = __word->GetLern();

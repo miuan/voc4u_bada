@@ -29,6 +29,7 @@ bool AddWord::ShowPopup(Form * parent)
 		pbtnAdd->SetActionId(ID_BTN_ADD);
 	}
 
+
 	Button *pbtnCancel = static_cast<Button *> (GetControl("IDC_BTN_CANCEL"));
 	if (pbtnCancel)
 	{

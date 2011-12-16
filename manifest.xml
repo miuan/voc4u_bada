@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' ?>
 <Manifest>
-	<Id>93bt1p123e</Id>
-	<Secret>9C645DDBA19C71BAD1204DA4DAA7A0B9</Secret>
-	<AppVersion>1.0.0</AppVersion>
-	<ManifestVersion>1.2</ManifestVersion>
-	<Privileges>
-	 <Privilege>
+    <Id>jn16fni19g</Id>
+    <Secret>F75F39167D00E75D2CC4FB494CA577B9</Secret>
+  <AppVersion>1.0.0</AppVersion>
+  <ManifestVersion>1.2</ManifestVersion>
+  <AppType>C++App</AppType>
+    <Privileges>
+        <Privilege>
             <Name>IMAGE</Name>
         </Privilege>
-	</Privileges>
-	<DeviceProfile>
-		<APIVersion>2.0</APIVersion>
-	</DeviceProfile>
+    </Privileges>
+    <DeviceProfile>
+        <APIVersion>2.0</APIVersion>
+    </DeviceProfile>
 </Manifest>

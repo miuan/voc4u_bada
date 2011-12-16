@@ -26,7 +26,7 @@ void Train::PrepareFooter()
 	Footer * footer = GetFooter();
 	if (footer)
 	{
-		Bitmap * pB1 = Utils::GetBitmap("bg_listener_normal.png");
+		Bitmap * pB1 = Utils::GetBitmapN("bg_listener_normal.png");
 		FooterItem f1;
 		f1.Construct(ID_BTN_DONTKNOW);
 		f1.SetIcon(FOOTER_ITEM_STATUS_NORMAL, pB1);
@@ -42,7 +42,7 @@ void Train::PrepareFooter()
 void Train::PrepareContextMenu()
 {
 	BaseWordForm::PrepareContextMenu();
-	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_dictionary.png");
+	Osp::Graphics::Bitmap *info = Utils::GetBitmapN(L"ic_dictionary.png");
 	//	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_DICTIONARY"), ID_DICTIONARY, *info);
 	//	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);

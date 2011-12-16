@@ -62,8 +62,8 @@ void Dictionary::PrepareContextMenu()
 {
 	BaseWordForm::PrepareContextMenu();
 
-	Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
-	Osp::Graphics::Bitmap *reset = Utils::GetBitmap(L"ic_reset.png");
+	Osp::Graphics::Bitmap *info = Utils::GetBitmapN(L"ic_info.png");
+	Osp::Graphics::Bitmap *reset = Utils::GetBitmapN(L"ic_reset.png");
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }

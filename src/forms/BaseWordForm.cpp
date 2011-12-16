@@ -36,7 +36,7 @@ void BaseWordForm::PrepareHeader()
 	if (header)
 	{
 		if (!__pICHeader)
-			__pICHeader = Utils::GetBitmap("ic_header.png");
+			__pICHeader = Utils::GetBitmapN("ic_header.png");
 
 		header->SetTitleIcon(__pICHeader);
 		header->RemoveAllButtons();
@@ -46,7 +46,7 @@ void BaseWordForm::PrepareHeader()
 		{
 			ButtonItem btnMenu;
 			btnMenu.Construct(BUTTON_ITEM_STYLE_ICON, ID_MENU);
-			btnMenu.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmap(L"ic_menu.png"));
+			btnMenu.SetIcon(BUTTON_ITEM_STATUS_NORMAL, Utils::GetBitmapN(L"ic_menu.png"));
 			header->SetButton(BUTTON_POSITION_RIGHT, btnMenu);
 		}
 
@@ -91,7 +91,7 @@ bool BaseWordForm::Init()
 	__WCtrl = WordCtrl::GetInstance();
 
 	Construct(GetResourceID());
-
+	//AddOrientationEventListener(*this);
 	// context menu must be first
 	// because when is created
 	// show menu button in footer
@@ -191,12 +191,12 @@ void BaseWordForm::PrepareContextMenu()
 {
 	__pContextMenu = new ContextMenu();
 	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
-	Osp::Graphics::Bitmap *add_word = Utils::GetBitmap(L"ic_add_word.png");
+	Osp::Graphics::Bitmap *add_word = Utils::GetBitmapN(L"ic_add_word.png");
 
 	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
 	if (GetShowInfoCode())
 	{
-		Osp::Graphics::Bitmap *info = Utils::GetBitmap(L"ic_info.png");
+		Osp::Graphics::Bitmap *info = Utils::GetBitmapN(L"ic_info.png");
 		__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
 	}
 
@@ -248,7 +248,7 @@ result BaseWordForm::OnDraw(void)
 	Canvas * canvas = GetCanvasN(bound);
 
 	if (!__pBGLogo)
-		__pBGLogo = Utils::GetBitmap("bg_logo.png");
+		__pBGLogo = Utils::GetBitmapN("bg_logo.png");
 
 	int x = bound.width / 2 - (__pBGLogo->GetWidth() / 2);
 	int y = bound.height - __pBGLogo->GetHeight() - 15;
@@ -332,4 +332,14 @@ void BaseWordForm::SpeechToTextStop()
 bool BaseWordForm::SpeechToTextStart()
 {
 	return __pSTTH && __pSTTH->Start();
+}
+
+void BaseWordForm::OnOrientationChanged(const Osp::Ui::Control &source, Osp::Ui::OrientationStatus orientationStatus)
+{
+//	if(orientationStatus == ORIENTATION_STATUS_LANDSCAPE)
+//		SetOrientation(ORIENTATION_LANDSCAPE);
+//	else
+//		SetOrientation(ORIENTATION_PORTRAIT);
+//	Draw();
+//	Show();
 }

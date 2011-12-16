@@ -14,14 +14,16 @@ using namespace Osp::System;
 
 class Speaker: public BaseTrainer, public ITimerEventListener, public Osp::Ui::ITouchEventListener
 {
+
 private:
+	static bool __paused;
 	static LastListProvider *__llProv;
-	Timer *__pTimer;
+	static Timer *__pTimer;
     void PlayAndGetFirstWord();
+    void DeleteTimer();
 
 public:
-	// 10s for next word
-	static const int TIMER_TIME = 10000;
+    static const int TIMER_TIME = 10000;
 public:
 
 
@@ -46,6 +48,10 @@ public:
 
 protected:
 	virtual String GetTextForTestLabel();
+
+public:
+	static void Pause();
+    static void CanPlay();
 };
 
 #endif /* SPEAKER_H_ */

@@ -10,11 +10,13 @@
 #include "forms/dashboard/Dashboard.h"
 #include "forms/trainforms/train/Train.h"
 #include "dialogs/information/Information.h"
+#include "system/DeleteListObject.h"
 
 class InitFrm :
 	public Osp::Ui::Controls::Form,
 	public Osp::Ui::IActionEventListener,
-	public ILangSelectListener
+	public ILangSelectListener,
+	public DeleteListObject
 {
 		CommonSetting *__setting;
 
