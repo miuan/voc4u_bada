@@ -23,7 +23,7 @@ public:
 
 	static void ShowFront(Osp::Ui::Controls::Form *form, Osp::Ui::Controls::Form *parent = null);
 	static void SplitString(Osp::Base::String &str, Osp::Base::String separator, Osp::Base::Collection::ArrayList & array);
-
+	static Osp::Base::String GetMenuString(Osp::Base::String ID);
 	static void RemovePunctuationFromEnd(Osp::Base::String &str);
 };
 

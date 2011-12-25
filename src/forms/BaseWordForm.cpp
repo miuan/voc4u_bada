@@ -193,11 +193,11 @@ void BaseWordForm::PrepareContextMenu()
 	__pContextMenu->Construct(Point(0, 0), CONTEXT_MENU_STYLE_LIST);
 	Osp::Graphics::Bitmap *add_word = Utils::GetBitmapN(L"ic_add_word.png");
 
-	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
+	__pContextMenu->AddItem(Utils::GetMenuString(L"IDS_DIC_MENU_ADD_WORD"), ID_ADD_WORD, *add_word);
 	if (GetShowInfoCode())
 	{
 		Osp::Graphics::Bitmap *info = Utils::GetBitmapN(L"ic_info.png");
-		__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
+		__pContextMenu->AddItem(Utils::GetMenuString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
 	}
 
 	__pContextMenu->AddActionEventListener(*this);

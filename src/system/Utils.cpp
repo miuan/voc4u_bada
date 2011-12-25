@@ -31,6 +31,17 @@ String Utils::GetString(String ID)
 	return out;
 }
 
+String Utils::GetMenuString(String ID)
+{
+	String out;
+
+	for(int i =0; i < 10; i++)
+		out.Append(" ");
+	out.Append(GetString(ID));
+
+	return out;
+}
+
 Bitmap * Utils::GetBitmapN(String ID)
 {
 	AppLogDebug("load icons: %S", ID.GetPointer());

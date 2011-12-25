@@ -39,10 +39,10 @@ void Dictionary::InitLessonState()
 
 bool Dictionary::Init()
 {
-//	CommonSetting *cs = &CommonSetting::GetInstance();
-//	cs->lern = L"ES";
-//	cs->native = L"CS";
-//	cs->Store();
+	//	CommonSetting *cs = &CommonSetting::GetInstance();
+	//	cs->lern = L"ES";
+	//	cs->native = L"CS";
+	//	cs->Store();
 
 	BaseWordForm::Init();
 	__pList = static_cast<ListView *> (GetControl(L"IDC_LESSON"));
@@ -51,7 +51,6 @@ bool Dictionary::Init()
 
 	return true;
 }
-
 
 void Dictionary::PrepareFooter()
 {
@@ -64,8 +63,8 @@ void Dictionary::PrepareContextMenu()
 
 	Osp::Graphics::Bitmap *info = Utils::GetBitmapN(L"ic_info.png");
 	Osp::Graphics::Bitmap *reset = Utils::GetBitmapN(L"ic_reset.png");
-	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
-	__pContextMenu->AddItem(Utils::GetString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
+	__pContextMenu->AddItem(Utils::GetMenuString(L"IDS_DIC_MENU_INFO"), ID_MENU_INFO, *info);
+	__pContextMenu->AddItem(Utils::GetMenuString(L"IDS_DIC_MENU_RESET_DB"), ID_MENU_RESETDB, *reset);
 }
 
 result Dictionary::OnInitializing(void)
@@ -117,16 +116,16 @@ void Dictionary::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 			Utils::ShowFront(pInit, this);
 		}
 	}
-	else if(actionId == ID_ADD_WORD)
+	else if (actionId == ID_ADD_WORD)
 	{
 		AddWord *aw = new AddWord();
 		aw->SetResultListener(this, ID_MENU_ADD_WORD_SUCCCES);
 		aw->ShowPopup(this);
 		AddToDestructList(aw);
 	}
-	else if(actionId == ID_MENU_ADD_WORD_SUCCCES)
+	else if (actionId == ID_MENU_ADD_WORD_SUCCCES)
 	{
-		__pList->RefreshList(__pList->GetItemCount() -1, LIST_REFRESH_TYPE_ITEM_MODIFY);
+		__pList->RefreshList(__pList->GetItemCount() - 1, LIST_REFRESH_TYPE_ITEM_MODIFY);
 	}
 	else BaseWordForm::OnActionPerformed(source, actionId);
 }
@@ -146,7 +145,34 @@ void Dictionary::OnListViewItemStateChanged(Osp::Ui::Controls::ListView &listVie
 	bool add = status == LIST_ITEM_STATUS_CHECKED;
 	GetLessonsInProgress();
 
-	if(__WCtrl->LoadLesson(index + 1, !add))
+	if (!add)
+	{
+		int res;
+
+		bool anyChecked = false;
+		for (int i = 0; i != LangSetting::NUM_LESSON; i++)
+			if (i != index && saveState[i])
+				anyChecked = true;
+
+		if (!anyChecked)
+		{
+
+			listView.SetItemChecked(index, true);
+			MessageBox msg;
+			msg.Construct(Utils::GetString("IDS_FORM_DICTIONARY"), Utils::GetString("IDS_MSG_MUST_BE_ANY_CHECKED"), MSGBOX_STYLE_OK, 0);
+			msg.ShowAndWait(res);
+			return;
+		}
+
+		listView.SetItemChecked(index, true);
+		MessageBox msg;
+		msg.Construct(Utils::GetString("IDS_FORM_DICTIONARY"), Utils::GetString("IDS_MSG_YOUR_ARE_SURE_DISABLE_LESSON"), MSGBOX_STYLE_YESNO, 0);
+		msg.ShowAndWait(res);
+		if(res != MSGBOX_RESULT_YES)
+			return;
+	}
+
+	if (__WCtrl->LoadLesson(index + 1, !add))
 		__progressState[index] = true;
 
 	saveState[index] = add;
@@ -177,7 +203,7 @@ void Dictionary::AddItemPreparing(CustomItem *& pItem, int itemWidth)
 	AddToDestructList(pEnrichedText);
 	int width, height;
 	pEnrichedText->GetSize(width, height);
-	pItem->AddElement(Rectangle(0, 5, itemWidth -10, 30), ID_FORMAT_PREPARING, *pEnrichedText);
+	pItem->AddElement(Rectangle(0, 5, itemWidth - 10, 30), ID_FORMAT_PREPARING, *pEnrichedText);
 }
 
 void Dictionary::AddItemTitle(CustomItem *& pItem, String name, int itemWidth)
@@ -198,7 +224,7 @@ void Dictionary::AddItemTitle(CustomItem *& pItem, String name, int itemWidth)
 
 	AddToDestructList(pTextElement);
 	AddToDestructList(pEnrichedText);
-	pItem->AddElement(Rectangle(10, 5, itemWidth -10, 50), ID_FORMAT_STRING, *pEnrichedText);
+	pItem->AddElement(Rectangle(10, 5, itemWidth - 10, 50), ID_FORMAT_STRING, *pEnrichedText);
 }
 
 void Dictionary::AddItemExamples(CustomItem *& pItem, int itemWidth, String examples)
@@ -223,7 +249,7 @@ void Dictionary::AddItemExamples(CustomItem *& pItem, int itemWidth, String exam
 	AddToDestructList(pTextElement);
 	AddToDestructList(pEnrichedText);
 
-	pItem->AddElement(Rectangle(10, 45, itemWidth-80, ITEM_HEIGHT-60), ID_FORMAT_EXAMPLES, *pEnrichedText);
+	pItem->AddElement(Rectangle(10, 45, itemWidth - 80, ITEM_HEIGHT - 60), ID_FORMAT_EXAMPLES, *pEnrichedText);
 }
 
 CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
@@ -236,7 +262,7 @@ CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
 
 	String name = LangSetting::GetNameOfLesson(lesson);
 
-	if(__progressState[lesson-1])
+	if (__progressState[lesson - 1])
 		AddItemPreparing(pItem, itemWidth);
 	AddItemTitle(pItem, name, itemWidth);
 
@@ -251,20 +277,20 @@ CustomItem *Dictionary::CreateLessonItem(int itemWidth, int lesson)
 		int indexOfComa;
 		String word = words[i];
 		//word.IndexOf(",", 0, indexOfComa);
-		if(word.IndexOf(",", 0, indexOfComa) == E_SUCCESS)
+		if (word.IndexOf(",", 0, indexOfComa) == E_SUCCESS)
 		{
 			String neww;
 			word.SubString(0, indexOfComa, neww);
 			word = neww;
 		}
 
-		if(!first)
+		if (!first)
 			examples.Append(L", ");
 		examples.Append(word);
 		first = false;
 	}
 
-	AddItemExamples( pItem, itemWidth, examples);
+	AddItemExamples(pItem, itemWidth, examples);
 	SetupInitSetting();
 	return pItem;
 }
@@ -281,13 +307,13 @@ CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
 
 	ArrayList *words = __WCtrl->GetWordsN(WordCtrl::CUSTOM_WORD_LESSON_ID);
 
-	if(words && words->GetCount() > 0)
+	if (words && words->GetCount() > 0)
 	{
 		int cnt = words->GetCount();
-		for(int i = 0; i!= cnt; i++)
+		for (int i = 0; i != cnt; i++)
 		{
-			Word * w = static_cast<Word*>(words->GetAt(i));
-			if(i > 0)
+			Word * w = static_cast<Word*> (words->GetAt(i));
+			if (i > 0)
 				examples.Append(",");
 			examples.Append(w->__lern);
 		}
@@ -295,8 +321,7 @@ CustomItem *Dictionary::CreateCustomWordItem(int itemWidth)
 		words->RemoveAll(true);
 		delete words;
 	}
-	else
-		examples = Utils::GetString("IDS_EMPTY_CUSTOM_LIST");
+	else examples = Utils::GetString("IDS_EMPTY_CUSTOM_LIST");
 
 	String name = Utils::GetString("IDS_CUSTOM_WORD_ITEM");
 	AddItemTitle(pItem, name, itemWidth);
@@ -324,31 +349,33 @@ bool Dictionary::DeleteItem(int index, Osp::Ui::Controls::ListItemBase *pItem, i
 int Dictionary::GetItemCount(void)
 {
 	// TODO: add special item for custom words
-	return LangSetting::NUM_LESSON +1;
+	return LangSetting::NUM_LESSON + 1;
 }
 
 void Dictionary::GetLessonsInProgress()
 {
-    int count;
-    int *lessons = __WCtrl->GetWorkerTaskLessonInProgressN(count);
-    if(count > 0){
-        for(int i = 0;i != count;i++){
-            int pos = Math::Abs(lessons[i]) - 1;
-            __progressState[pos] = true;
-        }
-    }
+	int count;
+	int *lessons = __WCtrl->GetWorkerTaskLessonInProgressN(count);
+	if (count > 0)
+	{
+		for (int i = 0; i != count; i++)
+		{
+			int pos = Math::Abs(lessons[i]) - 1;
+			__progressState[pos] = true;
+		}
+	}
 
-    if(lessons)
-    	delete lessons;
+	if (lessons)
+		delete lessons;
 
 }
 
 void Dictionary::OnLessonTask(const int lesson)
 {
 	AppLog("OnLessonDone %i", lesson);
-	int position = Math::Abs(lesson) -1;
-    GetLessonsInProgress();
-    __progressState[position] = false;
+	int position = Math::Abs(lesson) - 1;
+	GetLessonsInProgress();
+	__progressState[position] = false;
 	__pList->RefreshList(position, LIST_REFRESH_TYPE_ITEM_MODIFY);
 	__pList->UpdateList();
 }
