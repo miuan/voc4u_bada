@@ -45,7 +45,7 @@ public:
 	/**
 	 * num lesson for initing DB
 	 */
-	static const int NUM_LESSON = 5;
+	static const int NUM_LESSON = 4;
 
 	/**
 	 * colors for lesson

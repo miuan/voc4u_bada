@@ -188,7 +188,7 @@ void Dictionary::AddItemPreparing(CustomItem *& pItem, int itemWidth)
 	result r;
 
 	EnrichedText* pEnrichedText = new EnrichedText();
-	r = pEnrichedText->Construct(Dimension(itemWidth, 250));
+	r = pEnrichedText->Construct(Dimension(itemWidth, 200));
 	pEnrichedText->SetVerticalAlignment(TEXT_ALIGNMENT_TOP);
 	pEnrichedText->SetHorizontalAlignment(TEXT_ALIGNMENT_RIGHT);
 	TextElement * pTextElement = new TextElement();
@@ -336,7 +336,11 @@ Osp::Ui::Controls::ListItemBase * Dictionary::CreateItem(int index, int itemWidt
 	CustomItem *pItem;
 	if (index < LangSetting::NUM_LESSON)
 		pItem = CreateLessonItem(itemWidth, index + 1);
-	else pItem = CreateCustomWordItem(itemWidth);
+	else
+	{
+		pItem = CreateCustomWordItem(itemWidth);
+		__pList->SetItemEnabled(index, false);
+	}
 
 	return pItem;
 }

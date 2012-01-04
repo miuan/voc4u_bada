@@ -46,7 +46,7 @@ public:
 	static const int ID_FORMAT_EXAMPLES = 2;
 	static const int ID_FORMAT_PREPARING = 3;
 
-	static const int ITEM_HEIGHT = 150;
+	static const int ITEM_HEIGHT = 180;
 	static const int EXAMPLES_MAX = 30;
 public:
 	Dictionary();
