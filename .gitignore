@@ -5,3 +5,5 @@ Simulator-Debug/
 voc4u.htb
 signature.xml
 src/lang/
+.Target-Release/
+.pydevproject
