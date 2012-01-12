@@ -1,0 +1,9 @@
+.Simulator-Debug/
+.Target-Debug/
+Simulator-Debug/
+.settings
+voc4u.htb
+signature.xml
+src/lang/
+.Target-Release/
+.pydevproject
