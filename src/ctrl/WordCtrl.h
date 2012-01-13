@@ -67,6 +67,8 @@ private:
 	static WordCtrl *__wc;
 	Database *__db;
 
+	ArrayList *__pFirstWords;
+
 	LessonWorker *__lw;
 	ILessonWorkerLissener * __lwLissener;
 
@@ -81,6 +83,7 @@ private:
     String SQLUpdateWord();
     result PrepareDB();
     void CreateLessonWorker();
+    void FillFirstWordsArray(ArrayList *lastList);
 public:
     WordCtrl();
     virtual ~WordCtrl();

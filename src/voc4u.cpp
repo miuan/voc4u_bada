@@ -11,6 +11,7 @@
 #include "forms/dictionary/Dictionary.h"
 #include "setting/CommonSetting.h"
 #include "forms/trainforms/speaker/Speaker.h"
+#include "FBase.h"
 
 using namespace Osp::App;
 using namespace Osp::Base;
@@ -44,7 +45,7 @@ bool voc4u::OnAppInitializing(AppRegistry& appRegistry)
 
 	// Uncomment the following statement to listen to the screen on/off events.
 	//PowerManager::SetScreenEventListener(*this);
-
+	Osp::Base::Utility::Math::Srand( 12345);
 	Form *pForm;
 
 	ArrayList str1;

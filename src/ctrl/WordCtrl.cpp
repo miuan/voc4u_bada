@@ -12,7 +12,7 @@ using namespace Osp::Base::Collection;
 WordCtrl * WordCtrl::__wc = null;
 
 WordCtrl::WordCtrl() :
-	__db(null), __lw(null), __lwLissener(null)
+	__db(null), __lw(null), __lwLissener(null), __pFirstWords(null)
 {
 }
 
@@ -107,8 +107,7 @@ result WordCtrl::Init()
 		__db->Construct(DB_NAME, true);
 		r = PrepareDB();
 	}
-	else
-		__db->Construct(DB_NAME, false);
+	else __db->Construct(DB_NAME, false);
 
 	return r;
 }
@@ -188,8 +187,7 @@ bool WordCtrl::LoadLesson(const int lesson, bool unload)
 	// otherwise call StopWait -> continue cycle in Run
 	if (createnew)
 		__lw->Start();
-	else
-		__lw->StopWait();
+	else __lw->StopWait();
 
 	return result;
 }
@@ -301,7 +299,7 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 		for (int i = 0; i < withoutCount; i++)
 		{
 			String condition;
-			Word *word = static_cast<Word *>(withoutWords->GetAt(i));
+			Word *word = static_cast<Word *> (withoutWords->GetAt(i));
 			condition.Format(1000, L"%S <> %d AND ", COLUMN_ID, word->__id);
 			where.Append(condition);
 		}
@@ -319,8 +317,6 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 
 	AppLogDebug("SQL: (%S)", sql.GetPointer());
 	DbStatement * pStmt = __db->CreateStatementN(sql);
-
-
 
 	//if (lesson != -1)
 	//	pStmt->BindInt(0, lesson);
@@ -359,47 +355,67 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 	return result;
 }
 
-Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
+void WordCtrl::FillFirstWordsArray(ArrayList *lastList)
 {
-	Word *word = null;
-	ArrayList *words = null;
-
+	ArrayList *list;
+	//ArrayList *words = null;
 	EnableNextWords();
-
 	// if in the DB fewer word or the same as in Lastlist
 	// make new last list with DB maximum -1
 	// the last list is countet from end because
 	// last word was showed recently
 	int count = GetWordCount(WORD_TYPE_ENABLED);
-	if(lastList && count <= lastList->GetCount())
+	if (lastList && count <= lastList->GetCount())
 	{
 		int countLL = lastList->GetCount();
 		ArrayList array;
 		array.Construct(count);
-
 		int min = countLL - count;
-		for(int i = countLL -1; i > min; i--)
+		for (int i = countLL - 1; i > min; i--)
 		{
-			Word * word = static_cast<Word*>(lastList->GetAt(i));
+			Word *word = static_cast<Word*> (lastList->GetAt(i));
 			array.Add(*word);
 		}
-
 		// get word from any lessons (-1) and set limit to only one (1)
-		words = GetWordsN(-1, 1, WORD_TYPE_ENABLED, &array);
+		list = GetWordsN(-1, 15, WORD_TYPE_ENABLED, &array);
 	}
 	else
 	{
 		// get word from any lessons (-1) and set limit to only one (1)
-		words = GetWordsN(-1, 1, WORD_TYPE_ENABLED, lastList);
+		list = GetWordsN(-1, 15, WORD_TYPE_ENABLED, lastList);
 	}
 
-	if (words)
+	if (list)
 	{
-		if (words->GetCount() > 0)
-			word = (Word*) words->GetAt(0);
+		if (list->GetCount() > 0)
+		{
+			if (__pFirstWords == null)
+				__pFirstWords = new ArrayList();
 
-		words->RemoveAll(false);
-		delete words;
+			IEnumerator * enumlist = list->GetEnumeratorN();
+			while (enumlist->MoveNext() == E_SUCCESS)
+			{
+				__pFirstWords->Add(*(enumlist->GetCurrent()));
+			}
+		}
+
+		list->RemoveAll(false);
+		delete list;
+	}
+}
+
+Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
+{
+	Word *word = null;
+
+	if (!__pFirstWords || __pFirstWords->GetCount() < 1)
+		FillFirstWordsArray(lastList);
+
+	if (__pFirstWords && __pFirstWords->GetCount() > 0)
+	{
+		int rand = Osp::Base::Utility::Math::Rand() % __pFirstWords->GetCount();
+		word = (Word*) (__pFirstWords->GetAt(rand));
+		__pFirstWords->RemoveAt(rand, false);
 	}
 
 	return word;
@@ -457,8 +473,7 @@ bool WordCtrl::DeleteLesson(const int lesson)
 
 	if (lesson > 0)
 		statement.Format(1000, L"DELETE FROM %S WHERE %S = ?", TABLE_NAME, COLUMN_LESSON);
-	else
-		statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
+	else statement.Format(1000, L"DELETE FROM %S", TABLE_NAME);
 
 	DbStatement * pStmt = __db->CreateStatementN(statement);
 
