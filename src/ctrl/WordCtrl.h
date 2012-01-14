@@ -62,6 +62,7 @@ class WordCtrl: public ILessonWorkerLissener
 {
 public:
 	static const int CUSTOM_WORD_LESSON_ID = 0;
+    void UpdateWordTask(Word & word);
 
 private:
 	static WordCtrl *__wc;
@@ -72,7 +73,12 @@ private:
 	LessonWorker *__lw;
 	ILessonWorkerLissener * __lwLissener;
 
-	 friend Object *LessonWorker::Run(void);
+	void* __pUpdateTask;
+	Thread * __pUpdateThread;
+public:
+	Mutex __updateMutex;
+
+	friend Object *LessonWorker::Run(void);
 private:
 
 	String PrepareWordWhere(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
@@ -84,6 +90,7 @@ private:
     result PrepareDB();
     void CreateLessonWorker();
     void FillFirstWordsArray(ArrayList *lastList);
+    void UpdateWordCleanThread();
 public:
     WordCtrl();
     virtual ~WordCtrl();
@@ -118,6 +125,38 @@ public:
 
 public:
     bool DeleteLesson(const int lesson);
+
+    void UpdateMutexRelease()
+    {
+    	__updateMutex.Release();
+    };
 };
+
+
+class UpdateTask: public IRunnable
+{
+	WordCtrl &__wc;
+	Word &__word;
+
+public:
+	UpdateTask(WordCtrl & wc, Word & word) : __wc(wc), __word(word)
+	{
+
+	}
+
+	~UpdateTask()
+	{
+
+	}
+
+	public:
+        Object* Run(void)
+        {
+            __wc.UpdateWordTask(__word);
+            return null;
+        }
+
+};
+
 
 #endif /* WORDCTRL_H_ */

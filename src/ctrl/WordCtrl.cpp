@@ -12,12 +12,15 @@ using namespace Osp::Base::Collection;
 WordCtrl * WordCtrl::__wc = null;
 
 WordCtrl::WordCtrl() :
-	__db(null), __lw(null), __lwLissener(null), __pFirstWords(null)
+	__db(null), __lw(null), __lwLissener(null), __pFirstWords(null), __pUpdateTask(null), __pUpdateThread(null)
 {
+	__updateMutex.Create();
 }
 
 WordCtrl::~WordCtrl()
 {
+	UpdateWordCleanThread();
+
 	if (__lw)
 	{
 		__lw->SetLessonWorkerLissener(null);
@@ -428,20 +431,19 @@ String WordCtrl::SQLUpdateWord()
 	return update;
 }
 
-bool WordCtrl::UpdateWord(Word & word)
+void WordCtrl::UpdateWordTask(Word & word)
 {
+	__updateMutex.Acquire();
+
 	String update = SQLUpdateWord();
-
 	__db->BeginTransaction();
-
 	AppLogDebug("update sql : (%S)", update.GetPointer());
-	DbStatement * pStmt = __db->CreateStatementN(update);
+	DbStatement *pStmt = __db->CreateStatementN(update);
 	result r = GetLastResult();
 	if (IsFailed(r))
 	{
 		AppLog("statement failed with: %s", GetErrorMessage(r));
 	}
-
 	if (pStmt)
 	{
 		pStmt->BindString(0, word.__lern);
@@ -450,10 +452,8 @@ bool WordCtrl::UpdateWord(Word & word)
 		pStmt->BindInt(3, word.__nweight);
 		pStmt->BindInt(4, word.__user);
 		pStmt->BindInt(5, word.__id);
-
-		DbEnumerator * pEnum = __db->ExecuteStatementN(*pStmt);
+		DbEnumerator *pEnum = __db->ExecuteStatementN(*pStmt);
 		__db->CommitTransaction();
-
 		delete pEnum;
 		delete pStmt;
 	}
@@ -461,6 +461,40 @@ bool WordCtrl::UpdateWord(Word & word)
 	{
 		__db->RollbackTransaction();
 	}
+	__updateMutex.Release();
+}
+
+void WordCtrl::UpdateWordCleanThread()
+{
+	if (__pUpdateThread)
+	{
+		__pUpdateThread->Join();
+		delete __pUpdateTask;
+	}
+
+	if (__pUpdateTask)
+	{
+		delete __pUpdateThread;
+	}
+}
+
+/**
+ * create thread and update word in thread
+ */
+bool WordCtrl::UpdateWord(Word & word)
+{
+
+	UpdateWordCleanThread();
+
+	// must be here because this mutex
+	// control loading first word and
+	// is unless load words before update
+
+	__pUpdateTask = new UpdateTask(*this, word);
+	__pUpdateThread = new Thread;
+	__pUpdateThread->Construct(*((UpdateTask*)__pUpdateTask));
+	__pUpdateThread->Start();
+
 	return true;
 }
 
@@ -512,7 +546,7 @@ bool WordCtrl::EnableNextWords()
 			Word * word = (Word*) list->GetAt(i);
 			word->__lweight = 1;
 			word->__nweight = 1;
-			UpdateWord(*word);
+			UpdateWordTask(*word);
 		}
 
 		list->RemoveAll(true);
