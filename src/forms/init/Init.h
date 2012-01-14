@@ -11,7 +11,7 @@
 #include "forms/trainforms/train/Train.h"
 #include "dialogs/information/Information.h"
 #include "system/DeleteListObject.h"
-
+#include "setting/LangSetting.h"
 class InitFrm :
 	public Osp::Ui::Controls::Form,
 	public Osp::Ui::IActionEventListener,
@@ -21,16 +21,14 @@ class InitFrm :
 		CommonSetting *__setting;
 
 		Information __infoDlg;
-// Construction
+    void SetDefaultLanguages();
 public:
-	InitFrm(void);
-	virtual ~InitFrm(void);
-	bool Initialize(void);
-
-// Implementation
+    InitFrm(void);
+    virtual ~InitFrm(void);
+    bool Initialize(void);
 protected:
 	static const int ID_BUTTON_NATIVE = 101;
-	static const int ID_BUTTON_LERN = 102;
+	static const int ID_BUTTON_LEARN = 102;
 	static const int ID_BUTTON_BEGIN = 103;
 	static const int ID_BUTTON_TRAIN = 104;
 	Osp::Ui::Controls::Button *__pbtnNative;

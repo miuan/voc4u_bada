@@ -26,6 +26,35 @@ bool InitFrm::Initialize()
 	return true;
 }
 
+void InitFrm::SetDefaultLanguages()
+{
+    LocaleManager localeManager;
+    localeManager.Construct();
+    // Gets the system locale information.
+    Locale systemLocale = localeManager.GetSystemLocale();
+    String sllc = systemLocale.GetLanguageCodeString();
+    for(int i = 0; i!= LangSetting::NUM_LOCALES; i++)
+	{
+		String lc = LangSetting::LOCALES[i].GetLanguageCodeString();
+		if(sllc.StartsWith(lc, 0))
+		{
+			AppLog("locale found as %S", lc.GetPointer());
+			onSelectLang(ID_BUTTON_NATIVE, LangSetting::LOCALES[i]);
+
+			if(i != 1)
+			{
+				onSelectLang(ID_BUTTON_LEARN, LangSetting::LOCALES[1]);
+			}
+			else
+			{
+				onSelectLang(ID_BUTTON_LEARN, LangSetting::LOCALES[2]);
+			}
+
+			break;
+		}
+	}
+}
+
 result InitFrm::OnInitializing(void)
 {
 	result r = E_SUCCESS;
@@ -44,7 +73,7 @@ result InitFrm::OnInitializing(void)
 	__pbtnLern = static_cast<Button *> (GetControl(L"IDC_BTN_LERN"));
 	if (__pbtnLern != null)
 	{
-		__pbtnLern->SetActionId(ID_BUTTON_LERN);
+		__pbtnLern->SetActionId(ID_BUTTON_LEARN);
 		__pbtnLern->AddActionEventListener(*this);
 	}
 
@@ -65,8 +94,9 @@ result InitFrm::OnInitializing(void)
 		__pbtnTrain->AddActionEventListener(*this);
 		__pbtnTrain->SetEnabled(false);
 	}
+    SetDefaultLanguages();
 
-	return r;
+    return r;
 }
 
 result InitFrm::OnTerminating(void)
@@ -82,13 +112,13 @@ void InitFrm::OnActionPerformed(const Osp::Ui::Control& source, int actionId)
 {
 	switch (actionId)
 	{
-	case ID_BUTTON_LERN:
+	case ID_BUTTON_LEARN:
 	case ID_BUTTON_NATIVE:
 	{
 		// Creates a Popup
 		LangSelect * __pPopup = new LangSelect(actionId, this);
 
-		if (actionId == ID_BUTTON_LERN)
+		if (actionId == ID_BUTTON_LEARN)
 			__pPopup->Init(__pNative);
 		else __pPopup->Init(null);
 
@@ -151,7 +181,7 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 
 	Osp::Graphics::Bitmap * icon = LangSetting::GetIconN(selected);
 
-	int posY = __pbtnNative->GetHeight() / 2 - icon->GetHeight()/ 2;
+	int posY = __pbtnNative->GetHeight() / 2 - icon->GetHeight() / 2;
 
 	Osp::Graphics::Point bpoint(30, posY);
 
@@ -179,7 +209,7 @@ void InitFrm::onSelectLang(int type, Locale &selected)
 
 		__setting->native = code;
 	}
-	if (type == ID_BUTTON_LERN)
+	if (type == ID_BUTTON_LEARN)
 	{
 		__pbtnLern->SetText(str);
 		__pbtnLern->SetNormalBitmap(bpoint, *icon);
