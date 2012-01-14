@@ -51,18 +51,14 @@ using namespace Osp::Base::Collection;
 
 enum WORD_TYPE
 {
-	WORD_TYPE_ALL,
-	WORD_TYPE_ENABLED,
-	WORD_TYPE_ENABLED_DONTKNOW,
-	WORD_TYPE_DISABLED
+	WORD_TYPE_ALL, WORD_TYPE_ENABLED, WORD_TYPE_ENABLED_DONTKNOW, WORD_TYPE_DISABLED
 };
-
 
 class WordCtrl: public ILessonWorkerLissener
 {
 public:
 	static const int CUSTOM_WORD_LESSON_ID = 0;
-    void UpdateWordTask(Word & word);
+	void UpdateWordTask(Word & word);
 
 private:
 	static WordCtrl *__wc;
@@ -75,6 +71,7 @@ private:
 
 	void* __pUpdateTask;
 	Thread * __pUpdateThread;
+	void *__pFirstWordTask;
 public:
 	Mutex __updateMutex;
 
@@ -84,54 +81,59 @@ private:
 	String PrepareWordWhere(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
 	Word * CreateWordFromDbEnumeratorN(DbEnumerator & pEnum);
 
+	String SQLSelectWord(String where, String limit);
+	String SQLUpdateWord();
+	result PrepareDB();
+	void CreateLessonWorker();
 
-    String SQLSelectWord(String where, String limit);
-    String SQLUpdateWord();
-    result PrepareDB();
-    void CreateLessonWorker();
-    void FillFirstWordsArray(ArrayList *lastList);
-    void UpdateWordCleanThread();
+	void UpdateWordCleanThread();
 public:
-    WordCtrl();
-    virtual ~WordCtrl();
-    result Init();
-    static WordCtrl *GetInstance();
+	WordCtrl();
+	virtual ~WordCtrl();
+	result Init();
+	static WordCtrl *GetInstance();
 
-    bool EnableNextWords();
-    bool AddWord(Word & word);
-    bool GetLessonLoaded(const int lesson);
-    int GetWordCount(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
-    bool LoadLesson(const int lesson, bool unload = false);
-    void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
-    virtual void OnLessonTask(const int lesson);
-    int *GetWorkerTaskLessonInProgressN(int & count);
+	bool EnableNextWords();
+	bool AddWord(Word & word);
+	bool GetLessonLoaded(const int lesson);
+	int GetWordCount(const WORD_TYPE type = WORD_TYPE_ALL, const int lesson = -1);
+	bool LoadLesson(const int lesson, bool unload = false);
+	void SetLessonWorkerListener(ILessonWorkerLissener *ilwl);
+	virtual void OnLessonTask(const int lesson);
+	int *GetWorkerTaskLessonInProgressN(int & count);
 
-    /**
-     * lesson : id ( -1 is all lesson)
-     * limit : maximum word loaded ( -1 is infinity )
-     * type : type of word see to enum WORD_TYPE for more
-     * withoutWords : list with words and theirs id will be escaped
-     */
-    ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL, Osp::Base::Collection::ArrayList *withoutWords = null);
-    Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
-    bool UpdateWord(Word & word);
+	/**
+	 * lesson : id ( -1 is all lesson)
+	 * limit : maximum word loaded ( -1 is infinity )
+	 * type : type of word see to enum WORD_TYPE for more
+	 * withoutWords : list with words and theirs id will be escaped
+	 */
+	ArrayList *GetWordsN(const int lesson = -1, const int limit = -1, const WORD_TYPE type = WORD_TYPE_ALL, Osp::Base::Collection::ArrayList *withoutWords = null);
+	Word *GetFirstWordN(Osp::Base::Collection::ArrayList *lastList);
+	bool UpdateWord(Word & word);
 
-public:
-    /**
-     * be carefully because this
-     * is designed for Voc4u::OnTerminting()
-     */
-    int GetCurrentWordAdding(){ return __lw? __lw->GetCurrentWordAdding() : -1; };
+	void FillFirstWordsArray(ArrayList *lastList);
 
 public:
-    bool DeleteLesson(const int lesson);
+	/**
+	 * be carefully because this
+	 * is designed for Voc4u::OnTerminting()
+	 */
+	int GetCurrentWordAdding()
+	{
+		return __lw ? __lw->GetCurrentWordAdding() : -1;
+	}
+	;
 
-    void UpdateMutexRelease()
-    {
-    	__updateMutex.Release();
-    };
+public:
+	bool DeleteLesson(const int lesson);
+
+	void UpdateMutexRelease()
+	{
+		__updateMutex.Release();
+	}
+	;
 };
-
 
 class UpdateTask: public IRunnable
 {
@@ -139,7 +141,8 @@ class UpdateTask: public IRunnable
 	Word &__word;
 
 public:
-	UpdateTask(WordCtrl & wc, Word & word) : __wc(wc), __word(word)
+	UpdateTask(WordCtrl & wc, Word & word) :
+		__wc(wc), __word(word)
 	{
 
 	}
@@ -149,14 +152,60 @@ public:
 
 	}
 
-	public:
-        Object* Run(void)
-        {
-            __wc.UpdateWordTask(__word);
-            return null;
-        }
+public:
+	Object* Run(void)
+	{
+		__wc.UpdateWordTask(__word);
+		return null;
+	}
 
 };
 
+class FirstWordTask: public IRunnable
+{
+	WordCtrl &__wc;
+	Thread * __pThread;
+	ArrayList &__lastList;
+
+public:
+	FirstWordTask(WordCtrl & wc, ArrayList &lastList) :
+		__wc(wc), __pThread(null), __lastList(lastList)
+	{
+		__pThread = new Thread();
+		if (__pThread)
+		{
+			__pThread->Construct(*this);
+			__pThread->Start();
+			AppLog("*************** START");
+		}
+	}
+
+	~FirstWordTask()
+	{
+		if (__pThread)
+		{
+			__pThread->Join();
+			delete __pThread;
+		}
+		__pThread = null;
+	}
+
+public:
+	virtual Object* Run(void)
+	{
+		AppLog("*************** RUN");
+		__wc.FillFirstWordsArray(&__lastList);
+		return null;
+	}
+
+
+	void Join(void)
+	{
+		if(__pThread)
+		{
+			__pThread->Join();
+		}
+	}
+};
 
 #endif /* WORDCTRL_H_ */

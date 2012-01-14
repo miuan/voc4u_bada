@@ -12,7 +12,7 @@ using namespace Osp::Base::Collection;
 WordCtrl * WordCtrl::__wc = null;
 
 WordCtrl::WordCtrl() :
-	__db(null), __lw(null), __lwLissener(null), __pFirstWords(null), __pUpdateTask(null), __pUpdateThread(null)
+	__db(null), __lw(null), __lwLissener(null), __pFirstWords(null), __pUpdateTask(null), __pUpdateThread(null), __pFirstWordTask(null)
 {
 	__updateMutex.Create();
 }
@@ -360,6 +360,8 @@ ArrayList * WordCtrl::GetWordsN(const int lesson, const int limit, const WORD_TY
 
 void WordCtrl::FillFirstWordsArray(ArrayList *lastList)
 {
+	__updateMutex.Acquire();
+
 	ArrayList *list;
 	//ArrayList *words = null;
 	EnableNextWords();
@@ -405,20 +407,45 @@ void WordCtrl::FillFirstWordsArray(ArrayList *lastList)
 		list->RemoveAll(false);
 		delete list;
 	}
+
+	__updateMutex.Release();
 }
 
 Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 {
 	Word *word = null;
 
-	if (!__pFirstWords || __pFirstWords->GetCount() < 1)
-		FillFirstWordsArray(lastList);
+	bool fillFirstWord = false;
 
-	if (__pFirstWords && __pFirstWords->GetCount() > 0)
+	// @FillFirstWordArray use this mutex
+	// and can be in proces called from @FirstWordTask
+	__updateMutex.Acquire();
+	fillFirstWord = !__pFirstWords || __pFirstWords->GetCount() < 1;
+	__updateMutex.Release();
+
+	if (fillFirstWord)
 	{
-		int rand = Osp::Base::Utility::Math::Rand() % __pFirstWords->GetCount();
+		FillFirstWordsArray(lastList);
+	}
+
+	if (!__pFirstWords)
+	{
+		return null;
+	}
+
+	int count = __pFirstWords->GetCount();
+
+	if (count > 0)
+	{
+		int rand = Osp::Base::Utility::Math::Rand() % count;
 		word = (Word*) (__pFirstWords->GetAt(rand));
 		__pFirstWords->RemoveAt(rand, false);
+	}
+
+	if(count < 3)
+	{
+		// load next first word in thread
+		__pFirstWordTask = new FirstWordTask(*this, *lastList);
 	}
 
 	return word;
@@ -492,7 +519,7 @@ bool WordCtrl::UpdateWord(Word & word)
 
 	__pUpdateTask = new UpdateTask(*this, word);
 	__pUpdateThread = new Thread;
-	__pUpdateThread->Construct(*((UpdateTask*)__pUpdateTask));
+	__pUpdateThread->Construct(*((UpdateTask*) __pUpdateTask));
 	__pUpdateThread->Start();
 
 	return true;
