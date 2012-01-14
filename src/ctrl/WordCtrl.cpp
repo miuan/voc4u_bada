@@ -381,6 +381,22 @@ void WordCtrl::FillFirstWordsArray(ArrayList *lastList)
 			Word *word = static_cast<Word*> (lastList->GetAt(i));
 			array.Add(*word);
 		}
+
+		// if some word in __pFirstWord
+		// when called in thread
+		// see @getFistWord must add word from this list
+		// because else the algorythm load words which are loaded
+		if (__pFirstWords)
+		{
+			int count = __pFirstWords->GetCount();
+
+			for (int i = 0; i < count; i++)
+			{
+				Word *word = static_cast<Word*> (__pFirstWords->GetAt(i));
+				array.Add(*word);
+			}
+
+		}
 		// get word from any lessons (-1) and set limit to only one (1)
 		list = GetWordsN(-1, 15, WORD_TYPE_ENABLED, &array);
 	}
@@ -395,7 +411,9 @@ void WordCtrl::FillFirstWordsArray(ArrayList *lastList)
 		if (list->GetCount() > 0)
 		{
 			if (__pFirstWords == null)
+			{
 				__pFirstWords = new ArrayList();
+			}
 
 			IEnumerator * enumlist = list->GetEnumeratorN();
 			while (enumlist->MoveNext() == E_SUCCESS)
@@ -442,7 +460,7 @@ Word * WordCtrl::GetFirstWordN(ArrayList *lastList)
 		__pFirstWords->RemoveAt(rand, false);
 	}
 
-	if(count < 3)
+	if (count < 3)
 	{
 		// load next first word in thread
 		__pFirstWordTask = new FirstWordTask(*this, *lastList);

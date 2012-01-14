@@ -153,7 +153,7 @@ public:
 	}
 
 public:
-	Object* Run(void)
+	virtual Object* Run(void)
 	{
 		__wc.UpdateWordTask(__word);
 		return null;

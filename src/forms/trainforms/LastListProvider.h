@@ -23,7 +23,7 @@ class LastListProvider: public IListViewItemEventListener,
 public IListViewItemProvider
 {
 public:
-	static const int MAX_IN_LAST_LIST = 15;
+	static const int MAX_IN_LAST_LIST = 10;
 private:
 	ArrayList array;
 	EnrichedText *PrepareText(String text, bool know, bool bold);
