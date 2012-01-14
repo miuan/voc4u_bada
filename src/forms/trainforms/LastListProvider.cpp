@@ -79,7 +79,9 @@ EnrichedText *LastListProvider::PrepareText(String text, bool know, bool bold)
 	else font.Construct(FONT_STYLE_PLAIN, 30);
 	pTextElement->SetFont(font);
 	pTextElement->SetTextColor(know ? Color::COLOR_BLUE : Color::COLOR_RED);
+
 	pEnrichedText->Add(*pTextElement);
+	pEnrichedText->SetTextWrapStyle(TEXT_WRAP_WORD_WRAP);
 
 	return pEnrichedText;
 }
@@ -99,10 +101,11 @@ ListItemBase * LastListProvider::CreateItem(int index, int itemWidth)
 {
 	ListAnnexStyle style = LIST_ANNEX_STYLE_NORMAL;
 	CustomItem *pItem = new CustomItem();
-	pItem->Construct(Osp::Graphics::Dimension(itemWidth, 100), style);
+	pItem->Construct(Osp::Graphics::Dimension(itemWidth, 70), style);
 
 	Word *word = GetWordAt(index);
-
+//	word->__lern = "MMMMMMMMMMMMMMMMM";
+//	word->__native= "MMMMMMMMMMMMMMMMM";
 	EnrichedText *pELern = PrepareText(word->__lern, word->__type || word->__know, true);
 	EnrichedText *pENative = PrepareText(word->__native, !word->__type || word->__know, false);
 
@@ -114,14 +117,39 @@ ListItemBase * LastListProvider::CreateItem(int index, int itemWidth)
 
 	Color cl = word->__type || word->__know ? blue : Color::COLOR_RED;
 	Color cn = !word->__type || word->__know ? blue : Color::COLOR_RED;
+
+
+	int width1 = columnWidth / 2;
+	int top1 = 13;
+	int top2 = 13;
+	int left2 = width1;
+	int width2 = width1;
+	int fontSize = 30;
+
+
+	if(word->__lern.GetLength() > 15 || word->__native.GetLength() > 15)
+	{
+		fontSize = 24;
+		top1 = 0;
+		top2 = 22;
+		left2 = 3;
+		width1 = columnWidth- 3;
+		width2 = width1;
+	}
+
+
+
 	if (pELern)
-		pItem->AddElement(Rectangle(10, 5, columnWidth, 50), 1, word->__lern, 30, cl, cl, cl);
-
+	{
+		pItem->AddElement(Rectangle(3, top1, width1, 50), 1, word->__lern, fontSize, cl, cl, cl);
+	}
 	if (pENative)
-		pItem->AddElement(Rectangle(10, 55, columnWidth, 50), 2, word->__native, 30, cn, cn, cn);
+	{
+		pItem->AddElement(Rectangle(left2, top2, width2, 50), 2, word->__native, fontSize, cn, cn, cn);
+	}
 
-	pItem->SetElementTextHorizontalAlignment(1, ALIGNMENT_CENTER);
-	pItem->SetElementTextHorizontalAlignment(2, ALIGNMENT_CENTER);
+	pItem->SetElementTextHorizontalAlignment(1, ALIGNMENT_LEFT);
+	pItem->SetElementTextHorizontalAlignment(2, ALIGNMENT_RIGHT);
 
 	return pItem;
 }
